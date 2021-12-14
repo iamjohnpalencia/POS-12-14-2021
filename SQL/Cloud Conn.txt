@@ -1,0 +1,5 @@
+server=gator3218.hostgator.com
+user id=johnpale_testuse
+password=password2019
+database=johnpale_postest
+port=3306
