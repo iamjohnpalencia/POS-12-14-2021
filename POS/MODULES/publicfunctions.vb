@@ -26,7 +26,6 @@ Module publicfunctions
             Wow64DisableWow64FsRedirection(0)
             Process.Start(osk)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -72,6 +71,21 @@ Module publicfunctions
             SendErrorReport(ex.ToString)
         End Try
     End Sub
+
+
+    'Public Sub TextboxReadOnly(ByVal root As Control, ENB As Boolean)
+    '    Try
+    '        For Each ctrl As Control In root.Controls
+    '            TextboxReadOnly(ctrl, ENB)
+    '            If TypeOf ctrl Is TextBox Then
+    '                CType(ctrl, TextBox).ReadOnly = ENB
+    '            End If
+    '        Next ctrl
+    '    Catch ex As Exception
+    '        MsgBox(ex.ToString)
+    '        SendErrorReport(ex.ToString)
+    '    End Try
+    'End Sub
     Public Sub ClearTextBox(ByVal root As Control)
         Try
             For Each ctrl As Control In root.Controls
@@ -95,7 +109,6 @@ Module publicfunctions
                 End If
             Next ctrl
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -111,7 +124,6 @@ Module publicfunctions
                 End If
             Next ctrl
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -189,14 +201,19 @@ Module publicfunctions
     '_________________________________________________________________________________________________________________
     'IMAGE TO TEXT
     Public Function ImageToBase64(ByVal image As Image, ByVal format As System.Drawing.Imaging.ImageFormat) As String
-        Using ms As New MemoryStream()
-            ' Convert Image to byte[]
-            image.Save(ms, format)
-            Dim imageBytes As Byte() = ms.ToArray()
-            ' Convert byte[] to Base64 String
-            Dim base64String As String = Convert.ToBase64String(imageBytes)
-            Return base64String
-        End Using
+        Dim base64String As String = ""
+        Try
+            Using ms As New MemoryStream()
+                ' Convert Image to byte[]
+                image.Save(ms, format)
+                Dim imageBytes As Byte() = ms.ToArray()
+                ' Convert byte[] to Base64 String
+                base64String = Convert.ToBase64String(imageBytes)
+            End Using
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
+        Return base64String
     End Function
     'TEXT TO IMAGE
     Public Function Base64ToImage(ByVal base64String As String) As Image
@@ -257,7 +274,6 @@ Module publicfunctions
             Dim FormatDay As String = "yyyy-MM-dd"
             displaythis = FirstDay.ToString(FormatDay)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return displaythis
@@ -293,7 +309,6 @@ Module publicfunctions
         Try
             DateNow = Format(Now(), "yyyy-MM-dd HH:mm:ss")
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return DateNow
@@ -303,7 +318,6 @@ Module publicfunctions
         Try
             DateSave = Format(Now(), "yyyy-MM-dd HH-mm-ss")
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return DateSave
@@ -333,7 +347,6 @@ Module publicfunctions
             BeginningBalance = 0
             EndingBalance = 0
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -347,7 +360,6 @@ Module publicfunctions
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return Format(SumTotal, "###,###,##0.00")
@@ -361,7 +373,6 @@ Module publicfunctions
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return SumTotal
@@ -462,7 +473,6 @@ Module publicfunctions
             SimpleTextDisplay(sender, e, "Business Style:", font, 0, 115 + AddLine)
             e.Graphics.DrawLine(Pens.Black, 75, 142 + AddLine, 180, 142 + AddLine)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -497,7 +507,6 @@ Module publicfunctions
                 CenterTextDisplay(sender, e, "VALID FOR CLAIM OF INPUT TAX", font1, a + 370)
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -540,7 +549,6 @@ Module publicfunctions
             sp.Dispose()
             sp = Nothing
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -566,7 +574,6 @@ Module publicfunctions
         Catch ex As Exception
             My.Settings.LedDisplayTrue = False
             My.Settings.Save()
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -577,7 +584,6 @@ Module publicfunctions
                 ToFill.Items.Add(sp)
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

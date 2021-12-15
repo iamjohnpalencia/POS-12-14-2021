@@ -8,7 +8,7 @@ Public Class Login
             Timer1.Enabled = True
             ButttonLogin.Text = "LOGIN (" & ClientStorename & ")"
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub BackupDatabase()
@@ -17,7 +17,6 @@ Public Class Login
             Process.Start("cmd.exe", "/k cd C:\xampp\mysql\bin & mysqldump --databases -h " & connectionModule.LocServer & " -u " & connectionModule.LocUser & " -p " & connectionModule.LocPass & " " & connectionModule.LocDatabase & " > """ & S_ExportPath & DatabaseName & """")
             'CheckIfRunning()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -79,7 +78,6 @@ Public Class Login
                 End If
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

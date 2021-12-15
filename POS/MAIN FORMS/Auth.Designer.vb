@@ -85,16 +85,16 @@ Partial Class Auth
         Me.Panel3.Controls.Add(Me.Label4)
         Me.Panel3.Location = New System.Drawing.Point(46, 38)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(232, 44)
+        Me.Panel3.Size = New System.Drawing.Size(233, 44)
         Me.Panel3.TabIndex = 229
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Dock = System.Windows.Forms.DockStyle.Left
+        Me.Label1.Dock = System.Windows.Forms.DockStyle.Right
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.999999!)
         Me.Label1.ForeColor = System.Drawing.Color.Red
-        Me.Label1.Location = New System.Drawing.Point(138, 0)
+        Me.Label1.Location = New System.Drawing.Point(233, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(0, 15)
         Me.Label1.TabIndex = 228
@@ -154,9 +154,9 @@ Partial Class Auth
         Me.DataGridViewRESULT.AllowUserToResizeColumns = False
         Me.DataGridViewRESULT.AllowUserToResizeRows = False
         Me.DataGridViewRESULT.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridViewRESULT.Location = New System.Drawing.Point(53, 195)
+        Me.DataGridViewRESULT.Location = New System.Drawing.Point(21, 140)
         Me.DataGridViewRESULT.Name = "DataGridViewRESULT"
-        Me.DataGridViewRESULT.Size = New System.Drawing.Size(325, 51)
+        Me.DataGridViewRESULT.Size = New System.Drawing.Size(257, 43)
         Me.DataGridViewRESULT.TabIndex = 220
         '
         'BackgroundWorker1

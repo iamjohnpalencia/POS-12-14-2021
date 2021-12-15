@@ -1,17 +1,21 @@
 ﻿Imports MySql.Data.MySqlClient
 Public Class BegBalance
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged, TextBox2.TextChanged, TextBox3.TextChanged, TextBox4.TextChanged, TextBox5.TextChanged, TextBox6.TextChanged, TextBox7.TextChanged, TextBox8.TextChanged, TextBox9.TextChanged, TextBox10.TextChanged
-        Dim OneThousand As Decimal = Val(TextBox1.Text) * Val(Label1.Text)
-        Dim FiveHundred As Decimal = Val(TextBox2.Text) * Val(Label2.Text)
-        Dim TwoHundred As Decimal = Val(TextBox3.Text) * Val(Label3.Text)
-        Dim OneHundred As Decimal = Val(TextBox4.Text) * Val(Label4.Text)
-        Dim Fifty As Decimal = Val(TextBox5.Text) * Val(Label5.Text)
-        Dim Twenty As Decimal = Val(TextBox6.Text) * Val(Label6.Text)
-        Dim Ten As Decimal = Val(TextBox7.Text) * Val(Label7.Text)
-        Dim Five As Decimal = Val(TextBox8.Text) * Val(Label8.Text)
-        Dim One As Decimal = Val(TextBox9.Text) * Val(Label9.Text)
-        Dim TwentyFiveCents As Decimal = Val(TextBox10.Text) * Val(Label10.Text)
-        Label12.Text = OneThousand + FiveHundred + TwoHundred + OneHundred + Fifty + Twenty + Ten + Five + One + TwentyFiveCents
+        Try
+            Dim OneThousand As Decimal = Val(TextBox1.Text) * Val(Label1.Text)
+            Dim FiveHundred As Decimal = Val(TextBox2.Text) * Val(Label2.Text)
+            Dim TwoHundred As Decimal = Val(TextBox3.Text) * Val(Label3.Text)
+            Dim OneHundred As Decimal = Val(TextBox4.Text) * Val(Label4.Text)
+            Dim Fifty As Decimal = Val(TextBox5.Text) * Val(Label5.Text)
+            Dim Twenty As Decimal = Val(TextBox6.Text) * Val(Label6.Text)
+            Dim Ten As Decimal = Val(TextBox7.Text) * Val(Label7.Text)
+            Dim Five As Decimal = Val(TextBox8.Text) * Val(Label8.Text)
+            Dim One As Decimal = Val(TextBox9.Text) * Val(Label9.Text)
+            Dim TwentyFiveCents As Decimal = Val(TextBox10.Text) * Val(Label10.Text)
+            Label12.Text = OneThousand + FiveHundred + TwoHundred + OneHundred + Fifty + Twenty + Ten + Five + One + TwentyFiveCents
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
     End Sub
     Private Sub TextBox1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBox1.KeyPress, TextBox2.KeyPress, TextBox3.KeyPress, TextBox4.KeyPress, TextBox5.KeyPress, TextBox6.KeyPress, TextBox7.KeyPress, TextBox8.KeyPress, TextBox9.KeyPress, TextBox10.KeyPress
         Numeric(sender:=sender, e:=e)
@@ -32,7 +36,6 @@ Public Class BegBalance
             End If
 
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -57,7 +60,6 @@ Public Class BegBalance
             AllowFormClose = True
             Me.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

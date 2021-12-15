@@ -39,7 +39,6 @@ Public Class UserSettings
                 .Columns(14).HeaderText = "Crew ID"
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -61,7 +60,6 @@ Public Class UserSettings
                     GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
                 End If
             Catch ex As Exception
-                MsgBox(ex.ToString)
                 SendErrorReport(ex.ToString)
             End Try
         End If
@@ -77,21 +75,33 @@ Public Class UserSettings
     End Sub
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
-        Enabled = False
-        AddUser.AddUserText = "ADD USER"
-        AddUser.Show()
+        Try
+            Enabled = False
+            AddUser.AddUserText = "ADD USER"
+            AddUser.Show()
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
-        Enabled = False
-        AddUser.AddUserText = "EDIT USER"
-        AddUser.userid = DataGridViewUserSettings.SelectedRows(0).Cells(14).Value.ToString
-        AddUser.Show()
+        Try
+            If DataGridViewUserSettings.Rows.Count > 0 Then
+                Enabled = False
+                AddUser.AddUserText = "EDIT USER"
+                AddUser.userid = DataGridViewUserSettings.SelectedRows(0).Cells(14).Value.ToString
+                AddUser.Show()
+            End If
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
     End Sub
 
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
-        If ClientRole = "Head Crew" Then
-            deactivateuser()
+        If ClientRole = "Head Crew" Or ClientRole = "Admin" Then
+            If DataGridViewUserSettings.Rows.Count > 0 Then
+                deactivateuser()
+            End If
         Else
             MsgBox("You do not have permission to perform this task" & vbNewLine & "Please contact your administrator for help.")
         End If

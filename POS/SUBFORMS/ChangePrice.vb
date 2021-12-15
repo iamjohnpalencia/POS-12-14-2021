@@ -9,7 +9,6 @@ Public Class ChangePrice
             TextBoxPriceFrom.Text = PriceFrom
             Me.Text = Product
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -18,7 +17,6 @@ Public Class ChangePrice
             MDIFORM.newMDIchildManageproduct.Enabled = True
             MDIFORM.newMDIchildManageproduct.LoadPriceChange()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -35,7 +33,6 @@ Public Class ChangePrice
                 MsgBox("Fill all the fields")
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -56,7 +53,6 @@ Public Class ChangePrice
             cmd.Parameters.Add("@9", MySqlDbType.Text).Value = "Unsynced"
             result = cmd.ExecuteNonQuery()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         If result = 1 Then
@@ -69,7 +65,6 @@ Public Class ChangePrice
         Try
             Numeric(sender, e)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

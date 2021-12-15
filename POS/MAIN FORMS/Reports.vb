@@ -116,7 +116,6 @@ Public Class Reports
             ToolStripComboBoxTransactionType.SelectedIndex = 0
             LoadProducts()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -140,7 +139,6 @@ Public Class Reports
             LabelCrewSalesQty.Text = SumOfColumnsToDecimal(DataGridViewCrewSales, 2)
             LabelCrewSalesTotal.Text = SumOfColumnsToDecimal(DataGridViewCrewSales, 1)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -154,7 +152,6 @@ Public Class Reports
                 End While
             End Using
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -192,7 +189,6 @@ Public Class Reports
                 DataGridViewSysLog.Rows.Add(row("log_type"), row("log_description"), row("log_date_time"))
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -217,7 +213,6 @@ Public Class Reports
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -238,7 +233,6 @@ Public Class Reports
                 .Columns(2).HeaderText = "Date and Time"
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -271,7 +265,7 @@ Public Class Reports
                 Next
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Public Sub reportssales(ByVal searchdate As Boolean)
@@ -296,7 +290,6 @@ Public Class Reports
                 Label9.Text = SumOfColumnsToInt(DataGridViewSales, 2)
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -323,7 +316,6 @@ Public Class Reports
                 .Columns(6).HeaderCell.Value = "Date"
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -341,7 +333,6 @@ Public Class Reports
                 .Columns(5).HeaderCell.Value = "Date"
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -362,7 +353,6 @@ Public Class Reports
             Next
 
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         Finally
             da.Dispose()
@@ -392,7 +382,6 @@ Public Class Reports
                 .Columns(9).Visible = False
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -413,7 +402,7 @@ Public Class Reports
             End Using
             ToolStripComboBoxProducts.SelectedIndex = 0
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
@@ -422,7 +411,7 @@ Public Class Reports
             CustomReport(ToolStripComboBoxProducts.Text, ToolStripComboBoxTaxType.Text, ToolStripComboBoxTransactionType.Text)
             ToolStripStatusLabel2.Text = DataGridViewCustomReport.Rows.Count
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Dim CustomReportLessVat As Double = 0
@@ -623,7 +612,7 @@ Public Class Reports
                 End Using
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub ToolStripButton6_Click(sender As Object, e As EventArgs) Handles ToolStripButton6.Click
@@ -656,7 +645,6 @@ Public Class Reports
                 viewexpensesdetails(datagridid)
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -667,7 +655,6 @@ Public Class Reports
                 viewtransactiondetails(transaction_number:=DataGridViewDaily.SelectedRows(0).Cells(0).Value)
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -811,7 +798,7 @@ Public Class Reports
 
             CenterTextDisplay(sender, e, "From: " & Format(DateTimePicker1.Value, "yyyy-MM-dd") & " - To: " & Format(DateTimePicker2.Value, "yyyy-MM-dd"), font, 180)
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub pdoc_PrintPage(sender As Object, e As System.Drawing.Printing.PrintPageEventArgs) Handles printdoc.PrintPage
@@ -961,7 +948,6 @@ Public Class Reports
                 End If
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -985,7 +971,6 @@ Public Class Reports
             SystemLogType = "X-READ"
             GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1003,168 +988,168 @@ Public Class Reports
             Dim font As New Font("tahoma", 6)
             Dim font2 As New Font("tahoma", 6, FontStyle.Bold)
             Dim brandfont As New Font("tahoma", 8, FontStyle.Bold)
-            Dim GrossSale
+            Dim GrossSale = 0
             ThreadZXRead = New Thread(Sub() GrossSale = sum("grosssales", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Grab') AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim LessVat
+            Dim LessVat = 0
             ThreadZXRead = New Thread(Sub() LessVat = sum("lessvat", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Grab') AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim TotalDiscount
+            Dim TotalDiscount = 0
             ThreadZXRead = New Thread(Sub() TotalDiscount = sum("totaldiscount", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Grab') AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim begORNm
+            Dim begORNm = ""
             ThreadZXRead = New Thread(Sub() begORNm = returnselect("transaction_number", "`loc_daily_transaction` WHERE date(zreading) = zreading AND active = 1 Limit 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim EndORNumber
+            Dim EndORNumber = ""
             ThreadZXRead = New Thread(Sub() EndORNumber = returnselect("transaction_number", "loc_daily_transaction WHERE date(zreading) = zreading AND active = 1 ORDER by `transaction_number` desc limit 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim ReturnsTotal
+            Dim ReturnsTotal = 0
             ThreadZXRead = New Thread(Sub() sum("total", "loc_daily_transaction_details WHERE active = 2 AND zreading = '" & ZreadDateFormat & "' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim ReturnsExchange
+            Dim ReturnsExchange = 0
             ThreadZXRead = New Thread(Sub() ReturnsExchange = sum("quantity", "loc_daily_transaction_details WHERE active = 2 AND zreading = '" & ZreadDateFormat & "' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim OLDgrandtotal
+            Dim OLDgrandtotal = 0
             ThreadZXRead = New Thread(Sub() OLDgrandtotal = sum("total", "loc_daily_transaction_details WHERE zreading <> '" & ZreadDateFormat & "' AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim NEWgrandtotal
+            Dim NEWgrandtotal = 0
             ThreadZXRead = New Thread(Sub() NEWgrandtotal = sum("total", "loc_daily_transaction_details WHERE active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim TotalGuest
+            Dim TotalGuest = 0
             ThreadZXRead = New Thread(Sub() TotalGuest = count("transaction_id", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim TotalQuantity
+            Dim TotalQuantity = 0
             ThreadZXRead = New Thread(Sub() TotalQuantity = sum("quantity", "loc_daily_transaction_details WHERE zreading = '" & ZreadDateFormat & "' AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim SrDiscount
+            Dim SrDiscount = 0
             ThreadZXRead = New Thread(Sub() SrDiscount = sum("totaldiscount", "loc_daily_transaction WHERE discount_type = 'Percentage' AND zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Grab') AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim totalExpenses
+            Dim totalExpenses = 0
             ThreadZXRead = New Thread(Sub() totalExpenses = sum("total_amount", "loc_expense_list WHERE zreading = '" & ZreadDateFormat & "'"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim VatExempt
+            Dim VatExempt = 0
             ThreadZXRead = New Thread(Sub() VatExempt = sum("vatexemptsales", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Grab') AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim zeroratedsales
+            Dim zeroratedsales = 0
             ThreadZXRead = New Thread(Sub() zeroratedsales = sum("zeroratedsales", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim vatablesales
+            Dim vatablesales = 0
             ThreadZXRead = New Thread(Sub() vatablesales = sum("vatablesales", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Grab') AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim DepositSlip
+            Dim DepositSlip = 0
             ThreadZXRead = New Thread(Sub() DepositSlip = sum("amount", "loc_deposit WHERE date(transaction_date) = '" & ZreadDateFormat & "' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim BegBalance
+            Dim BegBalance = 0
             ThreadZXRead = New Thread(Sub() BegBalance = sum("CAST(log_description AS DECIMAL(10,2))", "loc_system_logs WHERE log_type IN ('BG-1','BG-2','BG-3','BG-4') AND zreading = '" & ZreadDateFormat & "' ORDER by log_date_time DESC LIMIT 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim vat12percent
+            Dim vat12percent = 0
             ThreadZXRead = New Thread(Sub() vat12percent = sum("vatpercentage", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Grab') AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim DailySales
+            Dim DailySales = 0
             ThreadZXRead = New Thread(Sub() DailySales = GrossSale - LessVat - TotalDiscount)
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim NetSales
+            Dim NetSales = 0
             ThreadZXRead = New Thread(Sub() NetSales = sum("amountdue", "loc_daily_transaction WHERE active = 1 AND zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Grab')"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim CashInDrawer
+            Dim CashInDrawer = 0
             ThreadZXRead = New Thread(Sub() CashInDrawer = DailySales + BeginningBalance - totalExpenses)
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim CashTotal
+            Dim CashTotal = 0
             ThreadZXRead = New Thread(Sub() CashTotal = CashInDrawer)
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim TotalNewGrandTotal
+            Dim TotalNewGrandTotal = 0
             ThreadZXRead = New Thread(Sub() TotalNewGrandTotal = CashInDrawer + OLDgrandtotal)
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
@@ -1227,7 +1212,7 @@ Public Class Reports
             RightToLeftDisplay(sender, e, 385, "DEPOSIT", NUMBERFORMAT(DepositSlip), font, 10, 0)
             RightToLeftDisplay(sender, e, 395, "CASH IN DRAWER", NUMBERFORMAT(CashInDrawer), font, 10, 0)
             '============================================================================================================================
-            Dim CASHLESS
+            Dim CASHLESS = 0
             ThreadZXRead = New Thread(Sub() CASHLESS = sum("amountdue", "loc_daily_transaction WHERE active IN (1,3) AND zreading = '" & ZreadDateFormat & "' AND transaction_type NOT IN ('Walk-in','Grab') "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
@@ -1235,7 +1220,7 @@ Public Class Reports
                 t.Join()
             Next
             RightToLeftDisplay(sender, e, 410, "CASHLESS", CASHLESS, font, 10, 0)
-            Dim GCASH
+            Dim GCASH = 0
             ThreadZXRead = New Thread(Sub() GCASH = sum("amountdue", "loc_daily_transaction WHERE active = 1 AND zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Gcash' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
@@ -1243,7 +1228,7 @@ Public Class Reports
                 t.Join()
             Next
             RightToLeftDisplay(sender, e, 420, "GCASH", GCASH, font, 10, 0)
-            Dim PAYMAYA
+            Dim PAYMAYA = 0
             ThreadZXRead = New Thread(Sub() PAYMAYA = sum("amountdue", "loc_daily_transaction WHERE active = 1 AND zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Paymaya' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
@@ -1251,7 +1236,7 @@ Public Class Reports
                 t.Join()
             Next
             RightToLeftDisplay(sender, e, 430, "PAYMAYA", PAYMAYA, font, 10, 0)
-            Dim lalafood
+            Dim lalafood = 0
             ThreadZXRead = New Thread(Sub() lalafood = sum("amountdue", "loc_daily_transaction WHERE active = 1 AND zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Lalafood' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
@@ -1259,7 +1244,7 @@ Public Class Reports
                 t.Join()
             Next
             RightToLeftDisplay(sender, e, 440, "LALAFOOD", lalafood, font, 10, 0)
-            Dim FOODPANDA
+            Dim FOODPANDA = 0
             ThreadZXRead = New Thread(Sub() FOODPANDA = sum("amountdue", "loc_daily_transaction WHERE active = 1 AND zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Food Panda' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
@@ -1267,7 +1252,7 @@ Public Class Reports
                 t.Join()
             Next
             RightToLeftDisplay(sender, e, 450, "FOOD PANDA", FOODPANDA, font, 10, 0)
-            Dim REPEX
+            Dim REPEX = 0
             ThreadZXRead = New Thread(Sub() REPEX = sum("amountdue", "loc_daily_transaction WHERE active = 3 AND zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Representation Expenses' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
@@ -1275,7 +1260,7 @@ Public Class Reports
                 t.Join()
             Next
             RightToLeftDisplay(sender, e, 460, "REPEXPENSE", REPEX, font, 10, 0)
-            Dim Others
+            Dim Others = 0
             ThreadZXRead = New Thread(Sub() Others = sum("amountdue", "loc_daily_transaction WHERE active = 3 AND zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Others' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
@@ -1309,7 +1294,7 @@ Public Class Reports
 
             Dim ZreadOrXread As Integer = 0
             If XreadOrZread = "Z-READ" Then
-                Dim ResetCounter
+                Dim ResetCounter = 0
                 ThreadZXRead = New Thread(Sub() ResetCounter = GLOBAL_SELECT_FUNCTION_RETURN("tbcountertable", "counter_value", "counter_id = 1", "counter_value"))
                 ThreadZXRead.Start()
                 ThreadlistZXRead.Add(ThreadZXRead)
@@ -1324,49 +1309,49 @@ Public Class Reports
                 ZreadOrXread += 10
             End If
 
-            Dim ADDONS
+            Dim ADDONS = 0
             ThreadZXRead = New Thread(Sub() ADDONS = sum("quantity", "loc_daily_transaction_details WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Walk-in' AND product_category = 'Add-Ons'"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim BLENDS
+            Dim BLENDS = 0
             ThreadZXRead = New Thread(Sub() BLENDS = sum("quantity", "loc_daily_transaction_details WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Walk-in' AND product_category = 'Famous Blends'"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim COMBO
+            Dim COMBO = 0
             ThreadZXRead = New Thread(Sub() COMBO = sum("quantity", "loc_daily_transaction_details WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Walk-in' AND product_category = 'Combo'"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim PERFECTC
+            Dim PERFECTC = 0
             ThreadZXRead = New Thread(Sub() PERFECTC = sum("quantity", "loc_daily_transaction_details WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Walk-in' AND product_category = 'Perfect Combination'"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim PREMIUM
+            Dim PREMIUM = 0
             ThreadZXRead = New Thread(Sub() PREMIUM = sum("quantity", "loc_daily_transaction_details WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Walk-in' AND product_category = 'Premium'"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim SAVORY
+            Dim SAVORY = 0
             ThreadZXRead = New Thread(Sub() SAVORY = sum("quantity", "loc_daily_transaction_details WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Walk-in' AND product_category = 'Savory'"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim SIMPERF
+            Dim SIMPERF = 0
             ThreadZXRead = New Thread(Sub() SIMPERF = sum("quantity", "loc_daily_transaction_details WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Walk-in' AND product_category = 'Simply Perfect'"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
@@ -1387,7 +1372,6 @@ Public Class Reports
             CenterTextDisplay(sender, e, S_Zreading & " " & Format(Now(), "HH:mm:ss"), font, 810)
 
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1422,7 +1406,6 @@ Public Class Reports
                 Con.Close()
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1521,27 +1504,10 @@ Public Class Reports
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
-    Private Sub ToolStripButton5_Click(sender As Object, e As EventArgs)
-        'Handles ToolStripButton5.Click
-        'Try
-        '    Dim msg = MessageBox.Show("Are you sure you want to reset the sales ? Press Yes to continue or No to cancel", "NOTICE", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
-        '    If msg = DialogResult.Yes Then
-        '        Dim sql = "TRUNCATE `loc_daily_transaction`; TRUNCATE `loc_daily_transaction_details`;"
-        '        Dim cmd As MySqlCommand = New MySqlCommand(sql, LocalhostConn)
-        '        cmd.ExecuteNonQuery()
-        '        reportsdailytransaction(False)
-        '        DataGridViewTransactionDetails.DataSource = Nothing
-        '        DataGridViewTransactionDetails.Rows.Clear()
-        '    End If
-        'Catch ex As Exception
-        '    MsgBox(ex.ToString)
-        '    SendErrorReport(ex.ToString)
-        'End Try
-    End Sub
+
     Dim loopb = 20
     Dim loopa = 20
     Dim PrintSalesDatatable As DataTable
@@ -1562,7 +1528,6 @@ Public Class Reports
             previewsales.Document = printsales
             previewsales.ShowDialog()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1592,7 +1557,6 @@ Public Class Reports
             CenterTextDisplay(sender, e, Format(Now(), "yyyy-MM-dd HH:mm:ss"), font, loopa + 80)
 
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1657,39 +1621,42 @@ Public Class Reports
                 End If
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub ToolStripButton9_Click(sender As Object, e As EventArgs) Handles ToolStripButton9.Click
-        If DataGridViewReturns.Rows.Count > 0 Then
+        Try
+            If DataGridViewReturns.Rows.Count > 0 Then
 
-            Dim B As Integer = 0
-            If CheckBoxPRINTALL.Checked = False Then
-                printdocReturns.DefaultPageSettings.PaperSize = New PaperSize("Custom", ReturnPrintSize(), 320)
-                If S_Print_Returns = "YES" Then
-                    printdocReturns.Print()
+                Dim B As Integer = 0
+                If CheckBoxPRINTALL.Checked = False Then
+                    printdocReturns.DefaultPageSettings.PaperSize = New PaperSize("Custom", ReturnPrintSize(), 320)
+                    If S_Print_Returns = "YES" Then
+                        printdocReturns.Print()
+                    Else
+                        PrintPreviewDialogReturns.Document = printdocReturns
+                        PrintPreviewDialogReturns.ShowDialog()
+                    End If
                 Else
-                    PrintPreviewDialogReturns.Document = printdocReturns
-                    PrintPreviewDialogReturns.ShowDialog()
+                    For i As Integer = 0 To DataGridViewReturns.Rows.Count - 1 Step +1
+                        B += 65
+                    Next
+                    printdocReturns.DefaultPageSettings.PaperSize = New PaperSize("Custom", ReturnPrintSize(), 320 + B)
+                    If S_Print_Returns = "YES" Then
+                        printdocReturns.Print()
+                    Else
+                        PrintPreviewDialogReturns.Document = printdocReturns
+                        PrintPreviewDialogReturns.ShowDialog()
+                    End If
                 End If
+                B = 0
+                ColumnSpacing = 0
             Else
-                For i As Integer = 0 To DataGridViewReturns.Rows.Count - 1 Step +1
-                    B += 65
-                Next
-                printdocReturns.DefaultPageSettings.PaperSize = New PaperSize("Custom", ReturnPrintSize(), 320 + B)
-                If S_Print_Returns = "YES" Then
-                    printdocReturns.Print()
-                Else
-                    PrintPreviewDialogReturns.Document = printdocReturns
-                    PrintPreviewDialogReturns.ShowDialog()
-                End If
+                MsgBox("Select returned product first.")
             End If
-            B = 0
-            ColumnSpacing = 0
-        Else
-            MsgBox("Select returned product first.")
-        End If
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
     End Sub
     Private Sub ButtonSearchCrewSales_Click(sender As Object, e As EventArgs) Handles ButtonSearchCrewSales.Click
         Try
@@ -1700,7 +1667,7 @@ Public Class Reports
                 LoadCrewSales(True)
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
 
@@ -1832,7 +1799,7 @@ Public Class Reports
 
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
 
@@ -1935,7 +1902,7 @@ Public Class Reports
 
             'MessageBox.Show("Excel file created , you can find the file " & Path)
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub releaseObject(ByVal obj As Object)
@@ -1960,7 +1927,7 @@ Public Class Reports
 
             GenerateTxtFile()
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Dim ThreadEJournal As Thread
@@ -1985,7 +1952,6 @@ Public Class Reports
                 End If
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1994,7 +1960,7 @@ Public Class Reports
         Try
             ToolStripProgressBar1.Value = e.ProgressPercentage
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
 
@@ -2004,7 +1970,7 @@ Public Class Reports
             ToolStripButton7.Enabled = True
             ToolStripButton4.Enabled = True
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
 
@@ -2293,7 +2259,7 @@ Public Class Reports
             'End With
             connectionlocal.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
 
@@ -2356,7 +2322,6 @@ Public Class Reports
                 Button7.PerformClick()
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2400,14 +2365,13 @@ Public Class Reports
                     End If
                     Button7.PerformClick()
                 Catch ex As Exception
-                    MsgBox(ex.ToString)
+                    SendErrorReport(ex.ToString)
                 End Try
 
             Else
                 MessageBox.Show("This will continue your yesterday's record ...", "Z-Reading", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2417,7 +2381,6 @@ Public Class Reports
             returnxreadingdateprint = True
             xreadingprint()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

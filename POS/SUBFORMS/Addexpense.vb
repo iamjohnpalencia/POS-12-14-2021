@@ -67,7 +67,6 @@ Public Class Addexpense
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Try
@@ -93,7 +92,6 @@ Public Class Addexpense
                 GLOBAL_INSERT_FUNCTION(table:=table, fields:=fields, values:=value)
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         DataGridViewExpenses.Rows.Clear()
@@ -124,7 +122,6 @@ Public Class Addexpense
             SystemLogDesc = "Submitted by :" & returnfullname(ClientCrewID) & " : " & ClientRole
             GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -140,7 +137,6 @@ Public Class Addexpense
             ExpenseImage.PictureBox1.BackgroundImage = Base64ToImage(image)
             ExpenseImage.PictureBox1.BackgroundImageLayout = ImageLayout.Zoom
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -156,7 +152,6 @@ Public Class Addexpense
                 Next
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

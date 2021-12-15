@@ -10,12 +10,7 @@ Public Class SynctoCloud
     Dim Unsuccessful As Boolean
     Dim CountStart As Boolean
     Dim INVENTORYISSYNCING As Boolean = False
-    Declare Auto Function SendMessage Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal msg As Integer, ByVal wParam As Integer, ByVal lParam As Integer) As Integer
-    Enum ProgressBarColor
-        Green = &H1
-        Red = &H2
-        Yellow = &H3
-    End Enum
+
     Private Shared Sub ChangeProgBarColor(ByVal ProgressBar_Name As System.Windows.Forms.ProgressBar, ByVal ProgressBar_Color As ProgressBarColor)
         SendMessage(ProgressBar_Name.Handle, &H410, ProgressBar_Color, 0)
     End Sub
@@ -43,7 +38,6 @@ Public Class SynctoCloud
                 e.Cancel = False
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -62,7 +56,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_refund_return_details")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -78,7 +71,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_system_logs")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -94,7 +86,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_system_logs")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -110,7 +101,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_system_logs")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -125,7 +115,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_system_logs")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -138,7 +127,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_daily_transaction")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -154,7 +142,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_daily_transaction_details")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -169,7 +156,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_pos_inventory")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -184,7 +170,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_pos_inventory")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -199,7 +184,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_expense_list")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -214,7 +198,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_expense_details")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -229,7 +212,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_users")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -244,7 +226,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_daily_transaction")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -259,7 +240,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_deposit")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -274,7 +254,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_transaction_mode_details")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -286,7 +265,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_price_request_change")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -298,7 +276,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="tbcoupon")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -311,7 +288,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_send_bug_report")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -323,7 +299,6 @@ Public Class SynctoCloud
             gettablesize(tablename:="loc_senior_details")
             countrows(tablename:=table)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -338,7 +313,6 @@ Public Class SynctoCloud
                 DataGridView2.Rows.Add(row("COUNT(*)"), tablename)
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         Finally
             LocalhostConn.close
@@ -357,7 +331,6 @@ Public Class SynctoCloud
                 DataGridView1.Rows.Add(row("Table"), row("Size in MB"))
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         Finally
             LocalhostConn.close
@@ -377,7 +350,6 @@ Public Class SynctoCloud
             LabelTTLRowtoSync.Text = ""
             Label5.Text = ""
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -391,7 +363,6 @@ Public Class SynctoCloud
             ProgressBar1.Maximum = Val(LabelTTLRowtoSync.Text)
             Label2.Text = "Item(s)"
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -660,7 +631,6 @@ Public Class SynctoCloud
 
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -678,7 +648,6 @@ Public Class SynctoCloud
             BackgroundWorkerSYNCTOCLOUD.WorkerReportsProgress = True
             BackgroundWorkerSYNCTOCLOUD.RunWorkerAsync()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -713,7 +682,7 @@ Public Class SynctoCloud
                 End If
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub ButtonSYNCINVENTORY_Click(sender As Object, e As EventArgs) Handles ButtonSYNCINVENTORY.Click
@@ -748,7 +717,7 @@ Public Class SynctoCloud
                 End If
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Dim threadListLOCTRAN As List(Of Thread) = New List(Of Thread)
@@ -1112,7 +1081,6 @@ Public Class SynctoCloud
                 Unsuccessful = True
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1159,7 +1127,6 @@ Public Class SynctoCloud
             ButtonSYNCDATA.Enabled = True
             ButtonSYNCINVENTORY.Enabled = True
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

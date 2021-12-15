@@ -63,7 +63,6 @@ Public Class TakeOut
 
                         GLOBAL_SYSTEM_LOGS("EXTRA", "SUGAR PACKETS")
                     Catch ex As Exception
-                        MsgBox(ex.ToString)
                         SendErrorReport(ex.ToString)
                     End Try
                 End If
@@ -106,7 +105,6 @@ Public Class TakeOut
                         GLOBAL_FUNCTION_UPDATE("loc_pos_inventory", "stock_primary=" & SPrimary & ",stock_secondary=" & SSecondary & ",stock_no_of_servings=" & SNServing & "", "server_inventory_id = " & WaffleBagID)
                         GLOBAL_SYSTEM_LOGS("EXTRA", "PACKAGING")
                     Catch ex As Exception
-                        MsgBox(ex.ToString)
                         SendErrorReport(ex.ToString)
                     End Try
                 End If
@@ -115,7 +113,6 @@ Public Class TakeOut
             End If
             Log()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -131,7 +128,6 @@ Public Class TakeOut
                 GLOBAL_SYSTEM_LOGS(LogType, LogDesc)
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -164,7 +160,7 @@ Public Class TakeOut
                 TextBoxQuantity.Text = btntext
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub ButtonNo9_Click(sender As Object, e As EventArgs) Handles ButtonNo9.Click
@@ -237,7 +233,7 @@ Public Class TakeOut
         Try
             LoadSettings()
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Dim WaffleBagID
@@ -256,7 +252,6 @@ Public Class TakeOut
             Next
 
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -270,7 +265,6 @@ Public Class TakeOut
         Try
             Numeric(sender, e)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

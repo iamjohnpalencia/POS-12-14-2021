@@ -11,7 +11,6 @@ Public Class CouponCode
             BackgroundWorker1.WorkerSupportsCancellation = True
             BackgroundWorker1.RunWorkerAsync()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -29,26 +28,21 @@ Public Class CouponCode
                 End If
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub LoadCoupons(sender As Object)
         Try
-            Try
-                Dim LoadCouponTable = AsDatatable("tbcoupon WHERE active = 1", "*", DataGridViewCoupons)
-                For Each row As DataRow In LoadCouponTable.Rows
-                    DataGridViewCoupons.Rows.Add(row("ID"), row("Couponname_"), row("Desc_"), row("Discountvalue_"), row("Referencevalue_"), row("Type"), row("Bundlebase_"), row("BBValue_"), row("Bundlepromo_"), row("BPValue_"), row("Effectivedate"), row("Expirydate"))
-                Next
-                If LoadCouponTable.Rows.Count > 0 Then
-                    Dim arg = New DataGridViewCellEventArgs(0, 0)
-                    DataGridViewCoupons_CellClick(sender, arg)
-                End If
-            Catch ex As Exception
-                MsgBox(ex.ToString)
-            End Try
+
+            Dim LoadCouponTable = AsDatatable("tbcoupon WHERE active = 1", "*", DataGridViewCoupons)
+            For Each row As DataRow In LoadCouponTable.Rows
+                DataGridViewCoupons.Rows.Add(row("ID"), row("Couponname_"), row("Desc_"), row("Discountvalue_"), row("Referencevalue_"), row("Type"), row("Bundlebase_"), row("BBValue_"), row("Bundlepromo_"), row("BPValue_"), row("Effectivedate"), row("Expirydate"))
+            Next
+            If LoadCouponTable.Rows.Count > 0 Then
+                Dim arg = New DataGridViewCellEventArgs(0, 0)
+                DataGridViewCoupons_CellClick(sender, arg)
+            End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -56,35 +50,39 @@ Public Class CouponCode
         POS.Enabled = True
     End Sub
     Private Sub CouponDefault()
-        CouponApplied = False
-        CouponName = ""
-        CouponDesc = ""
-        CouponLine = 10
-        CouponTotal = 0
-        With POS
-            For i As Integer = 0 To .DataGridViewOrders.Rows.Count - 1 Step +1
-                If .DataGridViewOrders.Rows(i).Cells(11).Value > 0 Then
-                    Dim priceadd = .DataGridViewOrders.Rows(i).Cells(11).Value * S_Upgrade_Price
-                    If S_ZeroRated = "0" Then
-                        .DataGridViewOrders.Rows(i).Cells(3).Value = .DataGridViewOrders.Rows(i).Cells(1).Value * .DataGridViewOrders.Rows(i).Cells(2).Value + priceadd
+        Try
+            CouponApplied = False
+            CouponName = ""
+            CouponDesc = ""
+            CouponLine = 10
+            CouponTotal = 0
+            With POS
+                For i As Integer = 0 To .DataGridViewOrders.Rows.Count - 1 Step +1
+                    If .DataGridViewOrders.Rows(i).Cells(11).Value > 0 Then
+                        Dim priceadd = .DataGridViewOrders.Rows(i).Cells(11).Value * S_Upgrade_Price
+                        If S_ZeroRated = "0" Then
+                            .DataGridViewOrders.Rows(i).Cells(3).Value = .DataGridViewOrders.Rows(i).Cells(1).Value * .DataGridViewOrders.Rows(i).Cells(2).Value + priceadd
+                        Else
+                            Dim TotalPrice As Double = 0
+                            Dim Tax = 1 + Val(S_Tax)
+                            Dim Total = Math.Round(.DataGridViewOrders.Rows(i).Cells(1).Value * .DataGridViewOrders.Rows(i).Cells(2).Value + priceadd / Tax, 2, MidpointRounding.AwayFromZero)
+                            .DataGridViewOrders.Rows(i).Cells(3).Value = Total
+                        End If
                     Else
-                        Dim TotalPrice As Double = 0
-                        Dim Tax = 1 + Val(S_Tax)
-                        Dim Total = Math.Round(.DataGridViewOrders.Rows(i).Cells(1).Value * .DataGridViewOrders.Rows(i).Cells(2).Value + priceadd / Tax, 2, MidpointRounding.AwayFromZero)
-                        .DataGridViewOrders.Rows(i).Cells(3).Value = Total
+                        If S_ZeroRated = "0" Then
+                            .DataGridViewOrders.Rows(i).Cells(3).Value = .DataGridViewOrders.Rows(i).Cells(1).Value * .DataGridViewOrders.Rows(i).Cells(2).Value
+                        Else
+                            Dim TotalPrice As Double = 0
+                            Dim Tax = 1 + Val(S_Tax)
+                            Dim Total = Math.Round(.DataGridViewOrders.Rows(i).Cells(1).Value * .DataGridViewOrders.Rows(i).Cells(2).Value / Tax, 2, MidpointRounding.AwayFromZero)
+                            .DataGridViewOrders.Rows(i).Cells(3).Value = Total
+                        End If
                     End If
-                Else
-                    If S_ZeroRated = "0" Then
-                        .DataGridViewOrders.Rows(i).Cells(3).Value = .DataGridViewOrders.Rows(i).Cells(1).Value * .DataGridViewOrders.Rows(i).Cells(2).Value
-                    Else
-                        Dim TotalPrice As Double = 0
-                        Dim Tax = 1 + Val(S_Tax)
-                        Dim Total = Math.Round(.DataGridViewOrders.Rows(i).Cells(1).Value * .DataGridViewOrders.Rows(i).Cells(2).Value / Tax, 2, MidpointRounding.AwayFromZero)
-                        .DataGridViewOrders.Rows(i).Cells(3).Value = Total
-                    End If
-                End If
-            Next
-        End With
+                Next
+            End With
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
     End Sub
     Private Sub ButtonSubmit_Click(sender As Object, e As EventArgs) Handles ButtonSubmit.Click
         Try
@@ -120,7 +118,6 @@ Public Class CouponCode
             End If
             'Compute()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -216,7 +213,6 @@ Public Class CouponCode
                 .DISCOUNTTYPE = Me.DataGridViewCoupons.Item(5, Me.DataGridViewCoupons.CurrentRow.Index).Value.ToString
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -298,7 +294,6 @@ Public Class CouponCode
             End With
             Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -428,7 +423,6 @@ Public Class CouponCode
 
             Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -447,9 +441,24 @@ Public Class CouponCode
                     TOTALAMOUNTDUE = Format(GROSSSALES - TOTALDISCOUNT, "0.00")
                     Dim VATABLESALES As Double = 0
                     Dim VAT12PERCENT As Double = 0
+                    Dim LESSVAT As Double = 0
+
+
 
                     If S_ZeroRated = "1" Then
-                        VATABLESALES = Format(GROSSSALES, "0.00")
+                        Dim TotalPrice As Double = 0
+                        Dim GrandTotal As Double = 0
+                        With POS.DataGridViewOrders
+                            For i As Integer = 0 To .Rows.Count - 1 Step +1
+                                TotalPrice = .Rows(i).Cells(1).Value * .Rows(i).Cells(2).Value
+                                GrandTotal += TotalPrice
+                            Next
+                        End With
+
+                        Dim SubTotal = Convert.ToDecimal(Double.Parse(POS.TextBoxSUBTOTAL.Text))
+                        LESSVAT = Math.Round(GrandTotal - SubTotal, 2, MidpointRounding.AwayFromZero)
+
+                        VATABLESALES = 0
                         VAT12PERCENT = 0
                         .ZERORATEDSALES = .Label76.Text
                         .ZERORATEDNETSALES = TOTALAMOUNTDUE
@@ -463,7 +472,7 @@ Public Class CouponCode
                     .GROSSSALE = GROSSSALES
                     .TOTALDISCOUNTEDAMOUNT = GROSSSALES
                     .VATEXEMPTSALES = 0
-                    .LESSVAT = 0
+                    .LESSVAT = LESSVAT
                     .TOTALDISCOUNT = TOTALDISCOUNT
                     .VATABLESALES = VATABLESALES
                     .VAT12PERCENT = VAT12PERCENT
@@ -483,7 +492,6 @@ Public Class CouponCode
             End With
             Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -603,7 +611,6 @@ Public Class CouponCode
             End With
             Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -712,7 +719,6 @@ Public Class CouponCode
             End With
             Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -734,8 +740,9 @@ Public Class CouponCode
                         Next
                     Next
                 Catch ex As Exception
-                    MsgBox(ex.ToString)
+                    SendErrorReport(ex.ToString)
                 End Try
+
                 Dim BundlepromoID As String = Me.DataGridViewCoupons.Item(8, Me.DataGridViewCoupons.CurrentRow.Index).Value.ToString
                 Dim bundIds As String() = BundlepromoID.Split(New Char() {","c})
                 Dim BundpromoID As Boolean = False
@@ -750,13 +757,12 @@ Public Class CouponCode
                                         Exit Try
                                     Else
                                         BundpromoID = False
-
                                     End If
                                 End If
                             Next
                         Next
                     Catch ex As Exception
-                        MsgBox(ex.ToString)
+                        SendErrorReport(ex.ToString)
                     End Try
                     Dim GROSSSALES As Double = 0
                     Dim DISCOUNTAMOUNT As Double = 0
@@ -773,7 +779,7 @@ Public Class CouponCode
                                 CountQty += .DataGridViewOrders.Rows(i).Cells(1).Value
                             End If
 
-                            If CountQty = 3 Then
+                            If CountQty >= 3 Then
                                 If S_ZeroRated = "0" Then
                                     VAT12PERCENT = Format(VATABLESALES * S_Tax, "0.00")
                                     DISCOUNTAMOUNT = .DataGridViewOrders.Rows(i).Cells(2).Value
@@ -791,6 +797,7 @@ Public Class CouponCode
                                     .ZERORATEDNETSALES = TOTALAMOUNTDUE
                                     VAT12PERCENT = 0
                                 End If
+
                                 .GROSSSALE = GROSSSALES
                                 .TOTALDISCOUNTEDAMOUNT = DISCOUNTAMOUNT
                                 .VATEXEMPTSALES = 0
@@ -820,7 +827,6 @@ Public Class CouponCode
             End With
             Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -828,10 +834,7 @@ Public Class CouponCode
         Try
             LabelDesc.Text = DataGridViewCoupons.SelectedRows(0).Cells(2).Value.ToString
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
-
-
 End Class

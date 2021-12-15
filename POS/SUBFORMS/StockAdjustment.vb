@@ -16,7 +16,6 @@ Public Class StockAdjustment
             Dim arg = New DataGridViewCellEventArgs(0, 0)
             DataGridViewPanelStockAdjustment_CellClick(sender, arg)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -31,7 +30,6 @@ Public Class StockAdjustment
                 DataGridViewPanelStockAdjustment.Rows.Add(row("formula_id"), row("product_ingredients"), row("P"), row("stock_secondary"), row("S"), row("server_inventory_id"))
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -52,7 +50,6 @@ Public Class StockAdjustment
             End If
             SelectFormula(FormulaID, Origin)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -79,7 +76,6 @@ Public Class StockAdjustment
             Next
             LocalhostConn.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -87,7 +83,6 @@ Public Class StockAdjustment
         Try
             GLOBAL_SELECT_ALL_FUNCTION_COMBOBOX("admin_outlets WHERE user_guid = '" & ClientGuid & "' AND store_id NOT IN(" & ClientStoreID & ")", "store_name", ComboBoxtransfer, False)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -95,7 +90,6 @@ Public Class StockAdjustment
         Try
             GLOBAL_SELECT_ALL_FUNCTION_COMBOBOX("loc_transfer_data WHERE active = 1", "transfer_cat", ComboBoxDeduction, True)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -111,7 +105,6 @@ Public Class StockAdjustment
                 .Columns(5).HeaderText = "Updated At"
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -224,7 +217,6 @@ Public Class StockAdjustment
             End If
             DataGridViewPanelStockAdjustment.CurrentCell = DataGridViewPanelStockAdjustment.Rows(IngredientIndex).Cells(1)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -249,7 +241,6 @@ Public Class StockAdjustment
                 ComboBoxtransfer.Enabled = False
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -275,7 +266,6 @@ Public Class StockAdjustment
                 MsgBox("Select Category first")
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -291,7 +281,6 @@ Public Class StockAdjustment
                 MsgBox("Select category first")
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -317,7 +306,6 @@ Public Class StockAdjustment
                 MsgBox("Select category Category first")
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -333,7 +321,6 @@ Public Class StockAdjustment
                 .Columns(5).HeaderText = "Updated At"
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -353,7 +340,6 @@ Public Class StockAdjustment
         Try
             Numeric(sender, e)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -364,7 +350,6 @@ Public Class StockAdjustment
                 e.Handled = True
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

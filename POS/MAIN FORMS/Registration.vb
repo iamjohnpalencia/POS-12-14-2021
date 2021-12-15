@@ -12,37 +12,38 @@ Public Class Registration
         Me.Dispose()
     End Sub
     Private Sub ButtonSubmit_click(sender As Object, e As EventArgs) Handles ButtonSubmit.Click
-        If String.IsNullOrWhiteSpace(TextBoxFN.Text.Trim) Then
-            TextBoxFN.Clear()
-            MessageBox.Show("Full name is required!", "Incomplete Fields", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        ElseIf String.IsNullOrWhiteSpace(TextBoxEMAIL.Text.Trim) Then
-            MessageBox.Show("Email is required!", "Incomplete Fields", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        ElseIf String.IsNullOrWhiteSpace(TextBoxUN.Text.Trim) Then
-            MessageBox.Show("Username is required!", "Incomplete Fields", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        ElseIf String.IsNullOrWhiteSpace(TextBoxP.Text.Trim) Then
-            MessageBox.Show("Password is required!", "Incomplete Fields", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        ElseIf String.IsNullOrWhiteSpace(TextBoxCN.Text.Trim) Then
-            MessageBox.Show("Contact number is required!", "Incomplete Fields", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        Else
-            If TextBoxP.Text.Trim <> TextBoxCP.Text.Trim Then
-                MessageBox.Show("Password did not match!", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Try
+            If String.IsNullOrWhiteSpace(TextBoxFN.Text.Trim) Then
+                TextBoxFN.Clear()
+                MessageBox.Show("Full name is required!", "Incomplete Fields", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf String.IsNullOrWhiteSpace(TextBoxEMAIL.Text.Trim) Then
+                MessageBox.Show("Email is required!", "Incomplete Fields", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf String.IsNullOrWhiteSpace(TextBoxUN.Text.Trim) Then
+                MessageBox.Show("Username is required!", "Incomplete Fields", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf String.IsNullOrWhiteSpace(TextBoxP.Text.Trim) Then
+                MessageBox.Show("Password is required!", "Incomplete Fields", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf String.IsNullOrWhiteSpace(TextBoxCN.Text.Trim) Then
+                MessageBox.Show("Contact number is required!", "Incomplete Fields", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Else
-                If CheckUserName(TextBoxUN.Text) = False Then
-                    If CheckEmail(TextBoxEMAIL.Text) = False Then
-                        If CheckContactNumber(TextBoxCN.Text) = False Then
-                            Dim cipherText As String = ConvertPassword(SourceString:=TextBoxP.Text)
-                            Try
+                If TextBoxP.Text.Trim <> TextBoxCP.Text.Trim Then
+                    MessageBox.Show("Password did not match!", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Else
+                    If CheckUserName(TextBoxUN.Text) = False Then
+                        If CheckEmail(TextBoxEMAIL.Text) = False Then
+                            If CheckContactNumber(TextBoxCN.Text) = False Then
+                                Dim cipherText As String = ConvertPassword(SourceString:=TextBoxP.Text)
+                                Try
 
-                                messageboxappearance = True
-                                If RadioButtonMALE.Checked = True Then
-                                    gender = "Male"
-                                ElseIf RadioButtonFEMALE.Checked = True Then
-                                    gender = "Female"
-                                End If
-                                uniqid = CheckUserId()
-                                table = "loc_users"
-                                fields = " (`uniq_id`,`user_level`,`full_name`,`username`,`password`,`contact_number`,`email`,`position`,`store_id`,`gender`,`active`,`guid`,`synced`)"
-                                value = "('" & uniqid & "'
+                                    messageboxappearance = True
+                                    If RadioButtonMALE.Checked = True Then
+                                        gender = "Male"
+                                    ElseIf RadioButtonFEMALE.Checked = True Then
+                                        gender = "Female"
+                                    End If
+                                    uniqid = CheckUserId()
+                                    table = "loc_users"
+                                    fields = " (`uniq_id`,`user_level`,`full_name`,`username`,`password`,`contact_number`,`email`,`position`,`store_id`,`gender`,`active`,`guid`,`synced`)"
+                                    value = "('" & uniqid & "'
                                 , 'Crew'
                                 , '" & TextBoxFN.Text & "'
                                 , '" & TextBoxUN.Text & "'
@@ -55,28 +56,31 @@ Public Class Registration
                                 , " & 1 & "
                                 , '" & ClientGuid & "'
                                 , 'Unsynced')"
-                                successmessage = "Successfully Registered!"
-                                errormessage = "error registrationvb(loc_users)"
-                                GLOBAL_INSERT_FUNCTION(table:=table, fields:=fields, values:=value)
-                            Catch ex As Exception
-                            End Try
-                            SystemLogType = "USER REGISTRATION"
-                            SystemLogDesc = "Registration of: " & TextBoxFN.Text
-                            GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
-                            ClearTextBox(Me)
-                            selectmax(whatform:=3)
-                            MessageBox.Show("Success fully registered" & vbNewLine & "Username: " & TextBoxUN.Text & vbNewLine & "Password: " & TextBoxP.Text, "Registration", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                                    successmessage = "Successfully Registered!"
+                                    errormessage = "error registrationvb(loc_users)"
+                                    GLOBAL_INSERT_FUNCTION(table:=table, fields:=fields, values:=value)
+                                Catch ex As Exception
+                                End Try
+                                SystemLogType = "USER REGISTRATION"
+                                SystemLogDesc = "Registration of: " & TextBoxFN.Text
+                                GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
+                                ClearTextBox(Me)
+                                selectmax(whatform:=3)
+                                MessageBox.Show("Success fully registered" & vbNewLine & "Username: " & TextBoxUN.Text & vbNewLine & "Password: " & TextBoxP.Text, "Registration", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                            Else
+                                MsgBox("Contact number exist")
+                            End If
                         Else
-                            MsgBox("Contact number exist")
+                            MsgBox("Email exist")
                         End If
                     Else
-                        MsgBox("Email exist")
+                        MsgBox("Username exist")
                     End If
-                Else
-                    MsgBox("Username exist")
                 End If
             End If
-        End If
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
     End Sub
 
 
@@ -98,7 +102,6 @@ Public Class Registration
                 e.Handled = True
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

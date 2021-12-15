@@ -4,7 +4,6 @@ Public Class SelectNewFormula
         Try
             GLOBAL_SELECT_ALL_FUNCTION("loc_product_formula", "`product_ingredients`", DataGridView1)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -14,15 +13,19 @@ Public Class SelectNewFormula
         Close()
     End Sub
     Private Sub SelectNewFormula_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If ChangeFormula = True Then
-            For Each btn As Button In Changeproductformula.FlowLayoutPanel1.Controls.OfType(Of Button)()
-                If btn.Name = Changeproductformula.IamTheChoosenButton Then
-                    btn.Text = DataGridView1.SelectedRows(0).Cells(0).Value.ToString
-                    btn.Name = DataGridView1.SelectedRows(0).Cells(0).Value.ToString & Changeproductformula.intTop
-                    Changeproductformula.intTop += Changeproductformula.intTop
-                End If
-            Next
-        End If
-        Changeproductformula.Enabled = True
+        Try
+            If ChangeFormula = True Then
+                For Each btn As Button In Changeproductformula.FlowLayoutPanel1.Controls.OfType(Of Button)()
+                    If btn.Name = Changeproductformula.IamTheChoosenButton Then
+                        btn.Text = DataGridView1.SelectedRows(0).Cells(0).Value.ToString
+                        btn.Name = DataGridView1.SelectedRows(0).Cells(0).Value.ToString & Changeproductformula.intTop
+                        Changeproductformula.intTop += Changeproductformula.intTop
+                    End If
+                Next
+            End If
+            Changeproductformula.Enabled = True
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
     End Sub
 End Class

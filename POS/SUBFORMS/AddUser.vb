@@ -37,7 +37,6 @@ Public Class AddUser
                 End If
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -50,41 +49,41 @@ Public Class AddUser
                 updateuser()
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
 
     Private Sub adduser()
-        If String.IsNullOrEmpty(TextBoxFULLNAME.Text.Trim) Then
-            TextBoxFULLNAME.Clear()
-            MessageBox.Show("Full name is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        ElseIf TextBoxEMAIL.Text.Trim.Length = 0 Then
-            MessageBox.Show("Email is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        ElseIf TextBoxUSERNAME.Text.Trim.Length = 0 Then
-            MessageBox.Show("Username is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        ElseIf TextBoxPASS.Text.Trim.Length = 0 Then
-            MessageBox.Show("Password is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        ElseIf TextBoxCONTACT.Text.Trim.Length = 0 Then
-            MessageBox.Show("Contact number is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        Else
-            If TextBoxPASS.Text.Trim <> TextBoxCONPASS.Text.Trim Then
-                MessageBox.Show("Password did not match!", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Try
+            If String.IsNullOrEmpty(TextBoxFULLNAME.Text.Trim) Then
+                TextBoxFULLNAME.Clear()
+                MessageBox.Show("Full name is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf TextBoxEMAIL.Text.Trim.Length = 0 Then
+                MessageBox.Show("Email is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf TextBoxUSERNAME.Text.Trim.Length = 0 Then
+                MessageBox.Show("Username is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf TextBoxPASS.Text.Trim.Length = 0 Then
+                MessageBox.Show("Password is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf TextBoxCONTACT.Text.Trim.Length = 0 Then
+                MessageBox.Show("Contact number is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Else
-                Dim cipherText As String = ConvertPassword(SourceString:=TextBoxPASS.Text)
-                If CheckUserName(TextBoxUSERNAME.Text) = False Then
-                    If CheckEmail(TextBoxEMAIL.Text) = False Then
-                        If CheckContactNumber(TextBoxCONTACT.Text) = False Then
-                            Try
-                                If RadioButtonMALE.Checked = True Then
-                                    gender = "Male"
-                                ElseIf RadioButtonFEMALE.Checked = True Then
-                                    gender = "Female"
-                                End If
-                                userid = CheckUserId()
-                                table = "loc_users"
-                                fields = " (`uniq_id`,`user_level`,`full_name`,`username`,`password`,`contact_number`,`email`,`position`,`store_id`,`gender`,`active`,`guid`,`synced`)"
-                                value = "('" & userid & "'
+                If TextBoxPASS.Text.Trim <> TextBoxCONPASS.Text.Trim Then
+                    MessageBox.Show("Password did not match!", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Else
+                    Dim cipherText As String = ConvertPassword(SourceString:=TextBoxPASS.Text)
+                    If CheckUserName(TextBoxUSERNAME.Text) = False Then
+                        If CheckEmail(TextBoxEMAIL.Text) = False Then
+                            If CheckContactNumber(TextBoxCONTACT.Text) = False Then
+                                Try
+                                    If RadioButtonMALE.Checked = True Then
+                                        gender = "Male"
+                                    ElseIf RadioButtonFEMALE.Checked = True Then
+                                        gender = "Female"
+                                    End If
+                                    userid = CheckUserId()
+                                    table = "loc_users"
+                                    fields = " (`uniq_id`,`user_level`,`full_name`,`username`,`password`,`contact_number`,`email`,`position`,`store_id`,`gender`,`active`,`guid`,`synced`)"
+                                    value = "('" & userid & "'
                             ,'Crew'
                             , '" & TextBoxFULLNAME.Text & "'
                             , '" & TextBoxUSERNAME.Text & "'
@@ -97,78 +96,84 @@ Public Class AddUser
                             , " & 1 & "
                             , '" & ClientGuid & "'
                             , 'Unsynced')"
-                                successmessage = "Successfully Registered!"
-                                errormessage = "error registrationvb(loc_users)"
-                                GLOBAL_INSERT_FUNCTION(table:=table, fields:=fields, values:=value)
-                            Catch ex As Exception
-                                MsgBox(ex.ToString)
-                                SendErrorReport(ex.ToString)
-                            End Try
-                            ClearTextBox(Me)
-                            selectmax(whatform:=3)
-                            messageboxappearance = False
-                            SystemLogType = "NEW USER"
-                            SystemLogDesc = "Added by :" & returnfullname(ClientCrewID) & " : " & ClientRole
-                            GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
-                            MsgBox("Registered Successfully")
-                            MDIFORM.newMDIchildUser.Usersloadusers()
-                            Close()
+                                    successmessage = "Successfully Registered!"
+                                    errormessage = "error registrationvb(loc_users)"
+                                    GLOBAL_INSERT_FUNCTION(table:=table, fields:=fields, values:=value)
+                                Catch ex As Exception
+                                    MsgBox(ex.ToString)
+                                    SendErrorReport(ex.ToString)
+                                End Try
+                                ClearTextBox(Me)
+                                selectmax(whatform:=3)
+                                messageboxappearance = False
+                                SystemLogType = "NEW USER"
+                                SystemLogDesc = "Added by :" & returnfullname(ClientCrewID) & " : " & ClientRole
+                                GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
+                                MsgBox("Registered Successfully")
+                                MDIFORM.newMDIchildUser.Usersloadusers()
+                                Close()
+                            Else
+                                MsgBox("Contact number already exist. Please use different ontact number")
+                            End If
                         Else
-                            MsgBox("Contact number already exist. Please use different ontact number")
+                            MsgBox("Email already exist. Please use different email")
                         End If
                     Else
-                        MsgBox("Email already exist. Please use different email")
+                        MsgBox("Username already exist. Please use different username")
                     End If
-                Else
-                    MsgBox("Username already exist. Please use different username")
                 End If
             End If
-        End If
-
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
     End Sub
     Private Sub updateuser()
-        'uniqid = DataGridViewUserSettings.SelectedRows(0).Cells(14).Value.ToString()
-        If String.IsNullOrEmpty(TextBoxFULLNAME.Text.Trim) Then
-            TextBoxFULLNAME.Clear()
-            MessageBox.Show("Full name is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        ElseIf TextBoxEMAIL.Text.Trim.Length = 0 Then
-            MessageBox.Show("Email is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        ElseIf TextBoxUSERNAME.Text.Trim.Length = 0 Then
-            MessageBox.Show("Username is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        ElseIf TextBoxCONTACT.Text.Trim.Length = 0 Then
-            MessageBox.Show("Contact number is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
-        Else
-            Dim cipherText As String = ConvertPassword(SourceString:=TextBoxPASS.Text)
+        Try
+            'uniqid = DataGridViewUserSettings.SelectedRows(0).Cells(14).Value.ToString()
+            If String.IsNullOrEmpty(TextBoxFULLNAME.Text.Trim) Then
+                TextBoxFULLNAME.Clear()
+                MessageBox.Show("Full name is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf TextBoxEMAIL.Text.Trim.Length = 0 Then
+                MessageBox.Show("Email is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf TextBoxUSERNAME.Text.Trim.Length = 0 Then
+                MessageBox.Show("Username is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf TextBoxCONTACT.Text.Trim.Length = 0 Then
+                MessageBox.Show("Contact number is required!", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Else
+                Dim cipherText As String = ConvertPassword(SourceString:=TextBoxPASS.Text)
 
-            Try
+                Try
+                    messageboxappearance = False
+                    If RadioButtonMALE.Checked = True Then
+                        gender = "Male"
+                    ElseIf RadioButtonFEMALE.Checked = True Then
+                        gender = "Female"
+                    End If
+                    table = " loc_users "
+                    If String.IsNullOrWhiteSpace(TextBoxPASS.Text) Then
+                        fields = "`full_name`='" & TextBoxFULLNAME.Text & "',`username`='" & TextBoxUSERNAME.Text & "',`contact_number`= '" & TextBoxCONTACT.Text & "',`email`='" & TextBoxEMAIL.Text & "',`gender`='" & gender & "',`active`=" & 1 & ", synced = 'Unsynced' "
+                    Else
+                        fields = "`full_name`='" & TextBoxFULLNAME.Text & "',`username`='" & TextBoxUSERNAME.Text & "',`password`='" & cipherText & "',`contact_number`= '" & TextBoxCONTACT.Text & "',`email`='" & TextBoxEMAIL.Text & "',`gender`='" & gender & "',`active`=" & 1 & ", synced = 'Unsynced' "
+                    End If
+                    Dim where = " uniq_id = '" & userid & "'"
+                    GLOBAL_FUNCTION_UPDATE(table, fields, where)
+                Catch ex As Exception
+                    MsgBox(ex.ToString)
+                    SendErrorReport(ex.ToString)
+                End Try
+                ClearTextBox(Me)
+                selectmax(whatform:=3)
                 messageboxappearance = False
-                If RadioButtonMALE.Checked = True Then
-                    gender = "Male"
-                ElseIf RadioButtonFEMALE.Checked = True Then
-                    gender = "Female"
-                End If
-                table = " loc_users "
-                If String.IsNullOrWhiteSpace(TextBoxPASS.Text) Then
-                    fields = "`full_name`='" & TextBoxFULLNAME.Text & "',`username`='" & TextBoxUSERNAME.Text & "',`contact_number`= '" & TextBoxCONTACT.Text & "',`email`='" & TextBoxEMAIL.Text & "',`gender`='" & gender & "',`active`=" & 1 & ", synced = 'Unsynced' "
-                Else
-                    fields = "`full_name`='" & TextBoxFULLNAME.Text & "',`username`='" & TextBoxUSERNAME.Text & "',`password`='" & cipherText & "',`contact_number`= '" & TextBoxCONTACT.Text & "',`email`='" & TextBoxEMAIL.Text & "',`gender`='" & gender & "',`active`=" & 1 & ", synced = 'Unsynced' "
-                End If
-                Dim where = " uniq_id = '" & userid & "'"
-                GLOBAL_FUNCTION_UPDATE(table, fields, where)
-            Catch ex As Exception
-                MsgBox(ex.ToString)
-                SendErrorReport(ex.ToString)
-            End Try
-            ClearTextBox(Me)
-            selectmax(whatform:=3)
-            messageboxappearance = False
-            SystemLogType = "USER UPDATE"
-            SystemLogDesc = "Updated by :" & returnfullname(ClientCrewID) & " : " & ClientRole
-            GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
-            MDIFORM.newMDIchildUser.Usersloadusers()
-            MsgBox("Updated Successfully")
-            Close()
-        End If
+                SystemLogType = "USER UPDATE"
+                SystemLogDesc = "Updated by :" & returnfullname(ClientCrewID) & " : " & ClientRole
+                GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
+                MDIFORM.newMDIchildUser.Usersloadusers()
+                MsgBox("Updated Successfully")
+                Close()
+            End If
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
 
     End Sub
     Private Sub edituser()
@@ -195,7 +200,6 @@ Public Class AddUser
             End If
 
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -210,7 +214,6 @@ Public Class AddUser
                 e.Handled = True
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -219,7 +222,6 @@ Public Class AddUser
         Try
             Numeric(sender, e)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

@@ -1,11 +1,11 @@
 ﻿Public Class TransactionTypeInfo
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         TopMost = True
-        If transactionmode = "GCash" Then
-            TextBoxMARKUP.Text = Val(POS.TextBoxGRANDTOTAL.Text) * 0.15
-        Else
-            TextBoxMARKUP.Text = "N/A"
-        End If
+        'If transactionmode = "GCash" Then
+        '    TextBoxMARKUP.Text = Val(POS.TextBoxGRANDTOTAL.Text) * 0.15
+        'Else
+        '    TextBoxMARKUP.Text = "N/A"
+        'End If
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
@@ -14,7 +14,6 @@
         Else
             TEXTBOXFULLNAMEVALUE = TextBoxFULLNAME.Text
             TEXTBOXREFERENCEVALUE = TextBoxREFERENCE.Text
-            TEXTBOXMARKUPVALUE = TextBoxMARKUP.Text
             Close()
             TransactionType.Close()
         End If
@@ -29,7 +28,6 @@
                 e.Handled = True
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

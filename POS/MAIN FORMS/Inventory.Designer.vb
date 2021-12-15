@@ -265,12 +265,14 @@ Partial Class Inventory
         '
         'Button7
         '
+        Me.Button7.Enabled = False
         Me.Button7.Location = New System.Drawing.Point(3, 3)
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(138, 29)
         Me.Button7.TabIndex = 0
         Me.Button7.Text = "Reset Inventory"
         Me.Button7.UseVisualStyleBackColor = True
+        Me.Button7.Visible = False
         '
         'TabPage11
         '

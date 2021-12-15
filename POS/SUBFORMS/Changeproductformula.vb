@@ -17,7 +17,6 @@ Public Class Changeproductformula
             DataGridViewProducts.Columns(0).Visible = False
             DataGridViewProducts.Columns(2).Visible = False
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -28,7 +27,6 @@ Public Class Changeproductformula
             Dim Origin = DataGridViewProducts.SelectedRows(0).Cells(3).Value.ToString
             LoadFormulas(formulaid, Origin)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -65,7 +63,6 @@ Public Class Changeproductformula
                 LocalhostConn.Close()
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -106,7 +103,6 @@ Public Class Changeproductformula
                 LoadProducts()
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

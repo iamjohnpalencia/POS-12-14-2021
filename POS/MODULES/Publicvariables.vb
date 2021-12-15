@@ -142,7 +142,6 @@ Module publicVariables
     'ModeOfTransactionDetails
     Public TEXTBOXFULLNAMEVALUE
     Public TEXTBOXREFERENCEVALUE
-    Public TEXTBOXMARKUPVALUE
     '
     Public IfConnectionIsConfigured As Boolean
     'Loading

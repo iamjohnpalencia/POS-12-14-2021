@@ -24,7 +24,6 @@ Public Class ForgotPassword
                 ResetPassword.CrewUserId = row("user_id")
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         If dt.Rows.Count > 0 Then
@@ -50,7 +49,6 @@ Public Class ForgotPassword
                 e.Handled = True
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

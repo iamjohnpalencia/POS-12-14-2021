@@ -19,7 +19,7 @@ Public Class PendingOrders
             Me.ComboBoxCustomerName.DisplayMember = "customer_name"
             Me.ComboBoxCustomerName.ValueMember = "customer_name"
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Public Sub pendingloadorders()
@@ -32,7 +32,6 @@ Public Class PendingOrders
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -46,7 +45,6 @@ Public Class PendingOrders
                 POS.DataGridViewOrders.Rows.Add(row("product_name"), row("product_quantity"), row("product_price"), row("product_total"), row("increment"), row("product_id"), row("product_sku"), row("product_category"), row("product_addon_id"), row("ColumnSumID"), row("ColumnInvID"), row("Upgrade"), row("Origin"), row("addontype"))
             Next row
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Try
@@ -58,7 +56,6 @@ Public Class PendingOrders
                 POS.DataGridViewInv.Rows.Add(row("sr_total"), row("f_id"), row("qty"), row("id"), row("nm"), row("org_serve"), row("cog"), row("ocog"), row("prd.addid"), row("origin"))
             Next row
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -95,9 +92,5 @@ Public Class PendingOrders
 
     Private Sub ButtonKeyboard_Click(sender As Object, e As EventArgs) Handles ButtonKeyboard.Click
         ShowKeyboard()
-    End Sub
-
-    Private Sub ComboBoxCustomerName_KeyPress(sender As Object, e As KeyPressEventArgs) Handles ComboBoxCustomerName.KeyPress
-
     End Sub
 End Class

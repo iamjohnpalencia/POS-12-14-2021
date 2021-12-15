@@ -90,7 +90,6 @@ Public Class SettingsForm
             End With
             ComboBoxPrintSize.SelectedItem = My.Settings.PrintSize
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -153,7 +152,7 @@ Public Class SettingsForm
             chk.Width = 100
 
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub LoadLedDisplaySettings()
@@ -163,7 +162,6 @@ Public Class SettingsForm
                 TextBoxBaudRate.Text = My.Settings.SpBaudrate
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -181,7 +179,7 @@ Public Class SettingsForm
                 CancelTestCloudCon = True
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub TabControl1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
@@ -254,7 +252,6 @@ Public Class SettingsForm
                 MsgBox("Internet connection is not available")
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -284,7 +281,6 @@ Public Class SettingsForm
                 DataGridViewPartners.Rows.Add(row("id"), row("arrid"), row("bankname"), row("date_modified"), row("crew_id"), row("store_id"), row("guid"), ActiveRow, row("synced"))
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -301,7 +297,6 @@ Public Class SettingsForm
                 DataGridViewPartnersDeact.Rows.Add(row("id"), row("arrid"), row("bankname"), row("date_modified"), row("crew_id"), row("store_id"), row("guid"), ActiveRow, row("synced"))
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -318,7 +313,6 @@ Public Class SettingsForm
                 LoadPartnersDeact()
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -335,7 +329,6 @@ Public Class SettingsForm
                 LoadPartnersDeact()
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -358,7 +351,6 @@ Public Class SettingsForm
                 LoadPartners()
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -398,7 +390,6 @@ Public Class SettingsForm
                 .Columns(2).Width = 70
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -421,7 +412,6 @@ Public Class SettingsForm
                 RadioButtonTrainingOFF.Checked = True
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -458,7 +448,6 @@ Public Class SettingsForm
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -581,7 +570,6 @@ Public Class SettingsForm
                 End With
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -627,7 +615,6 @@ Public Class SettingsForm
             End If
 
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -653,7 +640,6 @@ Public Class SettingsForm
             TextBoxSearchTranNumber.Clear()
             TextBoxIRREASON.Clear()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -680,7 +666,6 @@ Public Class SettingsForm
                 ToolStripComboBoxCategorySearch.Items.Add(row("Category"))
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -699,7 +684,6 @@ Public Class SettingsForm
                 Next
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -714,7 +698,6 @@ Public Class SettingsForm
                 .Columns(0).HeaderText = "Expiry Date"
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -729,7 +712,6 @@ Public Class SettingsForm
                 .Columns(0).HeaderText = "Expiry Date"
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -739,7 +721,7 @@ Public Class SettingsForm
             GLOBAL_INSERT_FUNCTION("tbcoupon", "(`Couponname_`, `Desc_`, `Discountvalue_`, `Referencevalue_`, `Type`, `Bundlebase_`, `BBValue_`, `Bundlepromo_`, `BPValue_`, `Effectivedate`, `Expirydate`, `active`, `store_id`, `crew_id`, `guid`, `synced`, `origin`)", value)
             GLOBAL_SYSTEM_LOGS("NEW COUPON", "Name : " & TextBoxCName.Text & " Type : " & ComboBoxCType.Text)
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Dim Checkall As Boolean = False
@@ -759,7 +741,6 @@ Public Class SettingsForm
                 Checkall = True
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -769,7 +750,6 @@ Public Class SettingsForm
             ShowAllProducts(ToolStripComboBoxCategorySearch.Text)
             CheckBox1.Checked = False
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -976,7 +956,6 @@ Public Class SettingsForm
                 MessageBox.Show("All fields are required", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1056,7 +1035,6 @@ Public Class SettingsForm
                 End If
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1080,7 +1058,6 @@ Public Class SettingsForm
                 End If
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1169,7 +1146,6 @@ Public Class SettingsForm
                 End If
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1211,7 +1187,6 @@ Public Class SettingsForm
                 My.Settings.Save()
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1254,7 +1229,6 @@ Public Class SettingsForm
                 End If
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1324,7 +1298,6 @@ Public Class SettingsForm
                 End If
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1359,7 +1332,6 @@ Public Class SettingsForm
             con.ConnectionString = "server=" & TextBoxLocalServer.Text & ";user name=" & TextBoxLocalUsername.Text & ";password=" & TextBoxLocalPassword.Text
             con.Open()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return con
@@ -1371,7 +1343,6 @@ Public Class SettingsForm
             cmd.ExecuteNonQuery()
             Process.Start("cmd.exe", "/k cd C:\xampp\mysql\bin & mysql -h " & TextBoxLocalServer.Text & " -u " & TextBoxLocalUsername.Text & " -p " & TextBoxLocalPassword.Text & " " & TextBoxLocalDatabase.Text & " < """ & TextBoxLocalRestorePath.Text & """")
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1391,7 +1362,6 @@ Public Class SettingsForm
         Try
             Process.Start("cmd.exe", "/k cd C:\xampp\mysql\bin & mysqlcheck -h " & TextBoxLocalServer.Text & " -u " & TextBoxLocalUsername.Text & " -p " & TextBoxLocalPassword.Text & " --auto-repair -c --databases " & TextBoxLocalDatabase.Text)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1406,7 +1376,6 @@ Public Class SettingsForm
         Try
             Process.Start("cmd.exe", "/k cd C:\xampp\mysql\bin & mysqlcheck -h " & TextBoxLocalServer.Text & " -u " & TextBoxLocalUsername.Text & " -p " & TextBoxLocalPassword.Text & " -o --databases " & TextBoxLocalDatabase.Text)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1472,7 +1441,6 @@ Public Class SettingsForm
                 End If
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1484,7 +1452,7 @@ Public Class SettingsForm
             End If
 
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub BackgroundWorkerLocalConnection_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorkerLocalConnection.RunWorkerCompleted
@@ -1497,7 +1465,7 @@ Public Class SettingsForm
                 ToolStripStatusLabel2.Text = "Cannot connect to server"
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Function TestDBConnectionCloud(server, username, password, database, port) As MySqlConnection
@@ -1526,7 +1494,6 @@ Public Class SettingsForm
             End If
         Catch ex As Exception
             ValidCloudConnection = False
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1576,7 +1543,6 @@ Public Class SettingsForm
                 Next
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1588,6 +1554,7 @@ Public Class SettingsForm
                 ToolStripStatusLabel3.Text = "Checking Connection " & e.ProgressPercentage & " %"
             End If
         Catch ex As Exception
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub BackgroundWorkerCloudConnection_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorkerCloudConnection.RunWorkerCompleted
@@ -1684,7 +1651,6 @@ Public Class SettingsForm
                 Next
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1734,7 +1700,6 @@ Public Class SettingsForm
             End If
             PictureBox1.Visible = False
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1760,7 +1725,7 @@ Public Class SettingsForm
             cmd = New MySqlCommand(sql, ConnectionCloud)
             CloudVersion = cmd.ExecuteScalar
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
 #End Region
@@ -1781,7 +1746,6 @@ Public Class SettingsForm
                 PRICECHANGE = False
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1803,7 +1767,6 @@ Public Class SettingsForm
                 CouponApp = False
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1828,7 +1791,6 @@ Public Class SettingsForm
                 dtlocal.Rows.Add(Cat)
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return dtlocal
@@ -1890,7 +1852,6 @@ Public Class SettingsForm
             End If
         Catch ex As Exception
             BackgroundWorker1.CancelAsync()
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
             'If table doesnt have data
         End Try
@@ -2009,7 +1970,6 @@ Public Class SettingsForm
             End If
         Catch ex As Exception
             BackgroundWorker1.CancelAsync()
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2064,7 +2024,6 @@ Public Class SettingsForm
                 Next
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2090,7 +2049,6 @@ Public Class SettingsForm
                 dtlocal.Rows.Add(Cat)
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return dtlocal
@@ -2157,7 +2115,6 @@ Public Class SettingsForm
             End If
         Catch ex As Exception
             BackgroundWorker1.CancelAsync()
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2183,7 +2140,6 @@ Public Class SettingsForm
             Next
             LocalhostConn.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return dtlocal
@@ -2250,7 +2206,6 @@ Public Class SettingsForm
             End If
         Catch ex As Exception
             BackgroundWorker1.CancelAsync()
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2276,7 +2231,6 @@ Public Class SettingsForm
                 dtlocal.Rows.Add(Coup)
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return dtlocal
@@ -2338,7 +2292,6 @@ Public Class SettingsForm
             End If
         Catch ex As Exception
             BackgroundWorker1.CancelAsync()
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
             'If table doesnt have data
         End Try
@@ -2403,7 +2356,6 @@ Public Class SettingsForm
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2437,7 +2389,6 @@ Public Class SettingsForm
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2496,7 +2447,6 @@ Public Class SettingsForm
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2553,7 +2503,6 @@ Public Class SettingsForm
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2615,7 +2564,6 @@ Public Class SettingsForm
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2638,7 +2586,6 @@ Public Class SettingsForm
             ConnectionLocal.Close()
             ConnectionServer.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2658,7 +2605,6 @@ Public Class SettingsForm
             ConnectionLocal.Close()
             ConnectionServer.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2680,7 +2626,6 @@ Public Class SettingsForm
         Try
             Query += "TRUNCATE TABLE " & ToTruncate & " ;"
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2822,148 +2767,10 @@ Public Class SettingsForm
                 Next
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
-    Private Sub Button5_Click(sender As Object, e As EventArgs)
-        'Query = ""
-        'Dim array() As String = {"loc_coupon_data", "loc_daily_transaction", "loc_daily_transaction_details", "loc_deposit", "loc_expense_details", "loc_expense_list",
-        '    "loc_fm_stock", "loc_hold_inventory", "loc_inv_temp_data", "loc_pending_orders", "loc_refund_return_details", "loc_senior_details",
-        '    "loc_system_logs", "loc_send_bug_report", "loc_transaction_mode_details", "loc_transfer_data", "loc_zread_inventory"}
-        'Try
-        '    If CheckBoxCategories.Checked Then
-        '        'TruncateTable("loc_admin_category")
-        '    End If
-        '    If CheckBoxProducts.Checked Then
-        '        'TruncateTable("loc_admin_products")
-        '        'TruncateTable("triggers_loc_admin_products")
-        '    End If
-        '    If CheckBoxCouponData.Checked Then
-        '        'TruncateTable("loc_coupon_data")
-        '    End If
-        '    If CheckBoxSales.Checked Then
-        '        'TruncateTable("loc_daily_transaction")
-        '        'TruncateTable("loc_daily_transaction_details")
-        '        'TruncateTable("loc_senior_details")
-        '        'TruncateTable("loc_transaction_mode_details")
-        '    End If
-        '    If CheckBoxDeposits.Checked Then
-        '        'TruncateTable("loc_deposit")
-        '    End If
-        '    If CheckBoxExpenses.Checked Then
-        '        'TruncateTable("loc_expense_details")
-        '        'TruncateTable("loc_expense_list")
-        '    End If
-        '    If CheckBoxFMStocks.Checked Then
-        '        'TruncateTable("loc_fm_stock")
-        '    End If
-        '    If CheckBoxMessage.Checked Then
-        '        'TruncateTable("loc_inbox_messages")
-        '    End If
-        '    If CheckBoxInvTempData.Checked Then
-        '        'TruncateTable("loc_inv_temp_data")
-        '    End If
-        '    If CheckBoxPartners.Checked Then
-        '        'TruncateTable("loc_partners_transaction")
-        '    End If
-        '    If CheckBoxPendingOrders.Checked Then
-        '        'TruncateTable("loc_pending_orders")
-        '    End If
-        '    If CheckBoxInventory.Checked Then
-        '        'TruncateTable("loc_pos_inventory")
-        '    End If
-        '    If CheckBoxPriceReq.Checked Then
-        '        'TruncateTable("loc_price_request_change")
-        '    End If
-        '    If CheckBoxFormula.Checked Then
-        '        'TruncateTable("loc_product_formula")
-        '    End If
-        '    If CheckBoxReturns.Checked Then
-        '        'TruncateTable("loc_refund_return_details")
-        '    End If
-        '    If CheckBoxErrorLogs.Checked Then
-        '        'TruncateTable("loc_send_bug_report")
-        '    End If
-        '    If CheckBoxStockAdjCat.Checked Then
-        '        'TruncateTable("loc_stockadjustment_cat")
-        '    End If
-        '    If CheckBoxSystemLogs.Checked Then
-        '        'TruncateTable("loc_system_logs")
-        '    End If
-        '    If CheckBoxTransferInventory.Checked Then
-        '        'TruncateTable("loc_transfer_data")
-        '    End If
-        '    If CheckBoxUsers.Checked Then
-        '        'TruncateTable("loc_users")
-        '        'TruncateTable("triggers_loc_users")
-        '    End If
-        '    If CheckBoxZreadInventory.Checked Then
-        '        'TruncateTable("loc_zread_inventory")
-        '    End If
-        '    If CheckBoxCoupons.Checked Then
-        '        'TruncateTable("tbcoupon")
-        '    End If
-        '    If CheckBoxAll.Checked Then
-        '        For Each value As String In array
-        '            TruncateTable(value)
-        '        Next
-        '    End If
-        '    Dim msg = MessageBox.Show("Are you sure you want to truncate all selected table(s)?", "NOTICE", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-        '    If msg = DialogResult.Yes Then
-        '        Dim counterValue = 0
-        '        Dim ConnectionLocal As MySqlConnection = LocalhostConn()
-        '        Dim cmd As MySqlCommand = New MySqlCommand(Query, ConnectionLocal)
-        '        Dim res = cmd.ExecuteNonQuery()
-        '        If CheckBoxAll.Checked Then
-        '            Dim ReturnBool As Boolean = False
 
-        '            Query = "SELECT counter_value FROM `tbcountertable` WHERE counter_id = 1"
-        '            cmd = New MySqlCommand(Query, ConnectionLocal)
-        '            Using reader As MySqlDataReader = cmd.ExecuteReader
-        '                If reader.HasRows Then
-        '                    ReturnBool = True
-        '                    While reader.Read
-        '                        counterValue = reader("counter_value")
-        '                    End While
-        '                Else
-        '                    ReturnBool = False
-        '                End If
-        '            End Using
-
-        '            If ReturnBool Then
-        '                counterValue += 1
-        '                Query = "UPDATE `tbcountertable` SET counter_value = '" & counterValue & "' WHERE counter_id = 1"
-        '                cmd = New MySqlCommand(Query, ConnectionLocal)
-        '                cmd.ExecuteNonQuery()
-
-        '                Query = "UPDATE `loc_pos_inventory` SET stock_primary = 0, stock_secondary = 0, stock_no_of_servings = 0, date_modified = '" & FullDate24HR() & "'"
-        '                cmd = New MySqlCommand(Query, ConnectionLocal)
-        '                cmd.ExecuteNonQuery()
-        '            Else
-        '                counterValue = 1
-        '                Query = "INSERT INTO `tbcountertable` (counter_value, date_created) VALUES ('" & counterValue & "', '" & FullDate24HR() & "')"
-        '                cmd = New MySqlCommand(Query, ConnectionLocal)
-        '                cmd.ExecuteNonQuery()
-
-        '                Query = "UPDATE `loc_pos_inventory` SET stock_primary = 0, stock_secondary = 0, stock_no_of_servings = 0, date_modified = '" & FullDate24HR() & "'"
-        '                cmd = New MySqlCommand(Query, ConnectionLocal)
-        '                cmd.ExecuteNonQuery()
-        '            End If
-        '        End If
-        '        LabelResetStatus.Text = counterValue
-        '        MsgBox("Complete")
-        '        POS.LoadCategory()
-        '        For Each btn As Button In POS.Panel3.Controls.OfType(Of Button)()
-        '            If btn.Text = "Simply Perfect" Then
-        '                btn.PerformClick()
-        '            End If
-        '        Next
-        '    End If
-        'Catch ex As Exception
-        '    MsgBox(ex.ToString)
-        '    SendErrorReport(ex.ToString)
-        'End Try
-    End Sub
     Dim Autobackup As Boolean
     Private Sub RadioButtonYearly_Click(sender As Object, e As EventArgs) Handles RadioButtonYearly.Click, RadioButtonWeekly.Click, RadioButtonMonthly.Click, RadioButtonDaily.Click
         Try
@@ -3005,7 +2812,7 @@ Public Class SettingsForm
                 End If
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
 
@@ -3062,9 +2869,10 @@ Public Class SettingsForm
                 End If
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
+
             PrintOptionIsSet = False
             PrintOption = ""
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
 
@@ -3120,9 +2928,10 @@ Public Class SettingsForm
             End If
 
         Catch ex As Exception
-            MsgBox(ex.ToString)
+
             RePrintOption = ""
             RePrintOptionIsSet = False
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
 
@@ -3179,9 +2988,9 @@ Public Class SettingsForm
             End If
 
         Catch ex As Exception
-            MsgBox(ex.ToString)
             PrintXZReadOption = ""
             PrintXZRead = False
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
 
@@ -3235,9 +3044,9 @@ Public Class SettingsForm
             End If
 
         Catch ex As Exception
-            MsgBox(ex.ToString)
             PrintReturns = ""
             PrintReturnsBool = False
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
 
@@ -3251,7 +3060,6 @@ Public Class SettingsForm
                 MessageBox.Show("Training mode is OFF", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -3273,7 +3081,6 @@ Public Class SettingsForm
                 MessageBox.Show("Monthly inventory reset is off", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -3288,7 +3095,6 @@ Public Class SettingsForm
                 MsgBox("Fill up all the fields first!")
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -3297,7 +3103,6 @@ Public Class SettingsForm
         Try
             GetPorts(ComboBoxComPort)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -3318,22 +3123,10 @@ Public Class SettingsForm
                 MsgBox("Select available Serial Port first.")
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
 
-    Private Sub CheckBoxAll_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxAll.CheckedChanged
-        'Try
-        '    If CheckBoxAll.Checked Then
-        '        CheckBoxEnabled(TabPage6, True)
-        '    Else
-        '        CheckBoxEnabled(TabPage6, False)
-        '    End If
-        'Catch ex As Exception
-        '    MsgBox(ex.ToString)
-        'End Try
-    End Sub
 
     Private Sub RadioButtonYES_Click(sender As Object, e As EventArgs) Handles RadioButtonYES.Click, RadioButtonNO.Click
         Try
@@ -3351,7 +3144,7 @@ Public Class SettingsForm
             cmd.ExecuteNonQuery()
 
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub NumericUpDownPrintCount_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDownPrintCount.ValueChanged
@@ -3372,7 +3165,7 @@ Public Class SettingsForm
                 cmd.ExecuteNonQuery()
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
 
@@ -3386,28 +3179,8 @@ Public Class SettingsForm
                 My.Settings.Save()
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #End Region
 End Class

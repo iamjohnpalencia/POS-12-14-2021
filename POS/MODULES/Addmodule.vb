@@ -24,7 +24,6 @@ Module Addmodule
             Command.ExecuteNonQuery()
             ConnectionLocal.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -41,11 +40,11 @@ Module Addmodule
             LocalhostConn.Close()
             cmd.Dispose()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
     Public Sub SendErrorReport(MSG)
+
         Dim ConnectionLocal As MySqlConnection = LocalhostConn()
         If ConnectionLocal.State = ConnectionState.Open Then
             Try
@@ -59,6 +58,8 @@ Module Addmodule
                 Command.Parameters.Add("@6", MySqlDbType.Text).Value = "Unsynced"
                 Command.ExecuteNonQuery()
                 ConnectionLocal.Close()
+
+                MessageBox.Show("An error occured. Please contact the System Administrator", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Catch ex As Exception
 
             End Try

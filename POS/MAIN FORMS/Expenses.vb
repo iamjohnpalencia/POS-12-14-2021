@@ -35,7 +35,6 @@ Public Class Expenses
                 t.Join()
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -79,7 +78,6 @@ Public Class Expenses
             decodingstring = encoding
             TextBoxAttatchment.Text = ImageToBase64(ImageToConvert, encodeType)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -104,7 +102,6 @@ Public Class Expenses
         Try
             Numeric(sender, e)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -114,7 +111,7 @@ Public Class Expenses
                 e.Handled = True
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
@@ -137,7 +134,6 @@ Public Class Expenses
                 ClearTextBox(root:=Me)
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -162,7 +158,6 @@ Public Class Expenses
                 ToolStripButton1.Enabled = False
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

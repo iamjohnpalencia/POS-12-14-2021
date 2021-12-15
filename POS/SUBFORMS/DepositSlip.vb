@@ -31,7 +31,6 @@ Public Class DepositSlip
                 ClearTextBox(Me)
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -52,7 +51,6 @@ Public Class DepositSlip
             Next
             ComboBoxBankName.SelectedIndex = 0
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -60,7 +58,6 @@ Public Class DepositSlip
         Try
             Numeric(sender, e)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -70,7 +67,6 @@ Public Class DepositSlip
                 e.Handled = True
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

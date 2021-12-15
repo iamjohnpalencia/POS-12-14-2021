@@ -14,12 +14,11 @@ Public Class Loading
             LabelVersion.Text = My.Settings.Version
             LabelFOOTER.Text = My.Settings.Footer
             CheckForIllegalCrossThreadCalls = False
-            Label1.Text = "Initializing component..."
+
             BackgroundWorker1.WorkerSupportsCancellation = True
             BackgroundWorker1.WorkerReportsProgress = True
             BackgroundWorker1.RunWorkerAsync()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -28,7 +27,6 @@ Public Class Loading
             ChangeProgBarColor(ProgressBar1, ProgressBarColor.Yellow)
             Loadme()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -40,6 +38,9 @@ Public Class Loading
                 BackgroundWorker1.ReportProgress(i)
                 Thread.Sleep(50)
                 If i = 0 Then
+                    Label1.Text = "Initializing component..."
+                End If
+                If i = 5 Then
                     Label1.Text = "Checking local connection..."
                     thread = New Thread(AddressOf LoadLocalConnection)
                     thread.Start()
@@ -132,7 +133,6 @@ Public Class Loading
                 e.Cancel = True
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -194,7 +194,6 @@ Public Class Loading
                 Next
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -218,7 +217,6 @@ Public Class Loading
                 Label1.Text = "Cannot connect to local server..."
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -227,7 +225,7 @@ Public Class Loading
             ProgressBar1.Value = e.ProgressPercentage
             Label2.Text = e.ProgressPercentage
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
@@ -263,7 +261,6 @@ Public Class Loading
                 ConnectionIsClose()
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -301,7 +298,6 @@ Public Class Loading
                 e.Cancel = True
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -317,7 +313,6 @@ Public Class Loading
                 Application.Exit()
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -331,7 +326,6 @@ Public Class Loading
                 Application.Exit()
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -349,7 +343,6 @@ Public Class Loading
                 Application.Exit()
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -381,7 +374,6 @@ Public Class Loading
             Login.Focus()
             Login.txtusername.Focus()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -395,7 +387,6 @@ Public Class Loading
                 .ExecuteNonQuery()
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -409,7 +400,6 @@ Public Class Loading
                 .ExecuteNonQuery()
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -434,7 +424,7 @@ Public Class Loading
         Try
             GLOBAL_SELECT_ALL_FUNCTION("loc_script_runner", "script_id", DataGridViewScript)
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub RunScript()
@@ -479,7 +469,6 @@ Public Class Loading
                 Next
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

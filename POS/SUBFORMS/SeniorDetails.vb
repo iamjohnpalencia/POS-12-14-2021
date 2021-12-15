@@ -14,7 +14,6 @@
             CouponCode.couponpercentage()
             Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

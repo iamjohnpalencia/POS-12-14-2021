@@ -47,7 +47,6 @@ Public Class POS
             Label11.Focus()
             Timer1.Start()
 
-            'listviewproductsshow(where:="Simply Perfect")
             selectmax(whatform:=1)
             DataGridViewOrders.Font = New Font("Tahoma", 11.25)
             LoadCategory()
@@ -67,17 +66,7 @@ Public Class POS
             Else
                 LabelCheckingUpdates.Text = "Invalid cloud server connection."
             End If
-
-            'printdoc1.DefaultPageSettings.PaperSize = New PaperSize("Custom", 100, 100)
-            'printdoc1.Print()
-
-
-            'PrintPreviewDialog2.Visible = False
-            'PrintPreviewDialog2.ShowDialog()
-
-
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -118,7 +107,6 @@ Public Class POS
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -184,7 +172,6 @@ Public Class POS
     End Sub
 
     Private Sub Button38_Click(sender As Object, e As EventArgs) Handles ButtonEnter.Click
-
         Try
             If payment = False Then
                 Dim Tax = 1 + Val(S_Tax)
@@ -230,70 +217,8 @@ Public Class POS
                 End If
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
-        'Try
-        '    If TextBoxPRICE.Text = "" And TextBoxNAME.Text = "" Then
-        '        MsgBox("Select Product first!")
-        '    Else
-        '        If TextBoxQTY.Text <> 0 Then
-        '            Dim TotalPrice As Double = 0
-        '            Dim Upgrade As Double = 0
-        '            If S_ZeroRated = "0" Then
-        '                TotalPrice = 1 * Val(TextBoxPRICE.Text)
-        '                Upgrade = Val(S_Upgrade_Price)
-        '            Else
-        '                Dim Tax = 1 + Val(S_Tax)
-        '                Dim ZeroRated = Val(TextBoxPRICE.Text) / Tax
-        '                TotalPrice = Math.Round(ZeroRated, 2, MidpointRounding.AwayFromZero)
-        '                Upgrade = Math.Round(Val(S_Upgrade_Price) / Tax, 2, MidpointRounding.AwayFromZero)
-        '            End If
-
-        '            If DataGridViewOrders.Rows.Count > 0 Then
-        '                DataGridViewOrders.SelectedRows(0).Cells(1).Value = Val(TextBoxQTY.Text)
-        '                If DataGridViewOrders.SelectedRows(0).Cells(11).Value > 0 Then
-        '                    Dim priceadd = DataGridViewOrders.SelectedRows(0).Cells(11).Value * Upgrade
-        '                    DataGridViewOrders.SelectedRows(0).Cells(3).Value = DataGridViewOrders.SelectedRows(0).Cells(1).Value * TotalPrice + priceadd
-        '                Else
-        '                    DataGridViewOrders.SelectedRows(0).Cells(3).Value = DataGridViewOrders.SelectedRows(0).Cells(1).Value * TotalPrice
-        '                End If
-        '                Label76.Text = SumOfColumnsToDecimal(datagrid:=DataGridViewOrders, celltocompute:=3)
-        '                Dim test As Boolean = False
-        '                For Each row In DataGridViewInv.Rows
-        '                    If TextBoxNAME.Text = row.Cells("Column10").Value Then
-        '                        test = True
-        '                        Exit For
-        '                    End If
-        '                Next
-        '                For i As Integer = 0 To DataGridViewInv.Rows.Count - 1 Step +1
-        '                    If DataGridViewOrders.SelectedRows(0).Cells(7).Value <> "Add-Ons" Then
-        '                        If DataGridViewInv.Rows(i).Cells(4).Value.ToString() = DataGridViewOrders.SelectedRows(0).Cells(0).Value Then
-        '                            DataGridViewInv.Rows(i).Cells(0).Value = DataGridViewOrders.SelectedRows(0).Cells(1).Value * DataGridViewInv.Rows(i).Cells(5).Value.ToString()
-        '                            DataGridViewInv.Rows(i).Cells(2).Value = TextBoxQTY.Text
-        '                        End If
-        '                    Else
-        '                        If DataGridViewOrders.SelectedRows(0).Cells(8).Value = DataGridViewInv.Rows(i).Cells(8).Value Then
-        '                            If DataGridViewInv.Rows(i).Cells(4).Value.ToString = DataGridViewOrders.SelectedRows(0).Cells(0).Value.ToString Then
-        '                                DataGridViewInv.Rows(i).Cells(0).Value = DataGridViewOrders.SelectedRows(0).Cells(1).Value * DataGridViewInv.Rows(i).Cells(5).Value.ToString()
-        '                                DataGridViewInv.Rows(i).Cells(2).Value = TextBoxQTY.Text
-        '                            End If
-        '                        End If
-        '                    End If
-        '                Next
-        '                TextBoxGRANDTOTAL.Text = Format(Val(Label76.Text), "##,##0.00")
-        '            Else
-        '                MsgBox("Select item first", vbInformation)
-        '            End If
-        '        End If
-        '        TextBoxQTY.Text = 0
-        '    End If
-
-        'Catch ex As Exception
-        '    MsgBox(ex.ToString)
-        '    SendErrorReport(ex.ToString)
-        'End Try
-
     End Sub
     Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles ButtonPendingOrders.Click
         Dim newMDIchild As New PendingOrders()
@@ -339,10 +264,7 @@ Public Class POS
             Else
                 MsgBox("Maximum sales capacity already reached. Please contact your administrator for immediate solution.")
             End If
-
-
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -425,7 +347,6 @@ Public Class POS
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -446,7 +367,7 @@ Public Class POS
                 t.Join()
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
 
@@ -503,7 +424,6 @@ Public Class POS
                 ButtonPendingOrders.Enabled = True
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -534,7 +454,6 @@ Public Class POS
                 LabelCheckingUpdates.Text = "Checking for updates."
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -552,7 +471,7 @@ Public Class POS
             TOTALDISCOUNT = 0
             Compute()
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles ButtonTransactionMode.Click
@@ -803,18 +722,10 @@ Public Class POS
             MessageBox.Show("Apply coupon after taking all customer orders", "NOTICE", MessageBoxButtons.OK, MessageBoxIcon.Information)
             ButtonCDISC.PerformClick()
             Enabled = False
-            'LESSVAT = 0
-            'CouponApplied = False
-            'Enabled = False
-            'TextBoxDISCOUNT.Text = "0.00"
-            'Label76.Text = SumOfColumnsToDecimal(datagrid:=DataGridViewOrders, celltocompute:=3)
-            'TextBoxSUBTOTAL.Text = SumOfColumnsToDecimal(datagrid:=DataGridViewOrders, celltocompute:=3)
-            'TextBoxGRANDTOTAL.Text = Label76.Text
             GetHighest()
             CouponCode.Show()
             CouponCode.ButtonSubmit.Enabled = True
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -845,7 +756,6 @@ Public Class POS
                 SeniorPWdDrinks = HighestDrinksPrice
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -908,7 +818,6 @@ Public Class POS
                 UpdateInventoryCon.Close()
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -931,7 +840,6 @@ Public Class POS
                 cmd.ExecuteNonQuery()
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -953,7 +861,6 @@ Public Class POS
                      ,'" & INSERTTHISDATE & "','" & TRANSACTIONMODE & "','" & Shift & "','" & S_Zreading & "','Unsynced','" & DISCOUNTTYPE & "'," & VAT12PERCENT & "," & GROSSSALE & "," & TOTALDISCOUNTEDAMOUNT & ")"
             GLOBAL_INSERT_FUNCTION(table, fields, value)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -994,7 +901,6 @@ Public Class POS
                 totalcostofgoods = 0
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1002,21 +908,19 @@ Public Class POS
         Try
 
             Dim table As String = "loc_transaction_mode_details"
-            Dim fields As String = "(`transaction_type`, `transaction_number`, `fullname`, `reference`, `markup`, `status`, `synced`, `store_id`, `guid`, `created_at`)"
+            Dim fields As String = "(`transaction_type`, `transaction_number`, `fullname`, `reference`, `status`, `synced`, `store_id`, `guid`, `created_at`)"
             Dim value As String = "( '" & TRANSACTIONMODE & "'
                             ,'" & TextBoxMAXID.Text & "'
                             , '" & TEXTBOXFULLNAMEVALUE & "'
                             , '" & TEXTBOXREFERENCEVALUE & "'
-                            , '" & TEXTBOXMARKUPVALUE & "'
                             , " & 1 & "
                             , 'Unsynced'
                             , '" & ClientStoreID & "'
                             , '" & ClientGuid & "'
                             , '" & FullDate24HR() & "')"
-                GLOBAL_INSERT_FUNCTION(table:=table, fields:=fields, values:=value)
+            GLOBAL_INSERT_FUNCTION(table:=table, fields:=fields, values:=value)
             ButtonClickCount = 0
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1032,7 +936,6 @@ Public Class POS
                       , '" & CouponTotal & "')"
             GLOBAL_INSERT_FUNCTION(table, fields, value)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1051,7 +954,6 @@ Public Class POS
                       , 'Unsynced')"
             GLOBAL_INSERT_FUNCTION(table, fields, value)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1108,6 +1010,7 @@ Public Class POS
                     'End If
                 End If
 
+
                 sql = "SELECT si_number FROM loc_daily_transaction ORDER BY transaction_id DESC limit 1"
                 cmd = New MySqlCommand(sql, LocalhostConn)
                 da = New MySqlDataAdapter(cmd)
@@ -1154,14 +1057,16 @@ Public Class POS
                             For Each t In THREADLIST
                                 t.Join()
                             Next
+
                             If modeoftransaction = True Then
-                                thread = New Thread(AddressOf InsertModeofTransaction)
-                                thread.Start()
-                                THREADLIST.Add(thread)
-                                For Each t In THREADLIST
-                                    t.Join()
-                                Next
+                                'thread = New Thread(AddressOf InsertModeofTransaction)
+                                'thread.Start()
+                                'THREADLIST.Add(thread)
+                                'For Each t In THREADLIST
+                                '    t.Join()
+                                'Next
                             End If
+
                             If SENIORDETAILSBOOL = True Then
                                 thread = New Thread(AddressOf InsertSeniorDetails)
                                 thread.Start()
@@ -1187,7 +1092,6 @@ Public Class POS
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1245,7 +1149,8 @@ Public Class POS
                     Next
                     Reprint = 1
                 End If
-            Catch exp As Exception
+            Catch ex As Exception
+                SendErrorReport(ex.ToString)
                 MessageBox.Show("An error occurred while trying to load the " &
                     "document for Print Preview. Make sure you currently have " &
                     "access to a printer. A printer must be localconnected and " &
@@ -1394,6 +1299,7 @@ Public Class POS
                 SimpleTextDisplay(sender, e, "*************************************", FontDefault, 0, RowA + 184)
                 ReceiptFooter(sender, e, RowA + 12, False)
             Else
+
                 Dim aNumber1 As Double = TEXTBOXCHANGEVALUE
                 Dim change = String.Format("{0:n2}", aNumber1)
                 Dim aNumber As Double = TEXTBOXMONEYVALUE
@@ -1420,7 +1326,11 @@ Public Class POS
                     RightToLeftDisplay(sender, e, RowA + 105, "     Less Vat", "    " & Format(LESSVAT, "0.00"), FontDefault, 0, 0)
                 Else
                     If SeniorGCDiscount = False Then
-                        RightToLeftDisplay(sender, e, RowA + 105, "     Less Vat", "    " & "0.00", FontDefault, 0, 0)
+                        If S_ZeroRated = "0" Then
+                            RightToLeftDisplay(sender, e, RowA + 105, "     Less Vat", "    " & "0.00", FontDefault, 0, 0)
+                        Else
+                            RightToLeftDisplay(sender, e, RowA + 105, "     Less Vat", "    " & Format(LESSVAT, "0.00"), FontDefault, 0, 0)
+                        End If
                     Else
                         RightToLeftDisplay(sender, e, RowA + 105, "     Less Vat", "    " & Format(LESSVAT, "0.00"), FontDefault, 0, 0)
                     End If
@@ -1452,7 +1362,6 @@ Public Class POS
                 ReceiptFooter(sender, e, RowA + 20, False)
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1474,7 +1383,6 @@ Public Class POS
                 PRICECHANGE = False
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1494,7 +1402,6 @@ Public Class POS
                 CouponApp = False
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1514,7 +1421,6 @@ Public Class POS
                 CustomProdctsAppBool = False
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1537,7 +1443,6 @@ Public Class POS
                 dtlocal.Rows.Add(Coup)
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return dtlocal
@@ -1595,7 +1500,6 @@ Public Class POS
             End If
         Catch ex As Exception
             BackgroundWorker2.CancelAsync()
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
             'If table doesnt have data
         End Try
@@ -1619,7 +1523,6 @@ Public Class POS
                 dtlocal.Rows.Add(Cat)
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return dtlocal
@@ -1679,7 +1582,6 @@ Public Class POS
         Catch ex As Exception
 
             BackgroundWorker2.CancelAsync()
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
             'If table doesnt have data
         End Try
@@ -1696,7 +1598,7 @@ Public Class POS
             BackgroundWorker2.RunWorkerAsync()
             LabelCheckingUpdates.Text = "Checking for updates."
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
     Public POSISUPDATING As Boolean = False
@@ -1887,7 +1789,6 @@ Public Class POS
                 End If
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2000,7 +1901,6 @@ Public Class POS
             End If
         Catch ex As Exception
             BackgroundWorker2.CancelAsync()
-            MessageBox.Show("Data table timeout click ok to exit", "Connection Time out", MessageBoxButtons.OK, MessageBoxIcon.Error)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2054,7 +1954,6 @@ Public Class POS
                 Next
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2079,7 +1978,6 @@ Public Class POS
                 dtlocal.Rows.Add(Cat)
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return dtlocal
@@ -2142,7 +2040,6 @@ Public Class POS
             End If
         Catch ex As Exception
             BackgroundWorker2.CancelAsync()
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2168,7 +2065,6 @@ Public Class POS
             Next
             LocalhostConn.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return dtlocal
@@ -2232,7 +2128,6 @@ Public Class POS
             End If
         Catch ex As Exception
             BackgroundWorker2.CancelAsync()
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2268,7 +2163,6 @@ Public Class POS
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2329,7 +2223,6 @@ Public Class POS
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2391,7 +2284,6 @@ Public Class POS
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2450,7 +2342,6 @@ Public Class POS
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2513,7 +2404,6 @@ Public Class POS
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2537,7 +2427,6 @@ Public Class POS
             ConnectionLocal.Close()
             ConnectionServer.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2558,7 +2447,6 @@ Public Class POS
             ConnectionLocal.Close()
             ConnectionServer.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2579,7 +2467,6 @@ Public Class POS
             ConnectionLocal.Close()
             ConnectionServer.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2655,7 +2542,6 @@ Public Class POS
                 Next
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -2666,7 +2552,6 @@ Public Class POS
                 LedDisplay(TextBoxGRANDTOTAL.Text, True)
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

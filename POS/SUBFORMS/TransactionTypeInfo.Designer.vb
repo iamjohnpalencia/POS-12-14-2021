@@ -28,8 +28,6 @@ Partial Class TransactionTypeInfo
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.TextBoxMARKUP = New System.Windows.Forms.TextBox()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.ButtonKeyboard = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
@@ -46,7 +44,7 @@ Partial Class TransactionTypeInfo
         Me.TextBoxREFERENCE.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxREFERENCE.Location = New System.Drawing.Point(8, 76)
         Me.TextBoxREFERENCE.Name = "TextBoxREFERENCE"
-        Me.TextBoxREFERENCE.Size = New System.Drawing.Size(265, 23)
+        Me.TextBoxREFERENCE.Size = New System.Drawing.Size(348, 23)
         Me.TextBoxREFERENCE.TabIndex = 1
         '
         'Button2
@@ -83,25 +81,6 @@ Partial Class TransactionTypeInfo
         Me.Label2.TabIndex = 105
         Me.Label2.Text = "Reference Number"
         '
-        'TextBoxMARKUP
-        '
-        Me.TextBoxMARKUP.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBoxMARKUP.Location = New System.Drawing.Point(279, 76)
-        Me.TextBoxMARKUP.Name = "TextBoxMARKUP"
-        Me.TextBoxMARKUP.ReadOnly = True
-        Me.TextBoxMARKUP.Size = New System.Drawing.Size(77, 23)
-        Me.TextBoxMARKUP.TabIndex = 107
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(276, 55)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(55, 16)
-        Me.Label3.TabIndex = 108
-        Me.Label3.Text = "Mark Up"
-        '
         'ButtonKeyboard
         '
         Me.ButtonKeyboard.BackColor = System.Drawing.SystemColors.Control
@@ -124,9 +103,7 @@ Partial Class TransactionTypeInfo
         Me.ClientSize = New System.Drawing.Size(364, 154)
         Me.Controls.Add(Me.ButtonKeyboard)
         Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.TextBoxFULLNAME)
-        Me.Controls.Add(Me.TextBoxMARKUP)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.TextBoxREFERENCE)
         Me.Controls.Add(Me.Label2)
@@ -148,7 +125,5 @@ Partial Class TransactionTypeInfo
     Friend WithEvents Button2 As Button
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
-    Friend WithEvents TextBoxMARKUP As TextBox
-    Friend WithEvents Label3 As Label
     Friend WithEvents ButtonKeyboard As Button
 End Class

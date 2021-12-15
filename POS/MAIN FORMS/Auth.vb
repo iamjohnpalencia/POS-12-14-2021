@@ -6,22 +6,16 @@ Public Class Auth
     Dim UserCount As Integer = 0
     Dim Account
     Dim TimerCount As Integer = 0
-    Declare Auto Function SendMessage Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal msg As Integer, ByVal wParam As Integer, ByVal lParam As Integer) As Integer
-    Enum ProgressBarColor
-        Green = &H1
-        Red = &H2
-        Yellow = &H3
-    End Enum
-    Private Shared Sub ChangeProgBarColor(ByVal ProgressBar_Name As System.Windows.Forms.ProgressBar, ByVal ProgressBar_Color As ProgressBarColor)
-        SendMessage(ProgressBar_Name.Handle, &H410, ProgressBar_Color, 0)
-    End Sub
     Private Sub Auth_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-        CheckForIllegalCrossThreadCalls = False
-        BackgroundWorker1.WorkerReportsProgress = True
-        BackgroundWorker1.WorkerSupportsCancellation = True
-        BackgroundWorker1.RunWorkerAsync()
-        ChangeProgBarColor(ProgressBar1, ProgressBarColor.Yellow)
+        Try
+            CheckForIllegalCrossThreadCalls = False
+            BackgroundWorker1.WorkerReportsProgress = True
+            BackgroundWorker1.WorkerSupportsCancellation = True
+            BackgroundWorker1.RunWorkerAsync()
+            ChangeProgBarColor(ProgressBar1, ProgressBarColor.Yellow)
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
     End Sub
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         Try
@@ -43,7 +37,6 @@ Public Class Auth
                 t.Join()
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -61,14 +54,9 @@ Public Class Auth
                 End If
             End Using
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
-        If ReturnBool Then
-            Return True
-        Else
-            Return False
-        End If
+        Return ReturnBool
     End Function
     Private Sub SyncToLocalUsers()
         UserCount = 0
@@ -76,17 +64,19 @@ Public Class Auth
             With DataGridViewRESULT
                 Dim ConnectionServer As MySqlConnection = ServerCloudCon()
                 Dim ConnectionLocal As MySqlConnection = LocalhostConn()
-                sql = "SELECT `user_level`, `full_name`, `username`, `password`, `contact_number`, `email`, `position`, `gender`, `active`, `guid`, `store_id`, `uniq_id` , `created_at`, `updated_at` , `pwd` FROM `loc_users` WHERE guid IN ('" & ClientGuid & "','Admin') AND store_id IN ('" & ClientStoreID & "','0') AND synced IN ('Unsynced','N/A') AND active = 1"
+                Dim sql = "SELECT `user_level`, `full_name`, `username`, `password`, `contact_number`, `email`, `position`, `gender`, `active`, `guid`, `store_id`, `uniq_id` , `created_at`, `updated_at` , `pwd` FROM `loc_users` WHERE guid IN ('" & ClientGuid & "','Admin') AND store_id IN ('" & ClientStoreID & "','0') AND synced IN ('Unsynced','N/A') AND active = 1"
                 Dim cmd As MySqlCommand = New MySqlCommand(sql, ConnectionServer)
                 Dim da As MySqlDataAdapter = New MySqlDataAdapter(cmd)
                 Dim DataTableServer As DataTable = New DataTable
                 da.Fill(DataTableServer)
                 .DataSource = DataTableServer
                 For i As Integer = 0 To .Rows.Count - 1 Step +1
-                    '.Rows(i).Cells(14).Value.ToString & vbNewLine & vbNewLine
+
                     If IfUserExist(.Rows(i).Cells(11).Value.ToString) = False Then
-                        Account += "Username: " & .Rows(i).Cells(2).Value.ToString & vbNewLine & "Password: **********"
+
+                        Account += "Username: " & .Rows(i).Cells(2).Value.ToString & vbNewLine & "Password: **********" & vbNewLine
                         UserCount = UserCount + 1
+
                         table = "triggers_loc_users"
                         fields = "(`user_level`, `full_name`, `username`, `password`, `contact_number`, `email`, `position`, `gender`, `active`, `guid`, `store_id`, `uniq_id`, `synced`)"
                         value = "(
@@ -103,6 +93,7 @@ Public Class Auth
                          ,'" & .Rows(i).Cells(10).Value.ToString & "'   
                          ,'" & .Rows(i).Cells(11).Value.ToString & "'       
                          ,'Synced')"
+
                         GLOBAL_INSERT_FUNCTION(table:=table, fields:=fields, values:=value)
                         If .Rows(i).Cells(6).Value.ToString <> "Admin" Then
                             sql = "UPDATE loc_users SET synced = 'Synced' WHERE uniq_id = '" & .Rows(i).Cells(11).Value.ToString & "'"
@@ -116,7 +107,6 @@ Public Class Auth
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -145,16 +135,11 @@ Public Class Auth
         Try
             TimerCount = TimerCount + 1
             If TimerCount = 1 Then
-                Label1.Text = "Closing in 3."
+                Label1.Text = "Closing..."
             ElseIf TimerCount = 2 Then
-                Label1.Text = "Closing in 2."
-            ElseIf TimerCount = 3 Then
-                Label1.Text = "Closing in 1."
-            ElseIf TimerCount = 4 Then
                 Close()
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

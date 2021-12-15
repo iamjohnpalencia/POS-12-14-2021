@@ -20,6 +20,8 @@ Public Class ConfigManager
     Dim POSVersion As String = ""
     Dim LOCALCONNDATA As Boolean = False
     Dim CLOUDCONDATA As Boolean = False
+
+    Dim TestModeIsOFF As Boolean = True
     Private Sub ConfigManager_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CheckForIllegalCrossThreadCalls = False
         TabControl1.TabPages(0).Text = "General Settings"
@@ -1208,25 +1210,7 @@ Public Class ConfigManager
             MsgBox("Invalid Local Connection")
         End If
     End Sub
-    Dim ValidProductKey As Boolean
-    Private Sub SerialKey()
-        Try
-            Dim CloudConnection As MySqlConnection = TestCloudConnection()
-            Dim sql = "SELECT serial_key FROM admin_serialkeys WHERE active = 0 AND serial_key = '" & Trim(TextBoxProdKey.Text) & "'"
-            Dim cloudcmd As MySqlCommand = New MySqlCommand(sql, CloudConnection)
-            Dim da As MySqlDataAdapter = New MySqlDataAdapter(cloudcmd)
-            Dim dt As DataTable = New DataTable
-            da.Fill(dt)
-            If dt.Rows.Count > 0 Then
-                ValidProductKey = True
-            Else
-                ValidProductKey = False
-            End If
-            CloudConnection.Close()
-        Catch ex As Exception
-            MsgBox(ex.ToString)
-        End Try
-    End Sub
+
     Dim threadListActivation As List(Of Thread) = New List(Of Thread)
     Dim ThreadActivation As Thread
 
@@ -1257,7 +1241,6 @@ Public Class ConfigManager
                     For Each t In threadListActivation
                         t.Join()
                     Next
-
                 End If
                 If i = 20 Then
                     If ValidProductKey = True Then
@@ -1329,8 +1312,8 @@ Public Class ConfigManager
     Private Sub BackgroundWorkerACTIVATION_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorkerACTIVATION.ProgressChanged
         ProgressBar5.Value = e.ProgressPercentage
     End Sub
+    Dim ValidProductKey As Boolean
     Private Sub BackgroundWorkerACTIVATION_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorkerACTIVATION.RunWorkerCompleted
-
         If ValidProductKey = True Then
             BackgroundWorker5.WorkerReportsProgress = True
             BackgroundWorker5.WorkerSupportsCancellation = True
@@ -1340,19 +1323,39 @@ Public Class ConfigManager
             TextboxEnableability(GroupBox12, True)
             ButtonEnableability(GroupBox12, True)
         End If
+    End Sub
 
+    Private Sub SerialKey()
+        Try
+            Dim CloudConnection As MySqlConnection = TestCloudConnection()
+            Dim sql = "SELECT serial_key FROM admin_serialkeys WHERE active = 0 AND serial_key = '" & Trim(TextBoxProdKey.Text) & "'"
+            Dim cloudcmd As MySqlCommand = New MySqlCommand(sql, CloudConnection)
+            Dim da As MySqlDataAdapter = New MySqlDataAdapter(cloudcmd)
+            Dim dt As DataTable = New DataTable
+            da.Fill(dt)
+            If dt.Rows.Count > 0 Then
+                ValidProductKey = True
+            Else
+                ValidProductKey = False
+            End If
+            CloudConnection.Close()
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        End Try
     End Sub
     Private Sub adminserialkey()
         Try
             TextBox1.Text += FullDate24HR() & " :    Updating cloud server's table(Product Key)." & vbNewLine
-            Dim CloudConnection As MySqlConnection = TestCloudConnection()
-            Dim sql = "UPDATE admin_serialkeys SET active = @1 , date_used = @2 WHERE serial_key = @3"
-            Dim cloudcmd As MySqlCommand = New MySqlCommand(sql, CloudConnection)
-            cloudcmd.Parameters.Add("@1", MySqlDbType.Int64).Value = 1
-            cloudcmd.Parameters.Add("@2", MySqlDbType.Text).Value = FullDate24HR()
-            cloudcmd.Parameters.Add("@3", MySqlDbType.VarChar).Value = Trim(TextBoxProdKey.Text)
-            cloudcmd.ExecuteNonQuery()
-            CloudConnection.Close()
+            If TestModeIsOFF Then
+                Dim CloudConnection As MySqlConnection = TestCloudConnection()
+                Dim sql = "UPDATE admin_serialkeys SET active = @1 , date_used = @2 WHERE serial_key = @3"
+                Dim cloudcmd As MySqlCommand = New MySqlCommand(sql, CloudConnection)
+                cloudcmd.Parameters.Add("@1", MySqlDbType.Int64).Value = 1
+                cloudcmd.Parameters.Add("@2", MySqlDbType.Text).Value = FullDate24HR()
+                cloudcmd.Parameters.Add("@3", MySqlDbType.VarChar).Value = Trim(TextBoxProdKey.Text)
+                cloudcmd.ExecuteNonQuery()
+                CloudConnection.Close()
+            End If
             TextBox1.Text += FullDate24HR() & " :    Complete(Product key table updated)." & vbNewLine
         Catch ex As Exception
             TextBox1.Text += FullDate24HR() & " :    Failed(Updating of product key)." & vbNewLine
@@ -1362,15 +1365,14 @@ Public Class ConfigManager
     Public Sub adminoutlets()
         Try
             TextBox1.Text += FullDate24HR() & " :    Updating cloud server's table(Outlets)." & vbNewLine
-            Dim CloudConnection As MySqlConnection = TestCloudConnection()
-            Dim table = "admin_outlets"
-            Dim fields = " active = @1 "
-            Dim where = " store_id = " & DataGridViewOutlets.SelectedRows(0).Cells(0).Value.ToString
-            Dim sql = "UPDATE " + table + " SET " + fields + " WHERE " & where
-            Dim cloudcmd As MySqlCommand = New MySqlCommand(sql, CloudConnection)
-            cloudcmd.Parameters.Add("@1", MySqlDbType.Int64).Value = 2
-            cloudcmd.ExecuteNonQuery()
-            CloudConnection.Close()
+            If TestModeIsOFF Then
+                Dim CloudConnection As MySqlConnection = TestCloudConnection()
+                Dim sql = "UPDATE admin_outlets SET active = @1 WHERE store_id = " & DataGridViewOutlets.SelectedRows(0).Cells(0).Value.ToString
+                Dim cloudcmd As MySqlCommand = New MySqlCommand(sql, CloudConnection)
+                cloudcmd.Parameters.Add("@1", MySqlDbType.Int64).Value = 2
+                cloudcmd.ExecuteNonQuery()
+                CloudConnection.Close()
+            End If
             TextBox1.Text += FullDate24HR() & " :    Complete(Outlets table updated)." & vbNewLine
         Catch ex As Exception
             TextBox1.Text += FullDate24HR() & " :    Failed(Updating of outlet)." & vbNewLine
@@ -1381,20 +1383,22 @@ Public Class ConfigManager
     Public Sub insertintocloud()
         Try
             TextBox1.Text += FullDate24HR() & " :    Inserting data to cloud server's table(Masterlist)." & vbNewLine
-            Dim CloudConnection As MySqlConnection = TestCloudConnection()
-            Dim table1 = "admin_masterlist"
-            Dim fields1 = " (`masterlist_username`,`masterlist_password`,`client_guid`,`client_product_key`,`user_id`,`active`,`client_store_id`)"
-            Dim value1 = "('" & TextBoxFrancUser.Text & "'
-                     ,'" & TextBoxFrancPass.Text & "'
-                     ,'" & UserGUID & "'
-                     ,'" & TextBoxProdKey.Text & "'
-                     ,'" & UserID & "'
-                     ," & 1 & "
-                     ,'" & DataGridViewOutlets.SelectedRows(0).Cells(0).Value & "')"
-            Dim sql = "INSERT INTO " + table1 + fields1 + " VALUES " + value1
-            Dim cloudcmd As MySqlCommand = New MySqlCommand(sql, CloudConnection)
-            cloudcmd.ExecuteNonQuery()
-            CloudConnection.Close()
+
+            If TestModeIsOFF Then
+                Dim CloudConnection As MySqlConnection = TestCloudConnection()
+                Dim sql = "INSERT INTO admin_masterlist (`masterlist_username`,`masterlist_password`,`client_guid`,`client_product_key`,`user_id`,`active`,`client_store_id`) VALUES (@1,@2,@3,@4,@5,@6,@7)"
+                Dim cloudcmd As MySqlCommand = New MySqlCommand(sql, CloudConnection)
+                cloudcmd.Parameters.Add("@1", MySqlDbType.VarChar).Value = TextBoxFrancUser.Text
+                cloudcmd.Parameters.Add("@2", MySqlDbType.VarChar).Value = TextBoxFrancPass.Text
+                cloudcmd.Parameters.Add("@3", MySqlDbType.VarChar).Value = UserGUID
+                cloudcmd.Parameters.Add("@4", MySqlDbType.VarChar).Value = TextBoxProdKey.Text
+                cloudcmd.Parameters.Add("@5", MySqlDbType.VarChar).Value = UserID
+                cloudcmd.Parameters.Add("@6", MySqlDbType.Int64).Value = 1
+                cloudcmd.Parameters.Add("@7", MySqlDbType.Int64).Value = DataGridViewOutlets.SelectedRows(0).Cells(0).Value
+                cloudcmd.ExecuteNonQuery()
+                CloudConnection.Close()
+            End If
+
             TextBox1.Text += FullDate24HR() & " :    Complete(Masterlist data inserted)." & vbNewLine
         Catch ex As Exception
             MsgBox(ex.ToString)
@@ -2473,6 +2477,16 @@ Public Class ConfigManager
             PrintReturnsBool = False
         End Try
     End Sub
+
+    Private Sub RadioButtonTestModeFalse_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTestModeFalse.CheckedChanged
+        If RadioButtonTestModeFalse.Checked Then
+            TestModeIsOFF = True
+        Else
+            TestModeIsOFF = False
+        End If
+    End Sub
+
+
 #Region "Test Insert"
     'Private Sub button734_click(sender As Object, e As EventArgs) Handles Button4.Click
     '    InsertToProducts()

@@ -13,7 +13,6 @@ Module DeleteModule
             End With
             cmd.ExecuteNonQuery()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -27,7 +26,6 @@ Module DeleteModule
             End With
             cmd.ExecuteNonQuery()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

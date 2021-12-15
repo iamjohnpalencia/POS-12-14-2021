@@ -62,7 +62,6 @@ Module NEWPOSMODULE
             End With
             GetFormulaid(ProductName, ProductPrice)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -109,7 +108,6 @@ Module NEWPOSMODULE
                 End While
             End Using
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -144,7 +142,6 @@ Module NEWPOSMODULE
             POS.TextBoxQTY.Text = "0"
             Compute()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -470,7 +467,6 @@ Module NEWPOSMODULE
                 End If
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -923,7 +919,6 @@ Module NEWPOSMODULE
                 End If
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         Finally
             cmd.Dispose()

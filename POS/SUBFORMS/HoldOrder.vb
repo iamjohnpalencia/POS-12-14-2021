@@ -44,7 +44,6 @@ Public Class HoldOrder
                         GLOBAL_INSERT_FUNCTION(table:=table, fields:=fields, values:=value)
                     Next
                 Catch ex As Exception
-                    MsgBox(ex.ToString)
                     SendErrorReport(ex.ToString)
                 End Try
                 Try
@@ -68,7 +67,6 @@ Public Class HoldOrder
                         GLOBAL_INSERT_FUNCTION(table:=table, fields:=fields, values:=value)
                     Next
                 Catch ex As Exception
-                    MsgBox(ex.ToString)
                     SendErrorReport(ex.ToString)
                 End Try
                 Try
@@ -77,7 +75,6 @@ Public Class HoldOrder
                     SystemLogDesc = "Customer name: " & TextBoxCustomerName.Text & " Item(s): " & POS.DataGridViewOrders.Rows.Count
                     GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
                 Catch ex As Exception
-                    MsgBox(ex.ToString)
                     SendErrorReport(ex.ToString)
                 End Try
                 MsgBox("success")

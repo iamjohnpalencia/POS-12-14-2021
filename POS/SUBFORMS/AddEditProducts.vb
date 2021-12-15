@@ -56,7 +56,6 @@ Public Class AddEditProducts
             decodingstring = encoding
             TextBoxbase64.Text = ImageToBase64(ImageToConvert, encodeType)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -197,7 +196,6 @@ Public Class AddEditProducts
                 Close()
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -210,7 +208,6 @@ Public Class AddEditProducts
             MDIFORM.newMDIchildManageproduct.LoadOthersPending()
             AddNewProduct = True
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -235,7 +232,6 @@ Public Class AddEditProducts
                 PictureBoxProductImage.SizeMode = PictureBoxSizeMode.Zoom
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -258,7 +254,6 @@ Public Class AddEditProducts
                 t.Join()
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -279,7 +274,6 @@ Public Class AddEditProducts
                 ToolStripStatusLabel1.Text = "Successfully Uploaded!"
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -293,7 +287,7 @@ Public Class AddEditProducts
                 e.Handled = True
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
 
@@ -301,7 +295,7 @@ Public Class AddEditProducts
         Try
             Numeric(sender, e)
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
         End Try
     End Sub
 End Class

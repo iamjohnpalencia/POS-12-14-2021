@@ -9,15 +9,7 @@ Public Class Leaderboards
     Dim BestsellerDataTable As DataTable
     Dim BestsellerDataAdapter As MySqlDataAdapter
     Dim BestSellerCmd As MySqlCommand
-    Declare Auto Function SendMessage Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal msg As Integer, ByVal wParam As Integer, ByVal lParam As Integer) As Integer
-    Enum ProgressBarColor
-        Green = &H1
-        Red = &H2
-        Yellow = &H3
-    End Enum
-    Private Shared Sub ChangeProgBarColor(ByVal ProgressBar_Name As System.Windows.Forms.ProgressBar, ByVal ProgressBar_Color As ProgressBarColor)
-        SendMessage(ProgressBar_Name.Handle, &H410, ProgressBar_Color, 0)
-    End Sub
+
     Private Sub ProductList_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
             TabControl1.TabPages(0).Text = "Sales"
@@ -32,7 +24,6 @@ Public Class Leaderboards
             LoadTransfers()
             LoadLogs()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -62,7 +53,6 @@ Public Class Leaderboards
                 .Columns(4).Width = 100
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -92,7 +82,6 @@ Public Class Leaderboards
                 .Columns(4).HeaderCell.Value = "Status"
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -112,7 +101,6 @@ Public Class Leaderboards
                 DataGridViewRecentExpenses.Rows.Add(row("expense_number"), row("datetime"), row("crew_id"), row("total_amount"), rowActive)
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -124,7 +112,6 @@ Public Class Leaderboards
                 DatagridviewTransfers.Rows.Add(row("loc_systemlog_id"), row("log_description"), row("crew_id"), row("log_date_time"))
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -150,7 +137,6 @@ Public Class Leaderboards
                 DatagridviewLogs.Rows.Add(row("log_type"), row("log_description"), row("crew_id"), row("log_date_time"))
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -165,7 +151,6 @@ Public Class Leaderboards
                 Chart2.Series("Series1").Points.AddXY(dr.GetString("product_name"), dr.GetInt64("totalprice"))
             End While
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -202,7 +187,6 @@ Public Class Leaderboards
             End With
             LocalhostConn.close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -210,7 +194,6 @@ Public Class Leaderboards
         Try
             LoadChart("SELECT DATE_FORMAT(zreading, '%Y-%m-%d') as zreading, SUM(total) FROM loc_daily_transaction_details WHERE DATE(CURRENT_DATE) - INTERVAL 7 DAY GROUP BY zreading DESC LIMIT 7", 0)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -218,7 +201,6 @@ Public Class Leaderboards
         Try
             LoadChart("SELECT MONTHNAME(zreading) , SUM(total) FROM `loc_daily_transaction_details` WHERE DATE(zreading) - INTERVAL 1 MONTH GROUP BY MONTHNAME(zreading)", 2)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -226,7 +208,6 @@ Public Class Leaderboards
         Try
             LoadChart("SELECT YEAR(zreading), SUM(total) FROM `loc_daily_transaction_details` WHERE YEAR(zreading) GROUP BY YEAR(zreading)", 1)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -234,7 +215,6 @@ Public Class Leaderboards
         Try
             LoadChart("SELECT YEAR(zreading), SUM(total) FROM `loc_daily_transaction_details` WHERE YEAR(zreading) - INTERVAL 1 YEAR GROUP BY YEAR(zreading)", 1)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

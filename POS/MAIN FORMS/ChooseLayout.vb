@@ -23,4 +23,5 @@ Public Class ChooseLayout
             SendErrorReport(ex.ToString)
         End Try
     End Sub
+
 End Class

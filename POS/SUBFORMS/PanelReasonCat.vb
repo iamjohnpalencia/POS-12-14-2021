@@ -44,7 +44,6 @@ Public Class PanelReasonCat
             End If
             Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub

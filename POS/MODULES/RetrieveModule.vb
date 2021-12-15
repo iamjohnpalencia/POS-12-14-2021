@@ -158,7 +158,6 @@ Module RetrieveModule
                 End Try
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -176,7 +175,6 @@ Module RetrieveModule
                 End If
             End Using
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return ReturnUsername
@@ -196,7 +194,6 @@ Module RetrieveModule
             End Using
             ConnectionLocal.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return ReturnUsername
@@ -216,7 +213,6 @@ Module RetrieveModule
             End Using
             ConnectionLocal.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return ReturnUsername
@@ -240,7 +236,6 @@ Module RetrieveModule
                 End Using
             Loop Until (ReturnThis = False)
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return Uniqid
@@ -304,7 +299,6 @@ Module RetrieveModule
                 Next
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         Finally
             LocalhostConn.close()
@@ -332,7 +326,6 @@ Module RetrieveModule
             cmd.Dispose()
             ConnectionLocal.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return formulaid
@@ -350,7 +343,6 @@ Module RetrieveModule
             da.Dispose()
             cmd.Dispose()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return FullName
@@ -386,7 +378,6 @@ Module RetrieveModule
                 MyCloudConnection.Close()
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return valuetoreturn
@@ -413,7 +404,6 @@ Module RetrieveModule
                 .SelectionMode = DataGridViewSelectionMode.FullRowSelect
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         Finally
             ConnectionLocal.Close()
@@ -445,7 +435,6 @@ Module RetrieveModule
                 .SelectionMode = DataGridViewSelectionMode.FullRowSelect
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -472,7 +461,6 @@ Module RetrieveModule
                 .SelectionMode = DataGridViewSelectionMode.FullRowSelect
             End With
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -499,7 +487,6 @@ Module RetrieveModule
             ConnectionLocal.Close()
             ConnectionCloud.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         Finally
             da.Dispose()
@@ -516,7 +503,6 @@ Module RetrieveModule
                 End While
             End Using
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return returnval
@@ -534,7 +520,6 @@ Module RetrieveModule
                 returncount = row("COUNT(" & tocount & ")")
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return returncount
@@ -555,7 +540,6 @@ Module RetrieveModule
                 Next
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return returnsum
@@ -575,7 +559,6 @@ Module RetrieveModule
                 Next
             End If
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return returnsum
@@ -592,7 +575,6 @@ Module RetrieveModule
                 RetunSel = row(toreturn)
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return RetunSel
@@ -613,7 +595,6 @@ Module RetrieveModule
             End Using
             ServerConn.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return ReturnMun
@@ -633,7 +614,6 @@ Module RetrieveModule
             End Using
             ServerConn.Close()
         Catch ex As Exception
-            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
         Return ReturnProv
