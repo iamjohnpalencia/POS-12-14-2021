@@ -51,6 +51,11 @@ Partial Class PaymentForm
         Me.ButtonNo7 = New System.Windows.Forms.Button()
         Me.TextBoxMONEY = New System.Windows.Forms.TextBox()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -84,6 +89,11 @@ Partial Class PaymentForm
         Me.Panel1.Controls.Add(Me.TextBoxTOTALPAY)
         Me.Panel1.Controls.Add(Me.ButtonNo7)
         Me.Panel1.Controls.Add(Me.TextBoxMONEY)
+        Me.Panel1.Controls.Add(Me.Label8)
+        Me.Panel1.Controls.Add(Me.Label7)
+        Me.Panel1.Controls.Add(Me.Label6)
+        Me.Panel1.Controls.Add(Me.Label10)
+        Me.Panel1.Controls.Add(Me.Label9)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
@@ -93,13 +103,14 @@ Partial Class PaymentForm
         'TextBoxDiscType
         '
         Me.TextBoxDiscType.BackColor = System.Drawing.Color.White
+        Me.TextBoxDiscType.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxDiscType.Enabled = False
         Me.TextBoxDiscType.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxDiscType.ForeColor = System.Drawing.Color.DimGray
         Me.TextBoxDiscType.Location = New System.Drawing.Point(9, 142)
         Me.TextBoxDiscType.Name = "TextBoxDiscType"
         Me.TextBoxDiscType.ReadOnly = True
-        Me.TextBoxDiscType.Size = New System.Drawing.Size(352, 27)
+        Me.TextBoxDiscType.Size = New System.Drawing.Size(352, 20)
         Me.TextBoxDiscType.TabIndex = 113
         Me.TextBoxDiscType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
@@ -146,13 +157,14 @@ Partial Class PaymentForm
         'TextBoxTransactionType
         '
         Me.TextBoxTransactionType.BackColor = System.Drawing.Color.White
+        Me.TextBoxTransactionType.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxTransactionType.Enabled = False
         Me.TextBoxTransactionType.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxTransactionType.ForeColor = System.Drawing.Color.DimGray
         Me.TextBoxTransactionType.Location = New System.Drawing.Point(9, 91)
         Me.TextBoxTransactionType.Name = "TextBoxTransactionType"
         Me.TextBoxTransactionType.ReadOnly = True
-        Me.TextBoxTransactionType.Size = New System.Drawing.Size(352, 27)
+        Me.TextBoxTransactionType.Size = New System.Drawing.Size(352, 20)
         Me.TextBoxTransactionType.TabIndex = 109
         Me.TextBoxTransactionType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
@@ -362,13 +374,14 @@ Partial Class PaymentForm
         'TextBoxCHANGE
         '
         Me.TextBoxCHANGE.BackColor = System.Drawing.Color.White
+        Me.TextBoxCHANGE.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxCHANGE.Enabled = False
         Me.TextBoxCHANGE.Font = New System.Drawing.Font("Tahoma", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxCHANGE.ForeColor = System.Drawing.Color.DimGray
-        Me.TextBoxCHANGE.Location = New System.Drawing.Point(231, 196)
+        Me.TextBoxCHANGE.Location = New System.Drawing.Point(231, 195)
         Me.TextBoxCHANGE.Name = "TextBoxCHANGE"
         Me.TextBoxCHANGE.ReadOnly = True
-        Me.TextBoxCHANGE.Size = New System.Drawing.Size(130, 36)
+        Me.TextBoxCHANGE.Size = New System.Drawing.Size(130, 29)
         Me.TextBoxCHANGE.TabIndex = 96
         Me.TextBoxCHANGE.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
@@ -405,13 +418,14 @@ Partial Class PaymentForm
         'TextBoxTOTALPAY
         '
         Me.TextBoxTOTALPAY.BackColor = System.Drawing.Color.White
+        Me.TextBoxTOTALPAY.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxTOTALPAY.Enabled = False
         Me.TextBoxTOTALPAY.Font = New System.Drawing.Font("Tahoma", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxTOTALPAY.ForeColor = System.Drawing.Color.DimGray
         Me.TextBoxTOTALPAY.Location = New System.Drawing.Point(9, 28)
         Me.TextBoxTOTALPAY.Name = "TextBoxTOTALPAY"
         Me.TextBoxTOTALPAY.ReadOnly = True
-        Me.TextBoxTOTALPAY.Size = New System.Drawing.Size(352, 36)
+        Me.TextBoxTOTALPAY.Size = New System.Drawing.Size(352, 29)
         Me.TextBoxTOTALPAY.TabIndex = 94
         Me.TextBoxTOTALPAY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
@@ -433,14 +447,65 @@ Partial Class PaymentForm
         'TextBoxMONEY
         '
         Me.TextBoxMONEY.BackColor = System.Drawing.Color.White
+        Me.TextBoxMONEY.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxMONEY.Font = New System.Drawing.Font("Tahoma", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxMONEY.ForeColor = System.Drawing.Color.DimGray
-        Me.TextBoxMONEY.Location = New System.Drawing.Point(9, 196)
+        Me.TextBoxMONEY.Location = New System.Drawing.Point(9, 195)
         Me.TextBoxMONEY.MaxLength = 10
         Me.TextBoxMONEY.Name = "TextBoxMONEY"
-        Me.TextBoxMONEY.Size = New System.Drawing.Size(216, 36)
+        Me.TextBoxMONEY.Size = New System.Drawing.Size(216, 29)
         Me.TextBoxMONEY.TabIndex = 95
         Me.TextBoxMONEY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Location = New System.Drawing.Point(9, 43)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(358, 16)
+        Me.Label6.TabIndex = 251
+        Me.Label6.Text = "__________________________________________________"
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Location = New System.Drawing.Point(9, 97)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(358, 16)
+        Me.Label7.TabIndex = 252
+        Me.Label7.Text = "__________________________________________________"
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(9, 148)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(358, 16)
+        Me.Label8.TabIndex = 253
+        Me.Label8.Text = "__________________________________________________"
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Location = New System.Drawing.Point(9, 210)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(218, 16)
+        Me.Label9.TabIndex = 254
+        Me.Label9.Text = "______________________________"
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.Location = New System.Drawing.Point(231, 210)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(134, 16)
+        Me.Label10.TabIndex = 255
+        Me.Label10.Text = "__________________"
         '
         'PaymentForm
         '
@@ -486,4 +551,9 @@ Partial Class PaymentForm
     Friend WithEvents ButtonClear As Button
     Friend WithEvents TextBoxDiscType As TextBox
     Friend WithEvents Label5 As Label
+    Friend WithEvents Label8 As Label
+    Friend WithEvents Label7 As Label
+    Friend WithEvents Label6 As Label
+    Friend WithEvents Label10 As Label
+    Friend WithEvents Label9 As Label
 End Class

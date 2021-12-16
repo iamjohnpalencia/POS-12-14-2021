@@ -38,6 +38,9 @@ Partial Class DepositSlip
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.ButtonKeyboard = New System.Windows.Forms.Button()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.Panel2.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -72,32 +75,32 @@ Partial Class DepositSlip
         '
         'TextBoxAMT
         '
-        Me.TextBoxAMT.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TextBoxAMT.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxAMT.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxAMT.Location = New System.Drawing.Point(208, 84)
         Me.TextBoxAMT.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.TextBoxAMT.Name = "TextBoxAMT"
-        Me.TextBoxAMT.Size = New System.Drawing.Size(400, 23)
+        Me.TextBoxAMT.Size = New System.Drawing.Size(400, 16)
         Me.TextBoxAMT.TabIndex = 218
         '
         'TextBoxTRANNUM
         '
-        Me.TextBoxTRANNUM.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TextBoxTRANNUM.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxTRANNUM.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxTRANNUM.Location = New System.Drawing.Point(208, 51)
         Me.TextBoxTRANNUM.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.TextBoxTRANNUM.Name = "TextBoxTRANNUM"
-        Me.TextBoxTRANNUM.Size = New System.Drawing.Size(400, 23)
+        Me.TextBoxTRANNUM.Size = New System.Drawing.Size(400, 16)
         Me.TextBoxTRANNUM.TabIndex = 217
         '
         'TextBoxNAME
         '
-        Me.TextBoxNAME.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TextBoxNAME.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxNAME.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxNAME.Location = New System.Drawing.Point(208, 18)
         Me.TextBoxNAME.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.TextBoxNAME.Name = "TextBoxNAME"
-        Me.TextBoxNAME.Size = New System.Drawing.Size(400, 23)
+        Me.TextBoxNAME.Size = New System.Drawing.Size(400, 16)
         Me.TextBoxNAME.TabIndex = 216
         '
         'Button1
@@ -187,10 +190,43 @@ Partial Class DepositSlip
         Me.Panel2.Controls.Add(Me.TextBoxAMT)
         Me.Panel2.Controls.Add(Me.Button1)
         Me.Panel2.Controls.Add(Me.TextBoxTRANNUM)
+        Me.Panel2.Controls.Add(Me.Label7)
+        Me.Panel2.Controls.Add(Me.Label6)
+        Me.Panel2.Controls.Add(Me.Label8)
         Me.Panel2.Location = New System.Drawing.Point(142, 155)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(674, 231)
         Me.Panel2.TabIndex = 234
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(205, 20)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(407, 16)
+        Me.Label8.TabIndex = 243
+        Me.Label8.Text = "_________________________________________________________"
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Location = New System.Drawing.Point(206, 53)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(407, 16)
+        Me.Label6.TabIndex = 244
+        Me.Label6.Text = "_________________________________________________________"
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Location = New System.Drawing.Point(206, 86)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(407, 16)
+        Me.Label7.TabIndex = 245
+        Me.Label7.Text = "_________________________________________________________"
         '
         'DepositSlip
         '
@@ -225,4 +261,7 @@ Partial Class DepositSlip
     Friend WithEvents ComboBoxBankName As ComboBox
     Friend WithEvents Panel2 As Panel
     Friend WithEvents ButtonKeyboard As Button
+    Friend WithEvents Label7 As Label
+    Friend WithEvents Label6 As Label
+    Friend WithEvents Label8 As Label
 End Class

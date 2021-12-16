@@ -1268,7 +1268,9 @@ Public Class POS
                 RightToLeftDisplay(sender, e, RowA, "AMOUNT DUE:", "P" & NETSALES, Font2Bold, 0, 0)
                 RightToLeftDisplay(sender, e, RowA + 15, "CASH:", "P" & cash, Font1Bold, 0, 0)
                 RightToLeftDisplay(sender, e, RowA + 25, "CHANGE:", "P" & change, Font1Bold, 0, 0)
-                SimpleTextDisplay(sender, e, "*************************************", FontDefault, 0, RowA + 23)
+
+                PrintStars(sender, e, FontDefault, RowA + 23)
+
                 RightToLeftDisplay(sender, e, RowA + 52, "     VATable Sales", "    " & Format(VATABLESALES, "###,###,##0.00"), FontDefault, 0, 0)
                 RightToLeftDisplay(sender, e, RowA + 62, "     VAT Exempt Sales", "    " & Format(VATEXEMPTSALES, "###,###,##0.00"), FontDefault, 0, 0)
                 RightToLeftDisplay(sender, e, RowA + 72, "     Zero-Rated Sales", "    " & Format(ZERORATEDSALES, "###,###,##0.00"), FontDefault, 0, 0)
@@ -1276,7 +1278,9 @@ Public Class POS
                 RightToLeftDisplay(sender, e, RowA + 92, "     Less Vat", "    " & Format(LESSVAT, "###,###,##0.00"), FontDefault, 0, 0)
                 RightToLeftDisplay(sender, e, RowA + 102, "     Total", "    " & Format(NETSALES, "###,###,##0.00"), FontDefault, 0, 0)
                 RowA += 4
-                SimpleTextDisplay(sender, e, "*************************************", FontDefault, 0, RowA + 92)
+
+                PrintStars(sender, e, FontDefault, RowA + 92)
+
                 RowA += 1
                 SimpleTextDisplay(sender, e, "Transaction Type: " & Trim(TRANSACTIONMODE), FontDefault, 0, RowA + 100)
                 SimpleTextDisplay(sender, e, "Total Item(s): " & Qty, FontDefault, 0, RowA + 110)
@@ -1296,7 +1300,9 @@ Public Class POS
                 Else
                     SimpleTextDisplay(sender, e, "THIS SERVES AS AN OFFICIAL RECEIPT", FontDefault, 0, RowA + 170)
                 End If
-                SimpleTextDisplay(sender, e, "*************************************", FontDefault, 0, RowA + 184)
+
+                PrintStars(sender, e, FontDefault, RowA + 184)
+
                 ReceiptFooter(sender, e, RowA + 12, False)
             Else
 
@@ -1309,7 +1315,9 @@ Public Class POS
                 RightToLeftDisplay(sender, e, RowA + 20, "AMOUNT DUE:", "P" & Format(Double.Parse(TextBoxGRANDTOTAL.Text), "###,###,##0.00"), Font1Bold, 0, 0)
                 RightToLeftDisplay(sender, e, RowA + 30, "CASH:", "P" & cash, Font1Bold, 0, 0)
                 RightToLeftDisplay(sender, e, RowA + 40, "CHANGE:", "P" & change, Font1Bold, 0, 0)
-                SimpleTextDisplay(sender, e, "*************************************", FontDefault, 0, RowA + 37)
+
+                PrintStars(sender, e, FontDefault, RowA + 37)
+
                 RightToLeftDisplay(sender, e, RowA + 65, "     VATable Sales", "    " & Format(VATABLESALES, "###,###,##0.00"), FontDefault, 0, 0)
                 If DISCOUNTTYPE = "Percentage(w/o vat)" Then
                     RightToLeftDisplay(sender, e, RowA + 75, "     VAT Exempt Sales", "    " & Format(VATEXEMPTSALES, "0.00"), FontDefault, 0, 0)
@@ -1337,7 +1345,9 @@ Public Class POS
                 End If
                 RightToLeftDisplay(sender, e, RowA + 115, "     Total", "    " & Format(NETSALES, "###,###,##0.00"), FontDefault, 0, 0)
                 RowA += 5
-                SimpleTextDisplay(sender, e, "*************************************", FontDefault, 0, RowA + 101)
+
+                PrintStars(sender, e, FontDefault, RowA + 101)
+
                 RowA += 4
                 SimpleTextDisplay(sender, e, "Transaction Type: " & Trim(TRANSACTIONMODE), FontDefault, 0, RowA + 110)
                 SimpleTextDisplay(sender, e, "Total Item(s): " & Qty, FontDefault, 0, RowA + 120)
@@ -1358,7 +1368,9 @@ Public Class POS
                     SimpleTextDisplay(sender, e, "THIS SERVES AS AN OFFICIAL RECEIPT", FontDefault, 0, RowA + 180)
                 End If
                 RowA += 6
-                SimpleTextDisplay(sender, e, "*************************************", FontDefault, 0, RowA + 190)
+
+                PrintStars(sender, e, FontDefault, RowA + 190)
+
                 ReceiptFooter(sender, e, RowA + 20, False)
             End If
         Catch ex As Exception

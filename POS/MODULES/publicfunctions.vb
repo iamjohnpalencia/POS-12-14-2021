@@ -396,10 +396,32 @@ Module publicfunctions
     End Function
     Public Sub RightToLeftDisplay(sender As Object, e As PrintPageEventArgs, position As Integer, lefttext As String, righttext As String, myfont As Font, wth As Single, frompoint As Single)
         Dim format As StringFormat = New StringFormat(StringFormatFlags.DirectionRightToLeft)
-        Dim rect3 As RectangleF = New RectangleF(10.0F + frompoint, position, 173.0F + wth, 100.0F)
+        Dim rect3 As RectangleF
+        If My.Settings.PrintSize = "57mm" Then
+            rect3 = New RectangleF(10.0F + frompoint, position, 173.0F + wth, 100.0F)
+        Else
+            rect3 = New RectangleF(10.0F + frompoint, position, 203.0F + wth, 100.0F)
+        End If
         e.Graphics.DrawString(lefttext, myfont, Brushes.Black, rect3)
         e.Graphics.DrawString(righttext, myfont, Brushes.Black, rect3, format)
     End Sub
+    Public Sub PrintStars(sender As Object, e As PrintPageEventArgs, FontDefault As Font, RowA As Integer)
+        If My.Settings.PrintSize = "57mm" Then
+            SimpleTextDisplay(sender, e, "*************************************", FontDefault, 0, RowA)
+        Else
+            SimpleTextDisplay(sender, e, "*********************************************", FontDefault, 0, RowA)
+        End If
+    End Sub
+    Public Sub PrintLine(sender As Object, e As PrintPageEventArgs, FontDefault As Font, RowA As Integer)
+
+        If My.Settings.PrintSize = "57mm" Then
+            SimpleTextDisplay(sender, e, "----------------------------------------------------------------", FontDefault, 0, RowA)
+        Else
+            SimpleTextDisplay(sender, e, "----------------------------------------------------------------------", FontDefault, 0, RowA)
+        End If
+    End Sub
+
+
     Public Sub RightDisplay1(sender As Object, e As PrintPageEventArgs, position As Integer, lefttext As String, righttext As String, myfont As Font, wth As Single, frompoint As Single)
         Dim format As StringFormat = New StringFormat(StringFormatFlags.DirectionRightToLeft)
         Dim rect3 As RectangleF = New RectangleF(10.0F + frompoint, position, 0 + wth, 0)
@@ -464,14 +486,24 @@ Module publicfunctions
                 SimpleTextDisplay(sender, e, SeniorDetailsName, font, 30, 82 + AddLine)
             End If
 
+
+            If My.Settings.PrintSize = "57mm" Then
+                e.Graphics.DrawLine(Pens.Black, 40, 112 + AddLine, 180, 112 + AddLine)
+                e.Graphics.DrawLine(Pens.Black, 28, 122 + AddLine, 180, 122 + AddLine)
+                e.Graphics.DrawLine(Pens.Black, 49, 132 + AddLine, 180, 132 + AddLine)
+                e.Graphics.DrawLine(Pens.Black, 75, 142 + AddLine, 180, 142 + AddLine)
+            Else
+                e.Graphics.DrawLine(Pens.Black, 40, 112 + AddLine, 210, 112 + AddLine)
+                e.Graphics.DrawLine(Pens.Black, 28, 122 + AddLine, 210, 122 + AddLine)
+                e.Graphics.DrawLine(Pens.Black, 49, 132 + AddLine, 210, 132 + AddLine)
+                e.Graphics.DrawLine(Pens.Black, 75, 142 + AddLine, 210, 142 + AddLine)
+            End If
+
             SimpleTextDisplay(sender, e, "Name:", font, 0, 85 + AddLine)
-            e.Graphics.DrawLine(Pens.Black, 40, 112 + AddLine, 180, 112 + AddLine)
             SimpleTextDisplay(sender, e, "Tin:", font, 0, 95 + AddLine)
-            e.Graphics.DrawLine(Pens.Black, 28, 122 + AddLine, 180, 122 + AddLine)
             SimpleTextDisplay(sender, e, "Address:", font, 0, 105 + AddLine)
-            e.Graphics.DrawLine(Pens.Black, 49, 132 + AddLine, 180, 132 + AddLine)
             SimpleTextDisplay(sender, e, "Business Style:", font, 0, 115 + AddLine)
-            e.Graphics.DrawLine(Pens.Black, 75, 142 + AddLine, 180, 142 + AddLine)
+
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try

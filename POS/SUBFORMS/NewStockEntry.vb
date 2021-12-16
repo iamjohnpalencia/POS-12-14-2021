@@ -47,7 +47,7 @@ Public Class NewStockEntry
                     where = "formula_id = " & TextBox1.Text
                 End If
                 GLOBAL_FUNCTION_UPDATE(table, fields, where)
-                MDIFORM.newMDIchildInventory.loadstockentry()
+                MDIFORM.newMDIchildInventory.loadstockentry(False)
                 MDIFORM.newMDIchildInventory.loadinventory()
                 MDIFORM.newMDIchildInventory.loadstockadjustmentreport(False)
                 MDIFORM.newMDIchildInventory.loadcriticalstocks()

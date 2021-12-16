@@ -29,15 +29,18 @@ Partial Class ChangePrice
         Me.TextBoxPriceTo = New System.Windows.Forms.TextBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.ButtonKeyboard = New System.Windows.Forms.Button()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'TextBoxPriceFrom
         '
         Me.TextBoxPriceFrom.BackColor = System.Drawing.Color.White
+        Me.TextBoxPriceFrom.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxPriceFrom.Location = New System.Drawing.Point(11, 25)
         Me.TextBoxPriceFrom.Name = "TextBoxPriceFrom"
         Me.TextBoxPriceFrom.ReadOnly = True
-        Me.TextBoxPriceFrom.Size = New System.Drawing.Size(315, 22)
+        Me.TextBoxPriceFrom.Size = New System.Drawing.Size(315, 15)
         Me.TextBoxPriceFrom.TabIndex = 0
         Me.TextBoxPriceFrom.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -61,9 +64,10 @@ Partial Class ChangePrice
         '
         'TextBoxPriceTo
         '
+        Me.TextBoxPriceTo.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxPriceTo.Location = New System.Drawing.Point(11, 67)
         Me.TextBoxPriceTo.Name = "TextBoxPriceTo"
-        Me.TextBoxPriceTo.Size = New System.Drawing.Size(315, 22)
+        Me.TextBoxPriceTo.Size = New System.Drawing.Size(315, 15)
         Me.TextBoxPriceTo.TabIndex = 3
         Me.TextBoxPriceTo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -93,6 +97,26 @@ Partial Class ChangePrice
         Me.ButtonKeyboard.TabIndex = 231
         Me.ButtonKeyboard.UseVisualStyleBackColor = False
         '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(10, 26)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(316, 16)
+        Me.Label8.TabIndex = 242
+        Me.Label8.Text = "____________________________________________"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(12, 68)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(316, 16)
+        Me.Label3.TabIndex = 243
+        Me.Label3.Text = "____________________________________________"
+        '
         'ChangePrice
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
@@ -105,6 +129,8 @@ Partial Class ChangePrice
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TextBoxPriceFrom)
+        Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.Label8)
         Me.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -124,4 +150,6 @@ Partial Class ChangePrice
     Friend WithEvents TextBoxPriceTo As TextBox
     Friend WithEvents Button1 As Button
     Friend WithEvents ButtonKeyboard As Button
+    Friend WithEvents Label8 As Label
+    Friend WithEvents Label3 As Label
 End Class

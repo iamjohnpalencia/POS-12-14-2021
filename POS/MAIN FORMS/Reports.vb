@@ -866,7 +866,7 @@ Public Class Reports
                     RightToLeftDisplay(sender, e, a, "AMOUNT DUE:", "P" & .SelectedRows(0).Cells(5).Value.ToString, font2, 0, 0)
                     RightToLeftDisplay(sender, e, a + 15, "CASH:", "P" & .SelectedRows(0).Cells(5).Value.ToString, font1, 0, 0)
                     RightToLeftDisplay(sender, e, a + 25, "CHANGE:", "P" & .SelectedRows(0).Cells(4).Value.ToString, font1, 0, 0)
-                    SimpleTextDisplay(sender, e, "*************************************", font, 0, a + 23)
+                    PrintStars(sender, e, font, a + 23)
                     RightToLeftDisplay(sender, e, a + 52, "     VATable Sales", "    " & .SelectedRows(0).Cells(6).Value.ToString, font, 0, 0)
                     RightToLeftDisplay(sender, e, a + 62, "     Vat Exempt Sales", "    " & .SelectedRows(0).Cells(7).Value.ToString, font, 0, 0)
                     RightToLeftDisplay(sender, e, a + 72, "     Zero-Rated Sales", "    " & .SelectedRows(0).Cells(8).Value.ToString, font, 0, 0)
@@ -874,7 +874,7 @@ Public Class Reports
                     RightToLeftDisplay(sender, e, a + 92, "     Less Vat", "    " & .SelectedRows(0).Cells(10).Value.ToString, font, 0, 0)
                     RightToLeftDisplay(sender, e, a + 102, "     Total", "    " & .SelectedRows(0).Cells(5).Value.ToString, font, 0, 0)
                     a += 4
-                    SimpleTextDisplay(sender, e, "*************************************", font, 0, a + 92)
+                    PrintStars(sender, e, font, a + 92)
                     a += 1
                     SimpleTextDisplay(sender, e, "Transaction Type: " & .SelectedRows(0).Cells(11).Value.ToString, font, 0, a + 100)
                     SimpleTextDisplay(sender, e, "Total Item(s): " & SumOfColumnsToInt(DataGridViewTransactionDetails, 1), font, 0, a + 110)
@@ -886,7 +886,7 @@ Public Class Reports
                     SimpleTextDisplay(sender, e, "SI No: " & SINUMBERSTRING, font, 0, a + 150)
                     SimpleTextDisplay(sender, e, "Reprint Copy", font, 0, a + 160)
                     SimpleTextDisplay(sender, e, "THIS SERVES AS AN OFFICIAL RECEIPT", font, 0, a + 170)
-                    SimpleTextDisplay(sender, e, "*************************************", font, 0, a + 185)
+                    PrintStars(sender, e, font, a + 185)
 
                     If DataGridViewDaily.SelectedRows(0).Cells(17).Value = 1 Then
                         ReceiptFooter(sender, e, a + 12, False)
@@ -916,7 +916,7 @@ Public Class Reports
                     RightToLeftDisplay(sender, e, a + 20, "AMOUNT DUE:", "P" & .SelectedRows(0).Cells(5).Value.ToString, font2, 0, 0)
                     RightToLeftDisplay(sender, e, a + 30, "CASH:", "P" & .SelectedRows(0).Cells(3).Value.ToString, font1, 0, 0)
                     RightToLeftDisplay(sender, e, a + 40, "CHANGE:", "P" & .SelectedRows(0).Cells(4).Value.ToString, font1, 0, 0)
-                    SimpleTextDisplay(sender, e, "*************************************", font, 0, a + 37)
+                    PrintStars(sender, e, font, a + 37)
                     a += 4
                     RightToLeftDisplay(sender, e, a + 65, "     VATable Sales", "    " & .SelectedRows(0).Cells(6).Value.ToString, font, 0, 0)
                     RightToLeftDisplay(sender, e, a + 75, "     Vat Exempt Sales", "    " & .SelectedRows(0).Cells(7).Value.ToString, font, 0, 0)
@@ -925,7 +925,7 @@ Public Class Reports
                     RightToLeftDisplay(sender, e, a + 105, "     Less Vat", "    " & .SelectedRows(0).Cells(10).Value.ToString, font, 0, 0)
                     RightToLeftDisplay(sender, e, a + 115, "     Total", "    " & .SelectedRows(0).Cells(5).Value.ToString, font, 0, 0)
                     a += 5
-                    SimpleTextDisplay(sender, e, "*************************************", font, 0, a + 101)
+                    PrintStars(sender, e, font, a + 101)
                     a += 4
                     SimpleTextDisplay(sender, e, "Transaction Type: " & .SelectedRows(0).Cells(11).Value.ToString, font, 0, a + 110)
                     SimpleTextDisplay(sender, e, "Total Item(s): " & SumOfColumnsToInt(DataGridViewTransactionDetails, 1), font, 0, a + 120)
@@ -938,7 +938,7 @@ Public Class Reports
                     SimpleTextDisplay(sender, e, "Reprint Copy", font, 0, a + 170)
                     SimpleTextDisplay(sender, e, "THIS SERVES AS AN OFFICIAL RECEIPT", font, 0, a + 180)
                     a += 6
-                    SimpleTextDisplay(sender, e, "*************************************", font, 0, a + 190)
+                    PrintStars(sender, e, font, a + 190)
                     a += 16
                     If DataGridViewDaily.SelectedRows(0).Cells(17).Value = 1 Then
                         ReceiptFooter(sender, e, a, False)
@@ -1178,11 +1178,13 @@ Public Class Reports
             RightToLeftDisplay(sender, e, 100, XreadOrZread, "", font2, 20, 0)
             '============================================================================================================================
             SimpleTextDisplay(sender, e, ReadingOR, font, 0, 90)
-            SimpleTextDisplay(sender, e, "-------------------------------------------------------------", font, 0, 95)
+            PrintLine(sender, e, font, a + 95)
+            'SimpleTextDisplay(sender, e, "-------------------------------------------------------------", font, 0, 95)
             '============================================================================================================================
             RightToLeftDisplay(sender, e, 123, "DESCRIPTION", "QTY/AMOUNT", font2, 10, 0)
             '============================================================================================================================
-            SimpleTextDisplay(sender, e, "-------------------------------------------------------------", font, 0, 110)
+            'SimpleTextDisplay(sender, e, "-------------------------------------------------------------", font, 0, 110)
+            PrintLine(sender, e, font, a + 110)
             '============================================================================================================================
             RightToLeftDisplay(sender, e, 140, "TERMINAL N0.", S_Terminal_No, font, 10, 0)
             RightToLeftDisplay(sender, e, 155, "GROSS", NUMBERFORMAT(GrossSale), font, 10, 0)
@@ -1358,7 +1360,9 @@ Public Class Reports
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            SimpleTextDisplay(sender, e, "-------------------------------------------------------------", font, 0, 665 + ZreadOrXread)
+            'SimpleTextDisplay(sender, e, "-------------------------------------------------------------", font, 0, 665 + ZreadOrXread)
+            PrintLine(sender, e, font, 665 + ZreadOrXread)
+
             SimpleTextDisplay(sender, e, "SALES BY CLASS", font2, 0, 675 + ZreadOrXread)
             RightToLeftDisplay(sender, e, 685 + 20 + ZreadOrXread, "ADD ONS", ADDONS, font, 10, 0)
             RightToLeftDisplay(sender, e, 695 + 20 + ZreadOrXread, "FAMOUS BLENDS", BLENDS, font, 10, 0)
@@ -1368,7 +1372,8 @@ Public Class Reports
             RightToLeftDisplay(sender, e, 735 + 20 + ZreadOrXread, "SAVORY", SAVORY, font, 10, 0)
             RightToLeftDisplay(sender, e, 745 + 20 + ZreadOrXread, "SIMPY PERFECT", SIMPERF, font, 10, 0)
 
-            SimpleTextDisplay(sender, e, "-------------------------------------------------------------", font, 0, 755 + ZreadOrXread)
+            'SimpleTextDisplay(sender, e, "-------------------------------------------------------------", font, 0, 755 + ZreadOrXread)
+            PrintLine(sender, e, font, 755 + ZreadOrXread)
             CenterTextDisplay(sender, e, S_Zreading & " " & Format(Now(), "HH:mm:ss"), font, 810)
 
         Catch ex As Exception
@@ -1533,27 +1538,48 @@ Public Class Reports
     End Sub
     Private Sub printsales_printdoc(sender As Object, e As System.Drawing.Printing.PrintPageEventArgs) Handles printsales.PrintPage
         Try
-            Dim font As New Font("Tahoma", 5)
-            Dim font1 As New Font("Tahoma", 5, FontStyle.Bold)
+            Dim font As New Font("Tahoma", 6)
+            Dim font1 As New Font("Tahoma", 6, FontStyle.Bold)
 
             ReceiptHeader(sender, e, False)
-            SimpleTextDisplay(sender, e, "PRODUCT CODE", font1, 0, 130)
-            SimpleTextDisplay(sender, e, "QUANTITY", font1, 70, 130)
-            SimpleTextDisplay(sender, e, "TOTAL SALES", font1, 120, 130)
+            If My.Settings.PrintSize = "57mm" Then
+                SimpleTextDisplay(sender, e, "PRODUCT CODE", font1, 0, 130)
+                SimpleTextDisplay(sender, e, "QUANTITY", font1, 70, 130)
+                SimpleTextDisplay(sender, e, "TOTAL SALES", font1, 120, 130)
+            Else
+                SimpleTextDisplay(sender, e, "PRODUCT CODE", font1, 0, 130)
+                SimpleTextDisplay(sender, e, "QUANTITY", font1, 80, 130)
+                SimpleTextDisplay(sender, e, "TOTAL SALES", font1, 140, 130)
+            End If
+
 
             loopa += 30
             Dim TotalSales As Decimal = 0
             For i As Integer = 0 To PrintSalesDatatable.Rows.Count - 1 Step +1
                 SimpleTextDisplay(sender, e, PrintSalesDatatable(i)(0), font, 0, loopa + 20)
-                RightDisplay1(sender, e, loopa + 40, "", PrintSalesDatatable(i)(1), font, 80, 0)
-                RightDisplay1(sender, e, loopa + 40, "", PrintSalesDatatable(i)(2), font, 170, 0)
+                If My.Settings.PrintSize = "57mm" Then
+                    RightDisplay1(sender, e, loopa + 40, "", PrintSalesDatatable(i)(1), font, 80, 0)
+                    RightDisplay1(sender, e, loopa + 40, "", PrintSalesDatatable(i)(2), font, 170, 0)
+                Else
+                    RightDisplay1(sender, e, loopa + 40, "", PrintSalesDatatable(i)(1), font, 80, 30)
+                    RightDisplay1(sender, e, loopa + 40, "", PrintSalesDatatable(i)(2), font, 170, 30)
+                End If
+
                 loopa += 10
                 TotalSales += PrintSalesDatatable(i)(2)
             Next
-            SimpleTextDisplay(sender, e, "GRAND TOTAL:", font1, 70, loopa + 20)
+            If My.Settings.PrintSize = "57mm" Then
+                SimpleTextDisplay(sender, e, "GRAND TOTAL:", font1, 70, loopa + 30)
+                RightDisplay1(sender, e, loopa + 50, "", TotalSales, font1, 170, 0)
+            Else
+                SimpleTextDisplay(sender, e, "GRAND TOTAL:", font1, 100, loopa + 30)
+                RightDisplay1(sender, e, loopa + 50, "", TotalSales, font1, 200, 0)
+            End If
+
+
             'SimpleTextDisplay(sender, e, , font1, 120, loopa + 20)
-            RightDisplay1(sender, e, loopa + 40, "", TotalSales, font1, 170, 0)
-            CenterTextDisplay(sender, e, "******************************************", font, loopa + 60)
+
+            PrintStars(sender, e, font, loopa + 50)
             CenterTextDisplay(sender, e, Format(Now(), "yyyy-MM-dd HH:mm:ss"), font, loopa + 80)
 
         Catch ex As Exception
@@ -1566,41 +1592,47 @@ Public Class Reports
             Dim font As New Font("tahoma", 6)
             Dim font2 As New Font("tahoma", 6, FontStyle.Bold)
             Dim brandfont As New Font("tahoma", 8, FontStyle.Bold)
-            CenterTextDisplay(sender, e, ClientBrand.ToUpper, brandfont, 10)
-            ReadingOR = "R" & Format(Now, "yyddMMHHmmssyy")
-            '============================================================================================================================
-            CenterTextDisplay(sender, e, "Opt by : Innovention Food Asia Co.", font, 21)
-            '============================================================================================================================
-            CenterTextDisplay(sender, e, ClientAddress & ", Brgy. " & ClientBrgy, font, 31)
-            '============================================================================================================================
-            CenterTextDisplay(sender, e, getmunicipality & ", " & getprovince, font, 41)
-            '============================================================================================================================
-            CenterTextDisplay(sender, e, "VAT REG TIN : " & ClientTin, font, 51)
-            '============================================================================================================================
-            CenterTextDisplay(sender, e, "MSN : " & ClientMSN, font, 61)
-            '============================================================================================================================
-            CenterTextDisplay(sender, e, "MIN : " & ClientMIN, font, 71)
-            '============================================================================================================================
-            CenterTextDisplay(sender, e, "PTUN : " & ClientPTUN, font, 81)
-            '============================================================================================================================
-            RightToLeftDisplay(sender, e, 100, "TERMINAL REPORT", "RETURNS", font2, 20, 0)
-            '============================================================================================================================
-            SimpleTextDisplay(sender, e, ReadingOR, font, 0, 90)
-            SimpleTextDisplay(sender, e, "----------------------------------------------------------------", font, 0, 100)
+            'CenterTextDisplay(sender, e, ClientBrand.ToUpper, brandfont, 10)
+            'ReadingOR = "R" & Format(Now, "yyddMMHHmmssyy")
+            ''============================================================================================================================
+            'CenterTextDisplay(sender, e, "Opt by : Innovention Food Asia Co.", font, 21)
+            ''============================================================================================================================
+            'CenterTextDisplay(sender, e, ClientAddress & ", Brgy. " & ClientBrgy, font, 31)
+            ''============================================================================================================================
+            'CenterTextDisplay(sender, e, getmunicipality & ", " & getprovince, font, 41)
+            ''============================================================================================================================
+            'CenterTextDisplay(sender, e, "VAT REG TIN : " & ClientTin, font, 51)
+            ''============================================================================================================================
+            'CenterTextDisplay(sender, e, "MSN : " & ClientMSN, font, 61)
+            ''============================================================================================================================
+            'CenterTextDisplay(sender, e, "MIN : " & ClientMIN, font, 71)
+            ''============================================================================================================================
+            'CenterTextDisplay(sender, e, "PTUN : " & ClientPTUN, font, 81)
+            ''============================================================================================================================
+            'RightToLeftDisplay(sender, e, 100, "TERMINAL REPORT", "RETURNS", font2, 20, 0)
+            ''============================================================================================================================
+            'SimpleTextDisplay(sender, e, ReadingOR, font, 0, 90)
+
+            ReceiptHeader(sender, e, False)
+
+            'SimpleTextDisplay(sender, e, "----------------------------------------------------------------", font, 0, 100)
+            PrintLine(sender, e, font, 140)
+
             '============================================================================================================================
             With DataGridViewReturns
                 Dim FooterSpacing As Integer = 0
                 If CheckBoxPRINTALL.Checked = False Then
-                    RightToLeftDisplay(sender, e, 140, "RETURN ITEM LOGS : " & Format(DateTimePicker14.Value, "yyyy-MM-dd") & " " & Format(DateTimePicker13.Value, "yyyy-MM-dd"), "", font, 20, 0)
-                    RightToLeftDisplay(sender, e, 160, "TRANSACTION NUMBER: ", "", font, 20, 0)
-                    RightToLeftDisplay(sender, e, 170, "SERVICE CREW: ", "", font, 20, 0)
-                    RightToLeftDisplay(sender, e, 180, "DATE: ", "", font, 20, 0)
-                    RightToLeftDisplay(sender, e, 190, "REASON:", "", font, 20, 0)
-                    RightToLeftDisplay(sender, e, 200, Space(5) & .SelectedRows(0).Cells(2).Value.ToString, "", font, 20, 0)
-                    SimpleTextDisplay(sender, e, Space(40) & .SelectedRows(0).Cells(0).Value.ToString, font, 0, 140)
-                    SimpleTextDisplay(sender, e, Space(40) & .SelectedRows(0).Cells(1).Value.ToString, font, 0, 150)
-                    SimpleTextDisplay(sender, e, Space(40) & .SelectedRows(0).Cells(3).Value.ToString, font, 0, 160)
-                    SimpleTextDisplay(sender, e, "----------------------------------------------------------------", font, 0, 260)
+                    RightToLeftDisplay(sender, e, 150, "RETURN ITEM LOGS : " & Format(DateTimePicker14.Value, "yyyy-MM-dd") & " " & Format(DateTimePicker13.Value, "yyyy-MM-dd"), "", font, 20, 0)
+                    RightToLeftDisplay(sender, e, 170, "TRANSACTION NUMBER: ", "", font, 20, 0)
+                    RightToLeftDisplay(sender, e, 180, "SERVICE CREW: ", "", font, 20, 0)
+                    RightToLeftDisplay(sender, e, 190, "DATE: ", "", font, 20, 0)
+                    RightToLeftDisplay(sender, e, 200, "REASON:", "", font, 20, 0)
+                    RightToLeftDisplay(sender, e, 210, Space(5) & .SelectedRows(0).Cells(2).Value.ToString, "", font, 20, 0)
+                    SimpleTextDisplay(sender, e, Space(40) & .SelectedRows(0).Cells(0).Value.ToString, font, 0, 150)
+                    SimpleTextDisplay(sender, e, Space(40) & .SelectedRows(0).Cells(1).Value.ToString, font, 0, 160)
+                    SimpleTextDisplay(sender, e, Space(40) & .SelectedRows(0).Cells(3).Value.ToString, font, 0, 170)
+                    PrintLine(sender, e, font, 260)
+                    'SimpleTextDisplay(sender, e, "----------------------------------------------------------------", font, 0, 260)
                     CenterTextDisplay(sender, e, S_Zreading & " " & Format(Now(), "HH:mm:ss"), font, 290)
                 Else
                     For i As Integer = 0 To .Rows.Count - 1 Step +1
@@ -1616,7 +1648,8 @@ Public Class Reports
                         ColumnSpacing += 70
                         FooterSpacing += 60
                     Next
-                    SimpleTextDisplay(sender, e, "----------------------------------------------------------------", font, 0, 260 + FooterSpacing)
+                    PrintLine(sender, e, font, 260 + FooterSpacing)
+                    'SimpleTextDisplay(sender, e, "----------------------------------------------------------------", font, 0, 260 + FooterSpacing)
                     CenterTextDisplay(sender, e, S_Zreading & " " & Format(Now(), "HH:mm:ss"), font, 290 + FooterSpacing)
                 End If
             End With

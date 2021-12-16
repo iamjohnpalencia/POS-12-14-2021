@@ -29,22 +29,26 @@ Partial Class TransactionTypeInfo
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.ButtonKeyboard = New System.Windows.Forms.Button()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'TextBoxFULLNAME
         '
+        Me.TextBoxFULLNAME.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxFULLNAME.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxFULLNAME.Location = New System.Drawing.Point(8, 26)
         Me.TextBoxFULLNAME.Name = "TextBoxFULLNAME"
-        Me.TextBoxFULLNAME.Size = New System.Drawing.Size(348, 23)
+        Me.TextBoxFULLNAME.Size = New System.Drawing.Size(348, 16)
         Me.TextBoxFULLNAME.TabIndex = 0
         '
         'TextBoxREFERENCE
         '
+        Me.TextBoxREFERENCE.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxREFERENCE.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxREFERENCE.Location = New System.Drawing.Point(8, 76)
         Me.TextBoxREFERENCE.Name = "TextBoxREFERENCE"
-        Me.TextBoxREFERENCE.Size = New System.Drawing.Size(348, 23)
+        Me.TextBoxREFERENCE.Size = New System.Drawing.Size(348, 16)
         Me.TextBoxREFERENCE.TabIndex = 1
         '
         'Button2
@@ -95,6 +99,26 @@ Partial Class TransactionTypeInfo
         Me.ButtonKeyboard.TabIndex = 240
         Me.ButtonKeyboard.UseVisualStyleBackColor = False
         '
+        'Label21
+        '
+        Me.Label21.AutoSize = True
+        Me.Label21.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label21.Location = New System.Drawing.Point(5, 28)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(358, 16)
+        Me.Label21.TabIndex = 264
+        Me.Label21.Text = "__________________________________________________"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(5, 78)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(358, 16)
+        Me.Label3.TabIndex = 265
+        Me.Label3.Text = "__________________________________________________"
+        '
         'TransactionTypeInfo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -107,6 +131,8 @@ Partial Class TransactionTypeInfo
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.TextBoxREFERENCE)
         Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.Label21)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
@@ -126,4 +152,6 @@ Partial Class TransactionTypeInfo
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents ButtonKeyboard As Button
+    Friend WithEvents Label21 As Label
+    Friend WithEvents Label3 As Label
 End Class

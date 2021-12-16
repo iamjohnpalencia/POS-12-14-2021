@@ -30,7 +30,7 @@ Public Class Inventory
             loadcriticalstocks()
             loadstockadjustmentreport(False)
             loadfastmovingstock()
-            loadstockentry()
+            loadstockentry(False)
 
             loadinventorycustom()
             loadinventorycustomdisapp()
@@ -126,11 +126,22 @@ Public Class Inventory
     Dim DataTableInventory As New DataTable
     Dim DataTableFormula As New DataTable
     Dim inv
-    Public Sub loadstockentry()
+    Public Sub loadstockentry(bool As Boolean)
         Try
-            where = " date(log_date_time) = CURRENT_DATE() AND log_type = 'STOCK ENTRY' "
+
+
             fields = "`crew_id`, `log_type`, `log_description`, `log_date_time`"
-            GLOBAL_SELECT_ALL_FUNCTION_WHERE(table:="loc_system_logs", datagrid:=DataGridViewSTOCKENTRY, errormessage:="", successmessage:="", fields:=fields, where:=where)
+            'GLOBAL_SELECT_ALL_FUNCTION_WHERE(table:="loc_system_logs", datagrid:=DataGridViewSTOCKENTRY, errormessage:="", successmessage:="", fields:=fields, where:=where)
+            ''
+
+            If bool = False Then
+                where = " date(log_date_time) = CURRENT_DATE() AND log_type = 'STOCK ENTRY' "
+                GLOBAL_SELECT_ALL_FUNCTION_WHERE(table:="loc_system_logs", datagrid:=DataGridViewSTOCKENTRY, errormessage:="", successmessage:="", fields:=fields, where:=where)
+            Else
+                where = " log_type = 'STOCK ENTRY' AND date(log_date_time) >= '" & Format(DateTimePicker4.Value, "yyyy-MM-dd") & "' AND date(log_date_time) <= '" & Format(DateTimePicker3.Value, "yyyy-MM-dd") & "'"
+                GLOBAL_SELECT_ALL_FUNCTION_WHERE(table:="loc_system_logs", datagrid:=DataGridViewSTOCKENTRY, errormessage:="", successmessage:="", fields:=fields, where:=where)
+            End If
+
             With DataGridViewSTOCKENTRY
                 .Columns(0).HeaderText = "Service Crew"
                 .Columns(1).Visible = False
@@ -177,7 +188,7 @@ Public Class Inventory
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Try
             If DateTimePicker1.Value.Date > DateTimePicker2.Value.Date Then
-                MsgBox("")
+
             Else
                 loadstockadjustmentreport(True)
             End If
@@ -282,5 +293,14 @@ Public Class Inventory
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
         NewStockEntry.Show()
         Enabled = False
+    End Sub
+
+    Private Sub ButtonSearchDailyTransaction_Click(sender As Object, e As EventArgs) Handles ButtonSearchDailyTransaction.Click
+
+        If DateTimePicker4.Value.Date > DateTimePicker3.Value.Date Then
+
+        Else
+            loadstockentry(True)
+        End If
     End Sub
 End Class

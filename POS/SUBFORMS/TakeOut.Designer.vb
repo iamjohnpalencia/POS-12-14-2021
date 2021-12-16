@@ -37,6 +37,7 @@ Partial Class TakeOut
         Me.ButtonTakeOut = New System.Windows.Forms.Button()
         Me.ComboBoxTakeout = New System.Windows.Forms.ComboBox()
         Me.TextBoxQuantity = New System.Windows.Forms.TextBox()
+        Me.Label21 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Button2
@@ -236,6 +237,7 @@ Partial Class TakeOut
         'ComboBoxTakeout
         '
         Me.ComboBoxTakeout.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBoxTakeout.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.ComboBoxTakeout.FormattingEnabled = True
         Me.ComboBoxTakeout.Location = New System.Drawing.Point(12, 12)
         Me.ComboBoxTakeout.Name = "ComboBoxTakeout"
@@ -244,10 +246,21 @@ Partial Class TakeOut
         '
         'TextBoxQuantity
         '
+        Me.TextBoxQuantity.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxQuantity.Location = New System.Drawing.Point(11, 42)
         Me.TextBoxQuantity.Name = "TextBoxQuantity"
-        Me.TextBoxQuantity.Size = New System.Drawing.Size(239, 23)
+        Me.TextBoxQuantity.Size = New System.Drawing.Size(239, 16)
         Me.TextBoxQuantity.TabIndex = 130
+        '
+        'Label21
+        '
+        Me.Label21.AutoSize = True
+        Me.Label21.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label21.Location = New System.Drawing.Point(8, 44)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(246, 16)
+        Me.Label21.TabIndex = 263
+        Me.Label21.Text = "__________________________________"
         '
         'TakeOut
         '
@@ -269,6 +282,7 @@ Partial Class TakeOut
         Me.Controls.Add(Me.ButtonNo8)
         Me.Controls.Add(Me.ButtonNo9)
         Me.Controls.Add(Me.ButtonNo7)
+        Me.Controls.Add(Me.Label21)
         Me.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Margin = New System.Windows.Forms.Padding(3, 4, 3, 4)
@@ -296,4 +310,5 @@ Partial Class TakeOut
     Friend WithEvents ButtonTakeOut As Button
     Friend WithEvents ComboBoxTakeout As ComboBox
     Friend WithEvents TextBoxQuantity As TextBox
+    Friend WithEvents Label21 As Label
 End Class

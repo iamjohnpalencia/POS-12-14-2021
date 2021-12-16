@@ -91,6 +91,17 @@ Partial Class StockAdjustment
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.Panel19 = New System.Windows.Forms.Panel()
         Me.Button11 = New System.Windows.Forms.Button()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.Label22 = New System.Windows.Forms.Label()
         Me.TabControl3.SuspendLayout()
         Me.TabPage6.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
@@ -261,6 +272,12 @@ Partial Class StockAdjustment
         'Panel23
         '
         Me.Panel23.AutoScroll = True
+        Me.Panel23.Controls.Add(Me.TextBoxFSecondary)
+        Me.Panel23.Controls.Add(Me.TextBoxFSecondaryUnit)
+        Me.Panel23.Controls.Add(Me.TextBoxFPrimaryVal)
+        Me.Panel23.Controls.Add(Me.TextBoxIPrimaryUnit)
+        Me.Panel23.Controls.Add(Me.TextBoxISecondaryTotal)
+        Me.Panel23.Controls.Add(Me.TextBoxIPrimaryVal)
         Me.Panel23.Controls.Add(Me.Label12)
         Me.Panel23.Controls.Add(Me.TextBoxIReason)
         Me.Panel23.Controls.Add(Me.Label13)
@@ -279,12 +296,17 @@ Partial Class StockAdjustment
         Me.Panel23.Controls.Add(Me.TextBoxFnoofservings)
         Me.Panel23.Controls.Add(Me.TextBox8)
         Me.Panel23.Controls.Add(Me.TextBox7)
-        Me.Panel23.Controls.Add(Me.TextBoxFSecondary)
-        Me.Panel23.Controls.Add(Me.TextBoxFSecondaryUnit)
-        Me.Panel23.Controls.Add(Me.TextBoxFPrimaryVal)
-        Me.Panel23.Controls.Add(Me.TextBoxIPrimaryUnit)
-        Me.Panel23.Controls.Add(Me.TextBoxISecondaryTotal)
-        Me.Panel23.Controls.Add(Me.TextBoxIPrimaryVal)
+        Me.Panel23.Controls.Add(Me.Label17)
+        Me.Panel23.Controls.Add(Me.Label16)
+        Me.Panel23.Controls.Add(Me.Label15)
+        Me.Panel23.Controls.Add(Me.Label14)
+        Me.Panel23.Controls.Add(Me.Label2)
+        Me.Panel23.Controls.Add(Me.Label6)
+        Me.Panel23.Controls.Add(Me.Label20)
+        Me.Panel23.Controls.Add(Me.Label19)
+        Me.Panel23.Controls.Add(Me.Label18)
+        Me.Panel23.Controls.Add(Me.Label22)
+        Me.Panel23.Controls.Add(Me.Label21)
         Me.Panel23.Dock = System.Windows.Forms.DockStyle.Right
         Me.Panel23.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.749999!)
         Me.Panel23.Location = New System.Drawing.Point(327, 22)
@@ -304,8 +326,9 @@ Partial Class StockAdjustment
         '
         'TextBoxIReason
         '
+        Me.TextBoxIReason.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxIReason.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBoxIReason.Location = New System.Drawing.Point(9, 157)
+        Me.TextBoxIReason.Location = New System.Drawing.Point(9, 155)
         Me.TextBoxIReason.Multiline = True
         Me.TextBoxIReason.Name = "TextBoxIReason"
         Me.TextBoxIReason.Size = New System.Drawing.Size(502, 31)
@@ -323,10 +346,11 @@ Partial Class StockAdjustment
         '
         'TextBoxIPQuantity
         '
+        Me.TextBoxIPQuantity.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxIPQuantity.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxIPQuantity.Location = New System.Drawing.Point(9, 112)
         Me.TextBoxIPQuantity.Name = "TextBoxIPQuantity"
-        Me.TextBoxIPQuantity.Size = New System.Drawing.Size(137, 23)
+        Me.TextBoxIPQuantity.Size = New System.Drawing.Size(137, 16)
         Me.TextBoxIPQuantity.TabIndex = 27
         '
         'Label11
@@ -343,6 +367,7 @@ Partial Class StockAdjustment
         '
         Me.ComboBoxtransfer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxtransfer.Enabled = False
+        Me.ComboBoxtransfer.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ComboBoxtransfer.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ComboBoxtransfer.FormattingEnabled = True
         Me.ComboBoxtransfer.Location = New System.Drawing.Point(381, 111)
@@ -354,6 +379,7 @@ Partial Class StockAdjustment
         '
         Me.ComboBoxDeduction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxDeduction.Enabled = False
+        Me.ComboBoxDeduction.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ComboBoxDeduction.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ComboBoxDeduction.FormattingEnabled = True
         Me.ComboBoxDeduction.Location = New System.Drawing.Point(266, 111)
@@ -364,6 +390,7 @@ Partial Class StockAdjustment
         'ComboBoxAction
         '
         Me.ComboBoxAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBoxAction.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ComboBoxAction.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ComboBoxAction.FormattingEnabled = True
         Me.ComboBoxAction.Items.AddRange(New Object() {"ADD", "TRANSFER", "DEDUCT"})
@@ -416,7 +443,7 @@ Partial Class StockAdjustment
         '
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(348, 3)
+        Me.Label5.Location = New System.Drawing.Point(350, 3)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(77, 16)
         Me.Label5.TabIndex = 24
@@ -444,83 +471,101 @@ Partial Class StockAdjustment
         '
         'TextBoxFnoofservings
         '
+        Me.TextBoxFnoofservings.BackColor = System.Drawing.Color.White
+        Me.TextBoxFnoofservings.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxFnoofservings.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxFnoofservings.Location = New System.Drawing.Point(257, 67)
         Me.TextBoxFnoofservings.Name = "TextBoxFnoofservings"
         Me.TextBoxFnoofservings.ReadOnly = True
-        Me.TextBoxFnoofservings.Size = New System.Drawing.Size(254, 23)
+        Me.TextBoxFnoofservings.Size = New System.Drawing.Size(254, 16)
         Me.TextBoxFnoofservings.TabIndex = 7
         '
         'TextBox8
         '
+        Me.TextBox8.BackColor = System.Drawing.Color.White
+        Me.TextBox8.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBox8.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBox8.Location = New System.Drawing.Point(257, 22)
         Me.TextBox8.Name = "TextBox8"
         Me.TextBox8.ReadOnly = True
-        Me.TextBox8.Size = New System.Drawing.Size(88, 23)
+        Me.TextBox8.Size = New System.Drawing.Size(88, 16)
         Me.TextBox8.TabIndex = 6
         '
         'TextBox7
         '
+        Me.TextBox7.BackColor = System.Drawing.Color.White
+        Me.TextBox7.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBox7.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox7.Location = New System.Drawing.Point(351, 22)
+        Me.TextBox7.Location = New System.Drawing.Point(353, 22)
         Me.TextBox7.Name = "TextBox7"
         Me.TextBox7.ReadOnly = True
-        Me.TextBox7.Size = New System.Drawing.Size(160, 23)
+        Me.TextBox7.Size = New System.Drawing.Size(160, 16)
         Me.TextBox7.TabIndex = 5
         '
         'TextBoxFSecondary
         '
+        Me.TextBoxFSecondary.BackColor = System.Drawing.Color.White
+        Me.TextBoxFSecondary.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxFSecondary.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxFSecondary.Location = New System.Drawing.Point(91, 67)
         Me.TextBoxFSecondary.Name = "TextBoxFSecondary"
         Me.TextBoxFSecondary.ReadOnly = True
-        Me.TextBoxFSecondary.Size = New System.Drawing.Size(77, 23)
+        Me.TextBoxFSecondary.Size = New System.Drawing.Size(77, 16)
         Me.TextBoxFSecondary.TabIndex = 4
         '
         'TextBoxFSecondaryUnit
         '
+        Me.TextBoxFSecondaryUnit.BackColor = System.Drawing.Color.White
+        Me.TextBoxFSecondaryUnit.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxFSecondaryUnit.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxFSecondaryUnit.Location = New System.Drawing.Point(174, 67)
         Me.TextBoxFSecondaryUnit.Name = "TextBoxFSecondaryUnit"
         Me.TextBoxFSecondaryUnit.ReadOnly = True
-        Me.TextBoxFSecondaryUnit.Size = New System.Drawing.Size(77, 23)
+        Me.TextBoxFSecondaryUnit.Size = New System.Drawing.Size(77, 16)
         Me.TextBoxFSecondaryUnit.TabIndex = 4
         '
         'TextBoxFPrimaryVal
         '
+        Me.TextBoxFPrimaryVal.BackColor = System.Drawing.Color.White
+        Me.TextBoxFPrimaryVal.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxFPrimaryVal.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxFPrimaryVal.Location = New System.Drawing.Point(91, 22)
         Me.TextBoxFPrimaryVal.Name = "TextBoxFPrimaryVal"
         Me.TextBoxFPrimaryVal.ReadOnly = True
-        Me.TextBoxFPrimaryVal.Size = New System.Drawing.Size(77, 23)
+        Me.TextBoxFPrimaryVal.Size = New System.Drawing.Size(77, 16)
         Me.TextBoxFPrimaryVal.TabIndex = 3
         '
         'TextBoxIPrimaryUnit
         '
+        Me.TextBoxIPrimaryUnit.BackColor = System.Drawing.Color.White
+        Me.TextBoxIPrimaryUnit.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxIPrimaryUnit.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxIPrimaryUnit.Location = New System.Drawing.Point(174, 22)
         Me.TextBoxIPrimaryUnit.Name = "TextBoxIPrimaryUnit"
         Me.TextBoxIPrimaryUnit.ReadOnly = True
-        Me.TextBoxIPrimaryUnit.Size = New System.Drawing.Size(77, 23)
+        Me.TextBoxIPrimaryUnit.Size = New System.Drawing.Size(77, 16)
         Me.TextBoxIPrimaryUnit.TabIndex = 2
         '
         'TextBoxISecondaryTotal
         '
+        Me.TextBoxISecondaryTotal.BackColor = System.Drawing.Color.White
+        Me.TextBoxISecondaryTotal.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxISecondaryTotal.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxISecondaryTotal.Location = New System.Drawing.Point(8, 67)
         Me.TextBoxISecondaryTotal.Name = "TextBoxISecondaryTotal"
         Me.TextBoxISecondaryTotal.ReadOnly = True
-        Me.TextBoxISecondaryTotal.Size = New System.Drawing.Size(77, 23)
+        Me.TextBoxISecondaryTotal.Size = New System.Drawing.Size(77, 16)
         Me.TextBoxISecondaryTotal.TabIndex = 1
         '
         'TextBoxIPrimaryVal
         '
+        Me.TextBoxIPrimaryVal.BackColor = System.Drawing.Color.White
+        Me.TextBoxIPrimaryVal.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxIPrimaryVal.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBoxIPrimaryVal.Location = New System.Drawing.Point(8, 23)
+        Me.TextBoxIPrimaryVal.Location = New System.Drawing.Point(8, 22)
         Me.TextBoxIPrimaryVal.Name = "TextBoxIPrimaryVal"
         Me.TextBoxIPrimaryVal.ReadOnly = True
-        Me.TextBoxIPrimaryVal.Size = New System.Drawing.Size(77, 23)
+        Me.TextBoxIPrimaryVal.Size = New System.Drawing.Size(77, 16)
         Me.TextBoxIPrimaryVal.TabIndex = 0
         '
         'GroupBox5
@@ -753,7 +798,7 @@ Partial Class StockAdjustment
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 2
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(859, 255)
         Me.TableLayoutPanel2.TabIndex = 122
         '
@@ -764,7 +809,7 @@ Partial Class StockAdjustment
         Me.GroupBox3.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!)
         Me.GroupBox3.Location = New System.Drawing.Point(3, 3)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(853, 179)
+        Me.GroupBox3.Size = New System.Drawing.Size(853, 189)
         Me.GroupBox3.TabIndex = 164
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Reason (Categories/Deactivated)"
@@ -802,7 +847,7 @@ Partial Class StockAdjustment
         Me.DataGridViewDeactivatedReasonCat.EnableHeadersVisualStyles = False
         Me.DataGridViewDeactivatedReasonCat.Location = New System.Drawing.Point(3, 20)
         Me.DataGridViewDeactivatedReasonCat.Name = "DataGridViewDeactivatedReasonCat"
-        Me.DataGridViewDeactivatedReasonCat.Size = New System.Drawing.Size(847, 156)
+        Me.DataGridViewDeactivatedReasonCat.Size = New System.Drawing.Size(847, 166)
         Me.DataGridViewDeactivatedReasonCat.TabIndex = 116
         '
         'GroupBox4
@@ -810,9 +855,9 @@ Partial Class StockAdjustment
         Me.GroupBox4.Controls.Add(Me.Panel19)
         Me.GroupBox4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox4.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!)
-        Me.GroupBox4.Location = New System.Drawing.Point(3, 188)
+        Me.GroupBox4.Location = New System.Drawing.Point(3, 198)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(853, 64)
+        Me.GroupBox4.Size = New System.Drawing.Size(853, 54)
         Me.GroupBox4.TabIndex = 166
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "Action"
@@ -823,7 +868,7 @@ Partial Class StockAdjustment
         Me.Panel19.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel19.Location = New System.Drawing.Point(3, 20)
         Me.Panel19.Name = "Panel19"
-        Me.Panel19.Size = New System.Drawing.Size(847, 41)
+        Me.Panel19.Size = New System.Drawing.Size(847, 31)
         Me.Panel19.TabIndex = 6
         '
         'Button11
@@ -837,10 +882,120 @@ Partial Class StockAdjustment
         Me.Button11.ForeColor = System.Drawing.Color.White
         Me.Button11.Location = New System.Drawing.Point(691, 0)
         Me.Button11.Name = "Button11"
-        Me.Button11.Size = New System.Drawing.Size(156, 41)
+        Me.Button11.Size = New System.Drawing.Size(156, 31)
         Me.Button11.TabIndex = 163
         Me.Button11.Text = "Activate"
         Me.Button11.UseVisualStyleBackColor = False
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Location = New System.Drawing.Point(6, 24)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(78, 16)
+        Me.Label6.TabIndex = 254
+        Me.Label6.Text = "__________"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(6, 69)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(78, 16)
+        Me.Label2.TabIndex = 255
+        Me.Label2.Text = "__________"
+        '
+        'Label14
+        '
+        Me.Label14.AutoSize = True
+        Me.Label14.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label14.Location = New System.Drawing.Point(89, 24)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(78, 16)
+        Me.Label14.TabIndex = 256
+        Me.Label14.Text = "__________"
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.Location = New System.Drawing.Point(89, 69)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(78, 16)
+        Me.Label15.TabIndex = 257
+        Me.Label15.Text = "__________"
+        '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label16.Location = New System.Drawing.Point(172, 24)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(78, 16)
+        Me.Label16.TabIndex = 258
+        Me.Label16.Text = "__________"
+        '
+        'Label17
+        '
+        Me.Label17.AutoSize = True
+        Me.Label17.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label17.Location = New System.Drawing.Point(172, 69)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(78, 16)
+        Me.Label17.TabIndex = 259
+        Me.Label17.Text = "__________"
+        '
+        'Label18
+        '
+        Me.Label18.AutoSize = True
+        Me.Label18.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label18.Location = New System.Drawing.Point(257, 24)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(92, 16)
+        Me.Label18.TabIndex = 255
+        Me.Label18.Text = "____________"
+        '
+        'Label19
+        '
+        Me.Label19.AutoSize = True
+        Me.Label19.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label19.Location = New System.Drawing.Point(353, 24)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(162, 16)
+        Me.Label19.TabIndex = 260
+        Me.Label19.Text = "______________________"
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label20.Location = New System.Drawing.Point(257, 69)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(260, 16)
+        Me.Label20.TabIndex = 261
+        Me.Label20.Text = "____________________________________"
+        '
+        'Label21
+        '
+        Me.Label21.AutoSize = True
+        Me.Label21.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label21.Location = New System.Drawing.Point(7, 114)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(141, 16)
+        Me.Label21.TabIndex = 262
+        Me.Label21.Text = "___________________"
+        '
+        'Label22
+        '
+        Me.Label22.AutoSize = True
+        Me.Label22.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label22.Location = New System.Drawing.Point(7, 172)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(512, 16)
+        Me.Label22.TabIndex = 263
+        Me.Label22.Text = "________________________________________________________________________"
         '
         'StockAdjustment
         '
@@ -944,4 +1099,15 @@ Partial Class StockAdjustment
     Friend WithEvents Column5 As DataGridViewTextBoxColumn
     Friend WithEvents Column6 As DataGridViewTextBoxColumn
     Friend WithEvents ButtonKeyboard As Button
+    Friend WithEvents Label17 As Label
+    Friend WithEvents Label16 As Label
+    Friend WithEvents Label15 As Label
+    Friend WithEvents Label14 As Label
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Label6 As Label
+    Friend WithEvents Label20 As Label
+    Friend WithEvents Label19 As Label
+    Friend WithEvents Label18 As Label
+    Friend WithEvents Label21 As Label
+    Friend WithEvents Label22 As Label
 End Class

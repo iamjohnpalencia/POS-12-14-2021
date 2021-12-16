@@ -442,6 +442,7 @@ Module RetrieveModule
         Try
             Dim ConnectionLocal As MySqlConnection = LocalhostConn()
             sql = "SELECT " + fields + " FROM " + table + " WHERE " + where
+            Console.Write(sql)
             Dim cmd As MySqlCommand = New MySqlCommand(sql, ConnectionLocal)
             Dim da As MySqlDataAdapter = New MySqlDataAdapter(cmd)
             dt = New DataTable

@@ -40,6 +40,12 @@ Partial Class AddUser
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.Label13 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'ButtonUser
@@ -83,52 +89,58 @@ Partial Class AddUser
         '
         'TextBoxFULLNAME
         '
+        Me.TextBoxFULLNAME.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxFULLNAME.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxFULLNAME.Location = New System.Drawing.Point(135, 6)
         Me.TextBoxFULLNAME.Name = "TextBoxFULLNAME"
-        Me.TextBoxFULLNAME.Size = New System.Drawing.Size(275, 23)
+        Me.TextBoxFULLNAME.Size = New System.Drawing.Size(275, 16)
         Me.TextBoxFULLNAME.TabIndex = 185
         '
         'TextBoxUSERNAME
         '
+        Me.TextBoxUSERNAME.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxUSERNAME.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxUSERNAME.Location = New System.Drawing.Point(135, 35)
         Me.TextBoxUSERNAME.Name = "TextBoxUSERNAME"
-        Me.TextBoxUSERNAME.Size = New System.Drawing.Size(275, 23)
+        Me.TextBoxUSERNAME.Size = New System.Drawing.Size(275, 16)
         Me.TextBoxUSERNAME.TabIndex = 186
         '
         'TextBoxEMAIL
         '
+        Me.TextBoxEMAIL.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxEMAIL.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxEMAIL.Location = New System.Drawing.Point(135, 64)
         Me.TextBoxEMAIL.Name = "TextBoxEMAIL"
-        Me.TextBoxEMAIL.Size = New System.Drawing.Size(275, 23)
+        Me.TextBoxEMAIL.Size = New System.Drawing.Size(275, 16)
         Me.TextBoxEMAIL.TabIndex = 187
         '
         'TextBoxPASS
         '
+        Me.TextBoxPASS.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxPASS.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxPASS.Location = New System.Drawing.Point(135, 93)
         Me.TextBoxPASS.Name = "TextBoxPASS"
-        Me.TextBoxPASS.Size = New System.Drawing.Size(275, 23)
+        Me.TextBoxPASS.Size = New System.Drawing.Size(275, 16)
         Me.TextBoxPASS.TabIndex = 188
         Me.TextBoxPASS.UseSystemPasswordChar = True
         '
         'TextBoxCONPASS
         '
+        Me.TextBoxCONPASS.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxCONPASS.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxCONPASS.Location = New System.Drawing.Point(135, 122)
         Me.TextBoxCONPASS.Name = "TextBoxCONPASS"
-        Me.TextBoxCONPASS.Size = New System.Drawing.Size(275, 23)
+        Me.TextBoxCONPASS.Size = New System.Drawing.Size(275, 16)
         Me.TextBoxCONPASS.TabIndex = 189
         Me.TextBoxCONPASS.UseSystemPasswordChar = True
         '
         'TextBoxCONTACT
         '
+        Me.TextBoxCONTACT.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxCONTACT.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxCONTACT.Location = New System.Drawing.Point(135, 151)
         Me.TextBoxCONTACT.Name = "TextBoxCONTACT"
-        Me.TextBoxCONTACT.Size = New System.Drawing.Size(275, 23)
+        Me.TextBoxCONTACT.Size = New System.Drawing.Size(275, 16)
         Me.TextBoxCONTACT.TabIndex = 190
         '
         'Label8
@@ -201,12 +213,78 @@ Partial Class AddUser
         Me.Label1.TabIndex = 201
         Me.Label1.Text = "Gender:"
         '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(132, 8)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(281, 16)
+        Me.Label3.TabIndex = 202
+        Me.Label3.Text = "_______________________________________"
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Location = New System.Drawing.Point(132, 37)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(281, 16)
+        Me.Label9.TabIndex = 203
+        Me.Label9.Text = "_______________________________________"
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.Location = New System.Drawing.Point(132, 66)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(281, 16)
+        Me.Label10.TabIndex = 204
+        Me.Label10.Text = "_______________________________________"
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.Location = New System.Drawing.Point(132, 95)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(281, 16)
+        Me.Label11.TabIndex = 205
+        Me.Label11.Text = "_______________________________________"
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.Location = New System.Drawing.Point(132, 124)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(281, 16)
+        Me.Label12.TabIndex = 206
+        Me.Label12.Text = "_______________________________________"
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label13.Location = New System.Drawing.Point(132, 153)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(281, 16)
+        Me.Label13.TabIndex = 207
+        Me.Label13.Text = "_______________________________________"
+        '
         'AddUser
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(419, 245)
+        Me.Controls.Add(Me.TextBoxFULLNAME)
+        Me.Controls.Add(Me.TextBoxUSERNAME)
+        Me.Controls.Add(Me.TextBoxEMAIL)
+        Me.Controls.Add(Me.TextBoxPASS)
+        Me.Controls.Add(Me.TextBoxCONPASS)
+        Me.Controls.Add(Me.TextBoxCONTACT)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Label8)
         Me.Controls.Add(Me.Label2)
@@ -217,12 +295,12 @@ Partial Class AddUser
         Me.Controls.Add(Me.ButtonUser)
         Me.Controls.Add(Me.RadioButtonFEMALE)
         Me.Controls.Add(Me.RadioButtonMALE)
-        Me.Controls.Add(Me.TextBoxFULLNAME)
-        Me.Controls.Add(Me.TextBoxUSERNAME)
-        Me.Controls.Add(Me.TextBoxEMAIL)
-        Me.Controls.Add(Me.TextBoxPASS)
-        Me.Controls.Add(Me.TextBoxCONPASS)
-        Me.Controls.Add(Me.TextBoxCONTACT)
+        Me.Controls.Add(Me.Label13)
+        Me.Controls.Add(Me.Label12)
+        Me.Controls.Add(Me.Label11)
+        Me.Controls.Add(Me.Label10)
+        Me.Controls.Add(Me.Label9)
+        Me.Controls.Add(Me.Label3)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
@@ -252,4 +330,10 @@ Partial Class AddUser
     Friend WithEvents Label4 As Label
     Friend WithEvents Label1 As Label
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
+    Friend WithEvents Label3 As Label
+    Friend WithEvents Label9 As Label
+    Friend WithEvents Label10 As Label
+    Friend WithEvents Label11 As Label
+    Friend WithEvents Label12 As Label
+    Friend WithEvents Label13 As Label
 End Class

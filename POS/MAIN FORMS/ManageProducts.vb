@@ -336,7 +336,7 @@ Public Class ManageProducts
             SendErrorReport(ex.ToString)
         End Try
     End Sub
-    Private Sub TextBoxSearchProductList_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBoxSearchProductList.KeyPress, TextBox1.KeyPress, TextBox2.KeyPress, TextBox3.KeyPress, TextBox4.KeyPress
+    Private Sub TextBoxSearchProductList_KeyPress(sender As Object, e As KeyPressEventArgs)
         Try
             If InStr(DisallowedCharacters, e.KeyChar) > 0 Then
                 e.Handled = True

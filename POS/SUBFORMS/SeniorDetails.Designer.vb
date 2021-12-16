@@ -29,6 +29,8 @@ Partial Class SeniorDetails
         Me.ButtonCANCEL = New System.Windows.Forms.Button()
         Me.ButtonSubmit = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Label1
@@ -43,18 +45,20 @@ Partial Class SeniorDetails
         '
         'TextBoxSENIORID
         '
+        Me.TextBoxSENIORID.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxSENIORID.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxSENIORID.Location = New System.Drawing.Point(16, 31)
         Me.TextBoxSENIORID.Name = "TextBoxSENIORID"
-        Me.TextBoxSENIORID.Size = New System.Drawing.Size(360, 23)
+        Me.TextBoxSENIORID.Size = New System.Drawing.Size(360, 16)
         Me.TextBoxSENIORID.TabIndex = 0
         '
         'TextBoxSENIORNAME
         '
+        Me.TextBoxSENIORNAME.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxSENIORNAME.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxSENIORNAME.Location = New System.Drawing.Point(16, 83)
         Me.TextBoxSENIORNAME.Name = "TextBoxSENIORNAME"
-        Me.TextBoxSENIORNAME.Size = New System.Drawing.Size(360, 23)
+        Me.TextBoxSENIORNAME.Size = New System.Drawing.Size(360, 16)
         Me.TextBoxSENIORNAME.TabIndex = 1
         '
         'ButtonCANCEL
@@ -95,6 +99,26 @@ Partial Class SeniorDetails
         Me.Label2.TabIndex = 105
         Me.Label2.Text = "Full Name"
         '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Location = New System.Drawing.Point(13, 33)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(365, 16)
+        Me.Label6.TabIndex = 252
+        Me.Label6.Text = "___________________________________________________"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(13, 85)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(365, 16)
+        Me.Label3.TabIndex = 253
+        Me.Label3.Text = "___________________________________________________"
+        '
         'SeniorDetails
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -107,6 +131,8 @@ Partial Class SeniorDetails
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.ButtonCANCEL)
         Me.Controls.Add(Me.ButtonSubmit)
+        Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.Label6)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "SeniorDetails"
@@ -122,4 +148,6 @@ Partial Class SeniorDetails
     Friend WithEvents ButtonCANCEL As Button
     Friend WithEvents ButtonSubmit As Button
     Friend WithEvents Label2 As Label
+    Friend WithEvents Label6 As Label
+    Friend WithEvents Label3 As Label
 End Class

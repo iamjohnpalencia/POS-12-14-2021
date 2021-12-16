@@ -231,6 +231,7 @@ Public Class TakeOut
     End Sub
     Private Sub TakeOut_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
+            ComboBoxTakeout.SelectedIndex = 0
             LoadSettings()
         Catch ex As Exception
             SendErrorReport(ex.ToString)
