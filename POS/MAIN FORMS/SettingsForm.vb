@@ -49,6 +49,8 @@ Public Class SettingsForm
                 GroupBox19.Enabled = False
                 RadioButtonYES.Enabled = False
                 RadioButtonNO.Enabled = False
+                NumericUpDownPrintCount.Enabled = False
+                ComboBoxPrintSize.Enabled = False
             Else
                 GroupBox19.Enabled = True
                 AutoBackupBoolean = True

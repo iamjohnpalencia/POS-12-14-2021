@@ -64,9 +64,10 @@ Public Class Registration
                                 SystemLogType = "USER REGISTRATION"
                                 SystemLogDesc = "Registration of: " & TextBoxFN.Text
                                 GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
-                                ClearTextBox(Me)
+
                                 selectmax(whatform:=3)
                                 MessageBox.Show("Success fully registered" & vbNewLine & "Username: " & TextBoxUN.Text & vbNewLine & "Password: " & TextBoxP.Text, "Registration", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                                ClearTextBox(Me)
                             Else
                                 MsgBox("Contact number exist")
                             End If
