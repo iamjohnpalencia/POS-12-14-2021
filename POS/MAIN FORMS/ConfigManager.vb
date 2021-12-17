@@ -24,6 +24,7 @@ Public Class ConfigManager
     Dim TestModeIsOFF As Boolean = True
     Private Sub ConfigManager_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CheckForIllegalCrossThreadCalls = False
+
         TabControl1.TabPages(0).Text = "General Settings"
         TabControl1.TabPages(1).Text = "License And Activation"
         TabControl2.TabPages(0).Text = "Connection Settings"
@@ -1161,12 +1162,18 @@ Public Class ConfigManager
                                                     If AccountExist = True Then
                                                         If FranchiseeStoreValidation = True Then
                                                             If Not String.IsNullOrWhiteSpace(TextBoxProdKey.Text) Then
+
+                                                                TabControl1.TabPages(0).Enabled = False
+                                                                TabControl3.TabPages(0).Enabled = False
+
                                                                 DataGridViewOutlets.Enabled = False
                                                                 TextboxEnableability(GroupBox12, False)
                                                                 ButtonEnableability(GroupBox12, False)
-                                                                BackgroundWorkerACTIVATION.WorkerReportsProgress = True
-                                                                BackgroundWorkerACTIVATION.WorkerSupportsCancellation = True
-                                                                BackgroundWorkerACTIVATION.RunWorkerAsync()
+
+                                                                BackgroundWorkerValidateSerial.WorkerReportsProgress = True
+                                                                BackgroundWorkerValidateSerial.WorkerSupportsCancellation = True
+                                                                BackgroundWorkerValidateSerial.RunWorkerAsync()
+
                                                             Else
                                                                 MsgBox("Please input serial key")
                                                             End If
@@ -1220,6 +1227,7 @@ Public Class ConfigManager
     Dim threadListActivationInventory As List(Of Thread) = New List(Of Thread)
     Dim threadListActivationPartners As List(Of Thread) = New List(Of Thread)
     Dim threadListActivationCoupons As List(Of Thread) = New List(Of Thread)
+    Dim threadListActivationStockCat As List(Of Thread) = New List(Of Thread)
 
     Dim ThreadActivationProduct As Thread
     Dim ThreadActivationCategory As Thread
@@ -1227,13 +1235,13 @@ Public Class ConfigManager
     Dim ThreadActivationInventory As Thread
     Dim ThreadActivationPartners As Thread
     Dim ThreadActivationCoupons As Thread
+    Dim ThreadActivationStockCat As Thread
 
-
-    Private Sub BackgroundWorkerACTIVATION_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorkerACTIVATION.DoWork
+    Private Sub BackgroundWorkerValidateSerial_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorkerValidateSerial.DoWork
         Try
             For i = 0 To 100
-                Thread.Sleep(50)
-                BackgroundWorkerACTIVATION.ReportProgress(i)
+                Thread.Sleep(10)
+                BackgroundWorkerValidateSerial.ReportProgress(i)
                 If i = 0 Then
                     ThreadActivation = New Thread(AddressOf SerialKey)
                     ThreadActivation.Start()
@@ -1242,68 +1250,80 @@ Public Class ConfigManager
                         t.Join()
                     Next
                 End If
-                If i = 20 Then
-                    If ValidProductKey = True Then
-                        ThreadActivation = New Thread(AddressOf adminserialkey)
-                        ThreadActivation.Start()
-                        threadListActivation.Add(ThreadActivation)
-                        For Each t In threadListActivation
-                            t.Join()
-                        Next
+            Next
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        End Try
+    End Sub
 
-                    End If
+    Private Sub BackgroundWorkerValidateSerial_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorkerValidateSerial.ProgressChanged
+        ProgressBar5.Value = e.ProgressPercentage
+    End Sub
+
+    Private Sub BackgroundWorkerValidateSerial_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorkerValidateSerial.RunWorkerCompleted
+        If ValidProductKey = True Then
+            BackgroundWorkerACTIVATION.WorkerReportsProgress = True
+            BackgroundWorkerACTIVATION.WorkerSupportsCancellation = True
+            BackgroundWorkerACTIVATION.RunWorkerAsync()
+        Else
+            MsgBox("Invalid Product key")
+            TextboxEnableability(GroupBox12, True)
+            ButtonEnableability(GroupBox12, True)
+            TabControl1.TabPages(0).Enabled = True
+            TabControl3.TabPages(0).Enabled = True
+        End If
+    End Sub
+    Private Sub BackgroundWorkerACTIVATION_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorkerACTIVATION.DoWork
+        Try
+            For i = 0 To 100
+                Thread.Sleep(50)
+                BackgroundWorkerACTIVATION.ReportProgress(i)
+                If i = 0 Then
+                    ThreadActivation = New Thread(AddressOf adminserialkey)
+                    ThreadActivation.Start()
+                    threadListActivation.Add(ThreadActivation)
+                    For Each t In threadListActivation
+                        t.Join()
+                    Next
+                End If
+                If i = 20 Then
+                    ThreadActivation = New Thread(AddressOf adminoutlets)
+                    ThreadActivation.Start()
+                    threadListActivation.Add(ThreadActivation)
+                    For Each t In threadListActivation
+                        t.Join()
+                    Next
                 End If
                 If i = 40 Then
-                    If ValidProductKey = True Then
-                        ThreadActivation = New Thread(AddressOf adminoutlets)
-                        ThreadActivation.Start()
-                        threadListActivation.Add(ThreadActivation)
-                        For Each t In threadListActivation
-                            t.Join()
-                        Next
-                    End If
-
+                    ThreadActivation = New Thread(AddressOf insertintocloud)
+                    ThreadActivation.Start()
+                    threadListActivation.Add(ThreadActivation)
+                    For Each t In threadListActivation
+                        t.Join()
+                    Next
                 End If
                 If i = 60 Then
-                    If ValidProductKey = True Then
-                        ThreadActivation = New Thread(AddressOf insertintocloud)
-                        ThreadActivation.Start()
-                        threadListActivation.Add(ThreadActivation)
-                        For Each t In threadListActivation
-                            t.Join()
-                        Next
-                    End If
-
+                    ThreadActivation = New Thread(AddressOf insertintolocaloutlets)
+                    ThreadActivation.Start()
+                    threadListActivation.Add(ThreadActivation)
+                    For Each t In threadListActivation
+                        t.Join()
+                    Next
                 End If
                 If i = 80 Then
-                    If ValidProductKey = True Then
-                        ThreadActivation = New Thread(AddressOf insertintolocaloutlets)
-                        ThreadActivation.Start()
-                        threadListActivation.Add(ThreadActivation)
-                        For Each t In threadListActivation
-                            t.Join()
-                        Next
-                    End If
+                    ThreadActivation = New Thread(AddressOf InsertLocalMasterList)
+                    ThreadActivation.Start()
+                    threadListActivation.Add(ThreadActivation)
+                    For Each t In threadListActivation
+                        t.Join()
+                    Next
+                    ThreadActivation = New Thread(AddressOf SaveLogo)
+                    ThreadActivation.Start()
+                    threadListActivation.Add(ThreadActivation)
+                    For Each t In threadListActivation
+                        t.Join()
+                    Next
                 End If
-                If i = 100 Then
-                    If ValidProductKey = True Then
-                        ThreadActivation = New Thread(AddressOf InsertLocalMasterList)
-                        ThreadActivation.Start()
-                        threadListActivation.Add(ThreadActivation)
-                        For Each t In threadListActivation
-                            t.Join()
-                        Next
-                        ThreadActivation = New Thread(AddressOf SaveLogo)
-                        ThreadActivation.Start()
-                        threadListActivation.Add(ThreadActivation)
-                        For Each t In threadListActivation
-                            t.Join()
-                        Next
-                    End If
-                End If
-            Next
-            For Each t In threadListActivation
-                t.Join()
             Next
         Catch ex As Exception
             MsgBox(ex.ToString)
@@ -1314,15 +1334,9 @@ Public Class ConfigManager
     End Sub
     Dim ValidProductKey As Boolean
     Private Sub BackgroundWorkerACTIVATION_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorkerACTIVATION.RunWorkerCompleted
-        If ValidProductKey = True Then
-            BackgroundWorker5.WorkerReportsProgress = True
-            BackgroundWorker5.WorkerSupportsCancellation = True
-            BackgroundWorker5.RunWorkerAsync()
-        Else
-            MsgBox("Invalid Product key")
-            TextboxEnableability(GroupBox12, True)
-            ButtonEnableability(GroupBox12, True)
-        End If
+        BackgroundWorker5.WorkerReportsProgress = True
+        BackgroundWorker5.WorkerSupportsCancellation = True
+        BackgroundWorker5.RunWorkerAsync()
     End Sub
 
     Private Sub SerialKey()
@@ -1570,6 +1584,15 @@ Public Class ConfigManager
                     Next
                 End If
                 If i = 50 Then
+                    ThreadActivationStockCat = New Thread(AddressOf GetStockCategory)
+                    ThreadActivationStockCat.Start()
+                    threadListActivationStockCat.Add(ThreadActivationStockCat)
+                    For Each t In threadListActivationStockCat
+                        t.Join()
+                    Next
+                End If
+
+                If i = 60 Then
                     ThreadActivationProduct = New Thread(AddressOf GetProducts)
                     ThreadActivationProduct.Start()
                     threadListActivationProduct.Add(ThreadActivationProduct)
@@ -1577,7 +1600,9 @@ Public Class ConfigManager
                         t.Join()
                     Next
                 End If
-                If i = 60 Then
+
+
+                If i = 70 Then
                     thread1 = New System.Threading.Thread(AddressOf FillDgvProd)
                     thread1.Start()
                     threadLISTINSERPROD.Add(thread1)
@@ -1621,6 +1646,14 @@ Public Class ConfigManager
                     For Each t In threadLISTINSERPROD
                         t.Join()
                     Next
+                    thread1 = New System.Threading.Thread(AddressOf InsertToStockCategory)
+                    thread1.Start()
+                    threadLISTINSERPROD.Add(thread1)
+                    For Each t In threadLISTINSERPROD
+                        t.Join()
+                    Next
+
+
                 End If
             Next
         Catch ex As Exception
@@ -1803,6 +1836,21 @@ Public Class ConfigManager
             MsgBox(ex.ToString)
         End Try
     End Sub
+    Private Sub GetStockCategory()
+        Try
+            TextBox1.Text += FullDate24HR() & " :    Getting cloud server's stock adjustment categories data." & vbNewLine
+            table = "admin_stock_category"
+            fields = "*"
+            Dim DatatableStockAdjustment = GLOBAL_SELECT_ALL_FUNCTION_CLOUD(table, fields, DataGridViewStockAdjustment)
+            For Each row As DataRow In DatatableStockAdjustment.Rows
+                DataGridViewStockAdjustment.Rows.Add(row("adj_type"), row("created_at"), row("active"))
+            Next
+            TextBox1.Text += FullDate24HR() & " :    Complete(Fetching of stock adjustment categories data)" & vbNewLine
+        Catch ex As Exception
+            TextBox1.Text += FullDate24HR() & " :    Failed(Fetching of stock adjustment categories data)" & vbNewLine
+            MsgBox(ex.ToString)
+        End Try
+    End Sub
     Public Sub GetInventory()
         Try
             TextBox1.Text += FullDate24HR() & " :    Getting cloud server's inventories data." & vbNewLine
@@ -1926,6 +1974,31 @@ Public Class ConfigManager
             TextBox1.Text += FullDate24HR() & " :    Complete(Categories data insertion)" & vbNewLine
         Catch ex As Exception
             TextBox1.Text += FullDate24HR() & " :    Failed(Categories data insertion)" & vbNewLine
+            MsgBox(ex.ToString)
+        End Try
+    End Sub
+    Private Sub InsertToStockCategory()
+        Try
+            TextBox1.Text += FullDate24HR() & " :    Inserting data to local server's table(Stock Adjustment Categories)." & vbNewLine
+            With DataGridViewStockAdjustment
+                Dim ConnectionLocal As MySqlConnection = TestLocalConnection()
+                Dim cmdlocal As MySqlCommand
+                For i As Integer = 0 To .Rows.Count - 1 Step +1
+                    cmdlocal = New MySqlCommand("INSERT INTO loc_transfer_data( `transfer_cat`, `crew_id`, `created_at`, `created_by`, `updated_at`, `active`)
+                                             VALUES (@0, @1, @2, @3, @4, @5)", ConnectionLocal)
+                    cmdlocal.Parameters.Add("@0", MySqlDbType.Text).Value = .Rows(i).Cells(0).Value.ToString()
+                    cmdlocal.Parameters.Add("@1", MySqlDbType.Text).Value = "Server"
+                    cmdlocal.Parameters.Add("@2", MySqlDbType.Text).Value = .Rows(i).Cells(1).Value.ToString()
+                    cmdlocal.Parameters.Add("@3", MySqlDbType.Text).Value = "Server"
+                    cmdlocal.Parameters.Add("@4", MySqlDbType.Text).Value = "N/A"
+                    cmdlocal.Parameters.Add("@5", MySqlDbType.Int64).Value = .Rows(i).Cells(2).Value.ToString()
+                    cmdlocal.ExecuteNonQuery()
+                Next
+                ConnectionLocal.Close()
+            End With
+            TextBox1.Text += FullDate24HR() & " :    Complete(Stock Adjustment Categories data insertion)" & vbNewLine
+        Catch ex As Exception
+            TextBox1.Text += FullDate24HR() & " :    Failed(Stock Adjustment  data insertion)" & vbNewLine
             MsgBox(ex.ToString)
         End Try
     End Sub
@@ -2485,6 +2558,8 @@ Public Class ConfigManager
             TestModeIsOFF = False
         End If
     End Sub
+
+
 
 
 #Region "Test Insert"

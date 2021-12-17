@@ -253,32 +253,41 @@ Public Class StockAdjustment
     End Sub
     Private Sub ButtonDeleteProducts_Click(sender As Object, e As EventArgs) Handles ButtonDeleteProducts.Click
         Try
-            If DataGridViewReasonCategories.SelectedRows.Count > 0 Then
-                Dim msg = MessageBox.Show("Are you sure do you want to deactivate this category ?", "Deactivation", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
-                If msg = DialogResult.Yes Then
-                    Dim sql = "UPDATE loc_transfer_data SET active = 0, updated_at = '" & FullDate24HR() & "' WHERE transfer_id = " & DataGridViewReasonCategories.SelectedRows(0).Cells(0).Value
-                    Dim cmd As MySqlCommand = New MySqlCommand(sql, LocalhostConn)
-                    cmd.ExecuteNonQuery()
-                    LoadReasonCategories()
-                    LoadReasonCategoriesDeactivated()
+            If DataGridViewReasonCategories.SelectedRows(0).Cells(2).Value <> "Server" Then
+                If DataGridViewReasonCategories.SelectedRows.Count > 0 Then
+                    Dim msg = MessageBox.Show("Are you sure do you want to deactivate this category ?", "Deactivation", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
+                    If msg = DialogResult.Yes Then
+                        Dim sql = "UPDATE loc_transfer_data SET active = 0, updated_at = '" & FullDate24HR() & "' WHERE transfer_id = " & DataGridViewReasonCategories.SelectedRows(0).Cells(0).Value
+                        Dim cmd As MySqlCommand = New MySqlCommand(sql, LocalhostConn)
+                        cmd.ExecuteNonQuery()
+                        LoadReasonCategories()
+                        LoadReasonCategoriesDeactivated()
+                    End If
+                Else
+                    MsgBox("Select Category first")
                 End If
             Else
-                MsgBox("Select Category first")
+                MsgBox("Server category cannot be edited")
             End If
+
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
     End Sub
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
-        Enabled = False
+
         Try
-            If DataGridViewReasonCategories.Rows.Count > 0 Then
-                AddOrUpdate = True
-                PanelReasonCat.Show()
-                PanelReasonCat.TextBoxReasonsCat.Text = DataGridViewReasonCategories.SelectedRows(0).Cells(1).Value
-                PanelReasonCat.TransferID = DataGridViewReasonCategories.SelectedRows(0).Cells(0).Value
+            If DataGridViewReasonCategories.SelectedRows(0).Cells(2).Value <> "Server" Then
+                If DataGridViewReasonCategories.Rows.Count > 0 Then
+                    AddOrUpdate = True
+                    PanelReasonCat.Show()
+                    PanelReasonCat.TextBoxReasonsCat.Text = DataGridViewReasonCategories.SelectedRows(0).Cells(1).Value
+                    PanelReasonCat.TransferID = DataGridViewReasonCategories.SelectedRows(0).Cells(0).Value
+                Else
+                    MsgBox("Select category first")
+                End If
             Else
-                MsgBox("Select category first")
+                MsgBox("Server category cannot be edited")
             End If
         Catch ex As Exception
             SendErrorReport(ex.ToString)
