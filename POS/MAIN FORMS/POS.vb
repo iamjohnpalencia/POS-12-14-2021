@@ -1605,6 +1605,12 @@ Public Class POS
         Try
             UPDATEPRODUCTONLY = True
             Button3.Enabled = False
+            DataGridView1.Rows.Clear()
+            DataGridView2.Rows.Clear()
+            DataGridView3.Rows.Clear()
+            DataGridView4.Rows.Clear()
+            DataGridView5.Rows.Clear()
+
             BackgroundWorker2.WorkerReportsProgress = True
             BackgroundWorker2.WorkerSupportsCancellation = True
             BackgroundWorker2.RunWorkerAsync()
@@ -2154,7 +2160,7 @@ Public Class POS
                     cmdlocal = New MySqlCommand(sql, Connection)
                     Dim result As Integer = cmdlocal.ExecuteScalar
                     If result = 0 Then
-                        Dim sqlinsert = "INSERT INTO `loc_admin_category`(`Couponname_`, `Desc_`, `Discountvalue_`, `Referencevalue_`, `Type`, `Bundlebase_`, `BBValue_`, `Bundlepromo_`, `BPValue_`, `Effectivedate`, `Expirydate`, `active`, `store_id`, `crew_id`, `guid`, `origin`, `synced`, `date_created`) VALUES (@0,@1,@2,@3,@4)"
+                        Dim sqlinsert = "INSERT INTO `loc_admin_category`(`category_name`, `brand_name`, `updated_at`, `origin`, `status`) VALUES (@0,@1,@2,@3,@4)"
                         cmdlocal = New MySqlCommand(sqlinsert, Connection)
                         cmdlocal.Parameters.Add("@0", MySqlDbType.VarChar).Value = .Rows(i).Cells(1).Value.ToString()
                         cmdlocal.Parameters.Add("@1", MySqlDbType.VarChar).Value = .Rows(i).Cells(2).Value.ToString()
@@ -2566,6 +2572,18 @@ Public Class POS
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        If Button2.Text = "Show" Then
+            SynctoCloud.TopMost = True
+            SynctoCloud.WindowState = FormWindowState.Normal
+            Button2.Text = "Hide"
+        Else
+            SynctoCloud.TopMost = False
+            SynctoCloud.WindowState = FormWindowState.Minimized
+            Button2.Text = "Show"
+        End If
     End Sub
 #End Region
 #End Region

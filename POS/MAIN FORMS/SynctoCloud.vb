@@ -30,7 +30,24 @@ Public Class SynctoCloud
         End If
     End Sub
     Private Sub SynctoCloud_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+
+        'Try
+        '    If BackgroundWorkerFILLDATAGRIDS.IsBusy Or BackgroundWorkerSYNCTOCLOUD.IsBusy Then
+        '        Dim msg = MessageBox.Show("Are you sure do you want to cancel sync ?", "Cancel Sync", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
+        '        If msg = DialogResult.Yes Then
+        '            If BackgroundWorkerFILLDATAGRIDS.IsBusy Or BackgroundWorkerSYNCTOCLOUD.IsBusy Then
+        '                BackgroundWorkerFILLDATAGRIDS.CancelAsync()
+        '                BackgroundWorkerSYNCTOCLOUD.CancelAsync()
+        '            End If
+        '            WorkerCanceled = True
+        '        End If
+        '    End If
+        'Catch ex As Exception
+        '    MsgBox(ex.ToString)
+        'End Try
+
         Try
+
             If SyncIsOnProcess = True Then
                 e.Cancel = True
             Else
@@ -309,9 +326,12 @@ Public Class SynctoCloud
             Dim da As MySqlDataAdapter = New MySqlDataAdapter(cmd)
             Dim dt As DataTable = New DataTable
             da.Fill(dt)
-            For Each row As DataRow In dt.Rows
-                DataGridView2.Rows.Add(row("COUNT(*)"), tablename)
-            Next
+            If BackgroundWorkerFILLDATAGRIDS.IsBusy Then
+                For Each row As DataRow In dt.Rows
+                    DataGridView2.Rows.Add(row("COUNT(*)"), tablename)
+                Next
+            End If
+
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         Finally
@@ -371,15 +391,17 @@ Public Class SynctoCloud
 #End Region
     Private Sub BackgroundWorker2_DoWork(sender As Object, e As DoWorkEventArgs) Handles BackgroundWorkerFILLDATAGRIDS.DoWork
         Try
+            If WorkerCanceled Then
+                Exit Sub
+            End If
             If CheckForInternetConnection() = True Then
                 ThreadLoaddata = New Thread(AddressOf LoadData1)
                 ThreadLoaddata.Start()
                 Threadlist.Add(ThreadLoaddata)
                 For Each t In Threadlist
                     t.Join()
-                    If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                    If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                         ' Indicate that the task was canceled.
-                        WorkerCanceled = True
                         e.Cancel = True
                         Exit For
                     End If
@@ -390,9 +412,8 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
                             e.Cancel = True
                             Exit For
                         End If
@@ -402,9 +423,8 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
                             e.Cancel = True
                             Exit For
                         End If
@@ -414,9 +434,8 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
                             e.Cancel = True
                             Exit For
                         End If
@@ -426,9 +445,8 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
                             e.Cancel = True
                             Exit For
                         End If
@@ -438,9 +456,8 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
                             e.Cancel = True
                             Exit For
                         End If
@@ -450,9 +467,9 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
+
                             e.Cancel = True
                             Exit For
                         End If
@@ -462,9 +479,9 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
+
                             e.Cancel = True
                             Exit For
                         End If
@@ -474,9 +491,9 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
+
                             e.Cancel = True
                             Exit For
                         End If
@@ -486,9 +503,9 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
+
                             e.Cancel = True
                             Exit For
                         End If
@@ -498,9 +515,9 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
+
                             e.Cancel = True
                             Exit For
                         End If
@@ -510,9 +527,9 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
+
                             e.Cancel = True
                             Exit For
                         End If
@@ -522,9 +539,9 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
+
                             e.Cancel = True
                             Exit For
                         End If
@@ -534,9 +551,9 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
+
                             e.Cancel = True
                             Exit For
                         End If
@@ -546,9 +563,9 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
+
                             e.Cancel = True
                             Exit For
                         End If
@@ -558,9 +575,9 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
+
                             e.Cancel = True
                             Exit For
                         End If
@@ -570,9 +587,9 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
+
                             e.Cancel = True
                             Exit For
                         End If
@@ -583,9 +600,9 @@ Public Class SynctoCloud
                     Threadlist.Add(ThreadLoaddata)
                     For Each t In Threadlist
                         t.Join()
-                        If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                        If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                             ' Indicate that the task was canceled.
-                            WorkerCanceled = True
+
                             e.Cancel = True
                             Exit For
                         End If
@@ -596,9 +613,9 @@ Public Class SynctoCloud
                 Threadlist.Add(ThreadLoaddata)
                 For Each t In Threadlist
                     t.Join()
-                    If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                    If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                         ' Indicate that the task was canceled.
-                        WorkerCanceled = True
+
                         e.Cancel = True
                         Exit For
                     End If
@@ -609,9 +626,9 @@ Public Class SynctoCloud
                 Threadlist.Add(ThreadLoaddata)
                 For Each t In Threadlist
                     t.Join()
-                    If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                    If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                         ' Indicate that the task was canceled.
-                        WorkerCanceled = True
+
                         e.Cancel = True
                         Exit For
                     End If
@@ -621,9 +638,9 @@ Public Class SynctoCloud
                 Threadlist.Add(ThreadLoaddata)
                 For Each t In Threadlist
                     t.Join()
-                    If (BackgroundWorkerSYNCTOCLOUD.CancellationPending) Then
+                    If (BackgroundWorkerFILLDATAGRIDS.CancellationPending) Then
                         ' Indicate that the task was canceled.
-                        WorkerCanceled = True
+
                         e.Cancel = True
                         Exit For
                     End If
@@ -637,8 +654,8 @@ Public Class SynctoCloud
     Private Sub BackgroundWorker2_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BackgroundWorkerFILLDATAGRIDS.RunWorkerCompleted
         Try
             POS.ProgressBar1.Visible = True
+            POS.Button2.Visible = True
             Timer1.Start()
-            SyncIsOnProcess = True
             If INVENTORYISSYNCING = False Then
                 ButtonSYNCDATA.Text = "CANCEL SYNC"
             Else
@@ -1124,6 +1141,8 @@ Public Class SynctoCloud
                 End If
             End If
             POS.ProgressBar1.Visible = False
+            POS.Button2.Visible = False
+            POS.Button2.Text = "Show"
             ButtonSYNCDATA.Enabled = True
             ButtonSYNCINVENTORY.Enabled = True
         Catch ex As Exception
@@ -1549,12 +1568,16 @@ Public Class SynctoCloud
                     Label1.Text = "Syncing " & LabelRowtoSync.Text & " of " & LabelTTLRowtoSync.Text & " "
                     cmd.ExecuteNonQuery()
                     '====================================================================
-                    Dim table = " loc_system_logs "
-                    Dim where = " loc_systemlog_id = '" & .Rows(i).Cells(6).Value.ToString & "'"
-                    Dim fields = "`synced`='Synced' "
-                    Dim sql = "UPDATE " & table & " SET " & fields & " WHERE " & where
-                    cmdloc = New MySqlCommand(sql, local)
-                    cmdloc.ExecuteNonQuery()
+
+                    If BackgroundWorkerSYNCTOCLOUD.IsBusy Then
+                        Dim table = " loc_system_logs "
+                        Dim where = " loc_systemlog_id = '" & .Rows(i).Cells(6).Value.ToString & "'"
+                        Dim fields = "`synced`='Synced' "
+                        Dim sql = "UPDATE " & table & " SET " & fields & " WHERE " & where
+                        cmdloc = New MySqlCommand(sql, local)
+                        cmdloc.ExecuteNonQuery()
+                    End If
+
                     '====================================================================
                 Next
                 server.Close()
@@ -2257,6 +2280,7 @@ Public Class SynctoCloud
 
     Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles Button2.Click
         Try
+            SyncIsOnProcess = True
             If Button2.Text = "Start" Then
                 RadioButton1.Enabled = False
                 RadioButton2.Enabled = False

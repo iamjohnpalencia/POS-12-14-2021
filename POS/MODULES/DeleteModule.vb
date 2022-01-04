@@ -16,17 +16,17 @@ Module DeleteModule
             SendErrorReport(ex.ToString)
         End Try
     End Sub
-    Public Sub truncatetable(ByVal tablename As String)
-        Try
-            sql = "TRUNCATE TABLE " & tablename & ";"
-            cmd = New MySqlCommand
-            With cmd
-                .Connection = LocalhostConn()
-                .CommandText = sql
-            End With
-            cmd.ExecuteNonQuery()
-        Catch ex As Exception
-            SendErrorReport(ex.ToString)
-        End Try
-    End Sub
+    'Public Sub truncatetable(ByVal tablename As String)
+    '    Try
+    '        sql = "TRUNCATE TABLE " & tablename & ";"
+    '        cmd = New MySqlCommand
+    '        With cmd
+    '            .Connection = LocalhostConn()
+    '            .CommandText = sql
+    '        End With
+    '        cmd.ExecuteNonQuery()
+    '    Catch ex As Exception
+    '        SendErrorReport(ex.ToString)
+    '    End Try
+    'End Sub
 End Module

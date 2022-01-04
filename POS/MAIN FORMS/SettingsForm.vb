@@ -2623,108 +2623,125 @@ Public Class SettingsForm
         Numeric(sender, e)
     End Sub
 #Region "Reset"
-    Dim Query As String = ""
-    Private Sub TruncateTable(ToTruncate)
+    '
+    'Private Sub TruncateTable(ToTruncate)
+    '    Try
+    '        Query += "TRUNCATE TABLE " & ToTruncate & " ;"
+    '    Catch ex As Exception
+    '        SendErrorReport(ex.ToString)
+    '    End Try
+    'End Sub
+
+    Private Sub TruncateTableAll(ToTruncate)
         Try
-            Query += "TRUNCATE TABLE " & ToTruncate & " ;"
+            Dim ConnectionLocal As MySqlConnection = LocalhostConn()
+            Dim Query As String = "TRUNCATE TABLE  " & ToTruncate & " ;"
+            Console.WriteLine(Query)
+            Dim cmd As MySqlCommand = New MySqlCommand(Query, ConnectionLocal)
+            cmd.ExecuteNonQuery()
+            ConnectionLocal.Close()
+            cmd.Dispose()
         Catch ex As Exception
-            SendErrorReport(ex.ToString)
+            MsgBox(ex.ToString)
         End Try
     End Sub
     Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
         Try
-            Query = ""
+            Dim Query As String = ""
             Dim array() As String = {"loc_coupon_data", "loc_daily_transaction", "loc_daily_transaction_details", "loc_deposit", "loc_expense_details", "loc_expense_list",
             "loc_fm_stock", "loc_hold_inventory", "loc_inv_temp_data", "loc_pending_orders", "loc_refund_return_details", "loc_senior_details",
-            "loc_system_logs", "loc_send_bug_report", "loc_transaction_mode_details", "loc_transfer_data", "loc_zread_inventory"}
+            "loc_system_logs", "loc_send_bug_report", "loc_transaction_mode_details", "loc_transfer_data", "loc_zread_inventory", "loc_admin_category", "loc_admin_products",
+            "loc_partners_transaction", "loc_pos_inventory", "loc_product_formula", "tbcoupon"}
 
             With DataGridViewReset
                 If .Rows(0).Cells(1).Selected Then
-                    TruncateTable("loc_daily_transaction")
-                    TruncateTable("loc_daily_transaction_details")
-                    TruncateTable("loc_senior_details")
-                    TruncateTable("loc_transaction_mode_details")
+                    TruncateTableAll("loc_daily_transaction")
+                    TruncateTableAll("loc_daily_transaction_details")
+                    TruncateTableAll("loc_senior_details")
+                    TruncateTableAll("loc_transaction_mode_details")
                 End If
                 If .Rows(1).Cells(1).Selected Then
-                    TruncateTable("loc_deposit")
+                    TruncateTableAll("loc_deposit")
                 End If
                 If .Rows(2).Cells(1).Selected Then
-                    TruncateTable("loc_expense_details")
-                    TruncateTable("loc_expense_list")
+                    TruncateTableAll("loc_expense_details")
+                    TruncateTableAll("loc_expense_list")
                 End If
                 If .Rows(3).Cells(1).Selected Then
-                    TruncateTable("loc_fm_stock")
+                    TruncateTableAll("loc_fm_stock")
                 End If
                 If .Rows(4).Cells(1).Selected Then
-                    TruncateTable("loc_admin_category")
+                    TruncateTableAll("loc_admin_category")
                 End If
                 If .Rows(5).Cells(1).Selected Then
-                    TruncateTable("loc_inbox_messages")
+                    TruncateTableAll("loc_inbox_messages")
                 End If
                 If .Rows(6).Cells(1).Selected Then
-                    TruncateTable("loc_inv_temp_data")
+                    TruncateTableAll("loc_inv_temp_data")
                 End If
                 If .Rows(7).Cells(1).Selected Then
-                    TruncateTable("loc_pending_orders")
+                    TruncateTableAll("loc_pending_orders")
                 End If
                 If .Rows(8).Cells(1).Selected Then
-                    TruncateTable("loc_pos_inventory")
+                    TruncateTableAll("loc_pos_inventory")
                 End If
                 If .Rows(9).Cells(1).Selected Then
-                    TruncateTable("loc_price_request_change")
+                    TruncateTableAll("loc_price_request_change")
                 End If
                 If .Rows(10).Cells(1).Selected Then
-                    TruncateTable("loc_product_formula")
+                    TruncateTableAll("loc_product_formula")
                 End If
                 If .Rows(11).Cells(1).Selected Then
-                    TruncateTable("loc_refund_return_details")
+                    TruncateTableAll("loc_refund_return_details")
                 End If
                 If .Rows(12).Cells(1).Selected Then
-                    TruncateTable("loc_send_bug_report")
+                    TruncateTableAll("loc_send_bug_report")
                 End If
                 If .Rows(13).Cells(1).Selected Then
-                    TruncateTable("loc_stockadjustment_cat")
+                    TruncateTableAll("loc_stockadjustment_cat")
                 End If
                 If .Rows(14).Cells(1).Selected Then
-                    TruncateTable("loc_system_logs")
+                    TruncateTableAll("loc_system_logs")
                 End If
                 If .Rows(15).Cells(1).Selected Then
-                    TruncateTable("loc_transfer_data")
+                    TruncateTableAll("loc_transfer_data")
                 End If
                 If .Rows(16).Cells(1).Selected Then
-                    TruncateTable("loc_users")
-                    TruncateTable("triggers_loc_users")
+                    TruncateTableAll("loc_users")
+                    TruncateTableAll("triggers_loc_users")
                 End If
                 If .Rows(17).Cells(1).Selected Then
-                    TruncateTable("loc_zread_inventory")
+                    TruncateTableAll("loc_zread_inventory")
                 End If
                 If .Rows(18).Cells(1).Selected Then
-                    TruncateTable("tbcoupon")
+                    TruncateTableAll("tbcoupon")
                 End If
                 If .Rows(19).Cells(1).Selected Then
-                    TruncateTable("loc_admin_products")
-                    TruncateTable("triggers_loc_admin_products")
+                    TruncateTableAll("loc_admin_products")
+                    TruncateTableAll("triggers_loc_admin_products")
                 End If
                 If .Rows(20).Cells(1).Selected Then
-                    TruncateTable("loc_coupon_data")
+                    TruncateTableAll("loc_coupon_data")
                 End If
                 If .Rows(21).Cells(1).Selected Then
-                    TruncateTable("loc_partners_transaction")
+                    TruncateTableAll("loc_partners_transaction")
                 End If
             End With
             If CheckBoxAll.Checked Then
-                For Each value As String In array
-                    TruncateTable(value)
-                Next
+
             End If
             Dim msg = MessageBox.Show("Are you sure you want to truncate all selected table(s)?", "NOTICE", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If msg = DialogResult.Yes Then
                 Dim counterValue = 0
                 Dim ConnectionLocal As MySqlConnection = LocalhostConn()
-                Dim cmd As MySqlCommand = New MySqlCommand(Query, ConnectionLocal)
-                Dim res = cmd.ExecuteNonQuery()
+                'Dim cmd As MySqlCommand = New MySqlCommand(Query, ConnectionLocal)
+                'Dim res = cmd.ExecuteNonQuery()
                 If CheckBoxAll.Checked Then
                     Dim ReturnBool As Boolean = False
+
+                    For Each value As String In array
+                        TruncateTableAll(value)
+                    Next
 
                     Query = "SELECT counter_value FROM `tbcountertable` WHERE counter_id = 1"
                     cmd = New MySqlCommand(Query, ConnectionLocal)
@@ -2761,12 +2778,19 @@ Public Class SettingsForm
                 End If
                 LabelResetStatus.Text = counterValue
                 MsgBox("Complete")
-                POS.LoadCategory()
-                For Each btn As Button In POS.Panel3.Controls.OfType(Of Button)()
-                    If btn.Text = "Simply Perfect" Then
-                        btn.PerformClick()
-                    End If
-                Next
+                'POS.LoadCategory()
+                'For Each btn As Button In POS.Panel3.Controls.OfType(Of Button)()
+                '    If btn.Text = "Simply Perfect" Then
+                '        btn.PerformClick()
+                '    End If
+                'Next
+                FormIsOpen()
+                SystemLogDesc = "User Logout: " & returnfullname(where:=ClientCrewID)
+                SystemLogType = "LOG OUT"
+                GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
+                EndBalance()
+                Login.Show()
+                Dispose()
             End If
         Catch ex As Exception
             SendErrorReport(ex.ToString)

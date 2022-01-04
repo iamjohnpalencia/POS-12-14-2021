@@ -204,6 +204,8 @@ Partial Class POS
         Me.BackgroundWorker2 = New System.ComponentModel.BackgroundWorker()
         Me.BackgroundWorker3 = New System.ComponentModel.BackgroundWorker()
         Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.Panel8.SuspendLayout()
         Me.Panel24.SuspendLayout()
         Me.Panel34.SuspendLayout()
@@ -230,6 +232,7 @@ Partial Class POS
         CType(Me.DataGridView3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridView2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TableLayoutPanel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'Panel7
@@ -282,6 +285,7 @@ Partial Class POS
         'Panel24
         '
         Me.Panel24.BackColor = System.Drawing.Color.FromArgb(CType(CType(54, Byte), Integer), CType(CType(54, Byte), Integer), CType(CType(54, Byte), Integer))
+        Me.Panel24.Controls.Add(Me.Button2)
         Me.Panel24.Controls.Add(Me.LabelFOOTER)
         Me.Panel24.Controls.Add(Me.Panel20)
         Me.Panel24.Controls.Add(Me.ProgressBar1)
@@ -316,7 +320,7 @@ Partial Class POS
         '
         'ProgressBar1
         '
-        Me.ProgressBar1.Location = New System.Drawing.Point(361, 8)
+        Me.ProgressBar1.Location = New System.Drawing.Point(363, 8)
         Me.ProgressBar1.Name = "ProgressBar1"
         Me.ProgressBar1.Size = New System.Drawing.Size(312, 15)
         Me.ProgressBar1.TabIndex = 17
@@ -373,11 +377,8 @@ Partial Class POS
         '
         Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel1.Controls.Add(Me.Label14)
-        Me.Panel1.Controls.Add(Me.Label5)
-        Me.Panel1.Controls.Add(Me.Label13)
+        Me.Panel1.Controls.Add(Me.TableLayoutPanel3)
         Me.Panel1.Controls.Add(Me.LabelStorename)
-        Me.Panel1.Controls.Add(Me.Label9)
         Me.Panel1.Controls.Add(Me.Label11)
         Me.Panel1.Controls.Add(Me.Panel22)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
@@ -391,9 +392,9 @@ Partial Class POS
         Me.Label14.AutoSize = True
         Me.Label14.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label14.ForeColor = System.Drawing.Color.Black
-        Me.Label14.Location = New System.Drawing.Point(211, 17)
+        Me.Label14.Location = New System.Drawing.Point(3, 17)
         Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(143, 18)
+        Me.Label14.Size = New System.Drawing.Size(143, 17)
         Me.Label14.TabIndex = 158
         Me.Label14.Text = "PREVIOUS CHANGE:"
         '
@@ -402,9 +403,9 @@ Partial Class POS
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label5.ForeColor = System.Drawing.Color.Black
-        Me.Label5.Location = New System.Drawing.Point(211, -1)
+        Me.Label5.Location = New System.Drawing.Point(3, 0)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(123, 18)
+        Me.Label5.Size = New System.Drawing.Size(123, 17)
         Me.Label5.TabIndex = 156
         Me.Label5.Text = "PREVIOUS CASH:"
         '
@@ -413,9 +414,9 @@ Partial Class POS
         Me.Label13.AutoSize = True
         Me.Label13.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label13.ForeColor = System.Drawing.Color.White
-        Me.Label13.Location = New System.Drawing.Point(359, 17)
+        Me.Label13.Location = New System.Drawing.Point(153, 17)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(18, 18)
+        Me.Label13.Size = New System.Drawing.Size(18, 17)
         Me.Label13.TabIndex = 159
         Me.Label13.Text = "0"
         '
@@ -436,9 +437,9 @@ Partial Class POS
         Me.Label9.AutoSize = True
         Me.Label9.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label9.ForeColor = System.Drawing.Color.White
-        Me.Label9.Location = New System.Drawing.Point(359, -1)
+        Me.Label9.Location = New System.Drawing.Point(153, 0)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(18, 18)
+        Me.Label9.Size = New System.Drawing.Size(18, 17)
         Me.Label9.TabIndex = 157
         Me.Label9.Text = "0"
         '
@@ -549,7 +550,7 @@ Partial Class POS
         '
         'TextBoxFormulaID
         '
-        Me.TextBoxFormulaID.Location = New System.Drawing.Point(221, 245)
+        Me.TextBoxFormulaID.Location = New System.Drawing.Point(54, 245)
         Me.TextBoxFormulaID.Name = "TextBoxFormulaID"
         Me.TextBoxFormulaID.ReadOnly = True
         Me.TextBoxFormulaID.Size = New System.Drawing.Size(236, 23)
@@ -558,7 +559,7 @@ Partial Class POS
         '
         'TextBoxPRICE
         '
-        Me.TextBoxPRICE.Location = New System.Drawing.Point(463, 245)
+        Me.TextBoxPRICE.Location = New System.Drawing.Point(296, 245)
         Me.TextBoxPRICE.Name = "TextBoxPRICE"
         Me.TextBoxPRICE.ReadOnly = True
         Me.TextBoxPRICE.Size = New System.Drawing.Size(236, 23)
@@ -567,7 +568,7 @@ Partial Class POS
         '
         'TextBoxNAME
         '
-        Me.TextBoxNAME.Location = New System.Drawing.Point(705, 245)
+        Me.TextBoxNAME.Location = New System.Drawing.Point(538, 245)
         Me.TextBoxNAME.Name = "TextBoxNAME"
         Me.TextBoxNAME.ReadOnly = True
         Me.TextBoxNAME.Size = New System.Drawing.Size(236, 23)
@@ -576,7 +577,7 @@ Partial Class POS
         '
         'TextBoxINC
         '
-        Me.TextBoxINC.Location = New System.Drawing.Point(463, 216)
+        Me.TextBoxINC.Location = New System.Drawing.Point(296, 216)
         Me.TextBoxINC.Name = "TextBoxINC"
         Me.TextBoxINC.ReadOnly = True
         Me.TextBoxINC.Size = New System.Drawing.Size(236, 23)
@@ -585,7 +586,7 @@ Partial Class POS
         '
         'TextBoxMAXID
         '
-        Me.TextBoxMAXID.Location = New System.Drawing.Point(221, 216)
+        Me.TextBoxMAXID.Location = New System.Drawing.Point(54, 216)
         Me.TextBoxMAXID.Name = "TextBoxMAXID"
         Me.TextBoxMAXID.ReadOnly = True
         Me.TextBoxMAXID.Size = New System.Drawing.Size(236, 23)
@@ -594,7 +595,7 @@ Partial Class POS
         '
         'TextBoxPressQTY
         '
-        Me.TextBoxPressQTY.Location = New System.Drawing.Point(705, 216)
+        Me.TextBoxPressQTY.Location = New System.Drawing.Point(538, 216)
         Me.TextBoxPressQTY.Name = "TextBoxPressQTY"
         Me.TextBoxPressQTY.ReadOnly = True
         Me.TextBoxPressQTY.Size = New System.Drawing.Size(236, 23)
@@ -610,11 +611,11 @@ Partial Class POS
         Me.DataGridViewInv.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.DataGridViewInv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridViewInv.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column5, Me.Column6, Me.Column7, Me.Column8, Me.Column10, Me.Column11, Me.Column14, Me.Column15, Me.Column18, Me.Origin})
-        Me.DataGridViewInv.Location = New System.Drawing.Point(591, 372)
+        Me.DataGridViewInv.Location = New System.Drawing.Point(53, 372)
         Me.DataGridViewInv.Name = "DataGridViewInv"
         Me.DataGridViewInv.ReadOnly = True
         Me.DataGridViewInv.RowHeadersVisible = False
-        Me.DataGridViewInv.Size = New System.Drawing.Size(350, 95)
+        Me.DataGridViewInv.Size = New System.Drawing.Size(843, 95)
         Me.DataGridViewInv.TabIndex = 65
         Me.DataGridViewInv.Visible = False
         '
@@ -1602,14 +1603,8 @@ Partial Class POS
         '
         Me.Panel13.BackColor = System.Drawing.Color.White
         Me.Panel13.Controls.Add(Me.PanelProducts)
-        Me.Panel13.Controls.Add(Me.DataGridViewInv)
-        Me.Panel13.Controls.Add(Me.DataGridView5)
-        Me.Panel13.Controls.Add(Me.DataGridView4)
-        Me.Panel13.Controls.Add(Me.DataGridView3)
         Me.Panel13.Controls.Add(Me.TextBoxPRICE)
-        Me.Panel13.Controls.Add(Me.DataGridView2)
         Me.Panel13.Controls.Add(Me.TextBoxNAME)
-        Me.Panel13.Controls.Add(Me.DataGridView1)
         Me.Panel13.Controls.Add(Me.Panel17)
         Me.Panel13.Controls.Add(Me.TextBoxFormulaID)
         Me.Panel13.Controls.Add(Me.Panel18)
@@ -1618,6 +1613,12 @@ Partial Class POS
         Me.Panel13.Controls.Add(Me.TextBoxPressQTY)
         Me.Panel13.Controls.Add(Me.Panel16)
         Me.Panel13.Controls.Add(Me.TextBoxMAXID)
+        Me.Panel13.Controls.Add(Me.DataGridViewInv)
+        Me.Panel13.Controls.Add(Me.DataGridView5)
+        Me.Panel13.Controls.Add(Me.DataGridView4)
+        Me.Panel13.Controls.Add(Me.DataGridView3)
+        Me.Panel13.Controls.Add(Me.DataGridView2)
+        Me.Panel13.Controls.Add(Me.DataGridView1)
         Me.Panel13.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel13.Font = New System.Drawing.Font("Century Gothic", 9.75!)
         Me.Panel13.Location = New System.Drawing.Point(10, 116)
@@ -1633,11 +1634,11 @@ Partial Class POS
         Me.DataGridView5.AllowUserToResizeRows = False
         Me.DataGridView5.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView5.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn3, Me.DataGridViewTextBoxColumn4, Me.DataGridViewTextBoxColumn5, Me.DataGridViewTextBoxColumn6, Me.DataGridViewTextBoxColumn7, Me.DataGridViewTextBoxColumn8, Me.DataGridViewTextBoxColumn9, Me.DataGridViewTextBoxColumn10, Me.DataGridViewTextBoxColumn11, Me.DataGridViewTextBoxColumn12, Me.DataGridViewTextBoxColumn13, Me.DataGridViewTextBoxColumn14, Me.Column47, Me.Column48, Me.Column49})
-        Me.DataGridView5.Location = New System.Drawing.Point(221, 372)
+        Me.DataGridView5.Location = New System.Drawing.Point(731, 274)
         Me.DataGridView5.Name = "DataGridView5"
         Me.DataGridView5.ReadOnly = True
         Me.DataGridView5.RowHeadersVisible = False
-        Me.DataGridView5.Size = New System.Drawing.Size(364, 95)
+        Me.DataGridView5.Size = New System.Drawing.Size(165, 95)
         Me.DataGridView5.TabIndex = 68
         Me.DataGridView5.Visible = False
         '
@@ -1739,11 +1740,11 @@ Partial Class POS
         Me.DataGridView4.AllowUserToResizeRows = False
         Me.DataGridView4.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView4.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column32, Me.Column33, Me.Column34, Me.Column35, Me.Column36, Me.Column37, Me.Column38, Me.Column39, Me.Column40, Me.Column41, Me.Column44, Me.Column46})
-        Me.DataGridView4.Location = New System.Drawing.Point(221, 274)
+        Me.DataGridView4.Location = New System.Drawing.Point(560, 274)
         Me.DataGridView4.Name = "DataGridView4"
         Me.DataGridView4.ReadOnly = True
         Me.DataGridView4.RowHeadersVisible = False
-        Me.DataGridView4.Size = New System.Drawing.Size(210, 92)
+        Me.DataGridView4.Size = New System.Drawing.Size(165, 92)
         Me.DataGridView4.TabIndex = 65
         Me.DataGridView4.Visible = False
         '
@@ -1827,7 +1828,7 @@ Partial Class POS
         Me.DataGridView3.AllowUserToResizeRows = False
         Me.DataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView3.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn1, Me.DataGridViewTextBoxColumn2, Me.Column21, Me.Column22, Me.Column23, Me.Column24, Me.Column25, Me.Column26, Me.Column27, Me.Column28, Me.Column29, Me.Column30, Me.Column31})
-        Me.DataGridView3.Location = New System.Drawing.Point(608, 274)
+        Me.DataGridView3.Location = New System.Drawing.Point(389, 274)
         Me.DataGridView3.Name = "DataGridView3"
         Me.DataGridView3.ReadOnly = True
         Me.DataGridView3.RowHeadersVisible = False
@@ -1920,7 +1921,7 @@ Partial Class POS
         Me.DataGridView2.AllowUserToResizeColumns = False
         Me.DataGridView2.AllowUserToResizeRows = False
         Me.DataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView2.Location = New System.Drawing.Point(779, 274)
+        Me.DataGridView2.Location = New System.Drawing.Point(53, 274)
         Me.DataGridView2.Name = "DataGridView2"
         Me.DataGridView2.ReadOnly = True
         Me.DataGridView2.RowHeadersVisible = False
@@ -1936,11 +1937,11 @@ Partial Class POS
         Me.DataGridView1.AllowUserToResizeRows = False
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn15, Me.DataGridViewTextBoxColumn16, Me.DataGridViewTextBoxColumn17, Me.DataGridViewTextBoxColumn18, Me.DataGridViewTextBoxColumn19, Me.DataGridViewTextBoxColumn20})
-        Me.DataGridView1.Location = New System.Drawing.Point(437, 274)
+        Me.DataGridView1.Location = New System.Drawing.Point(221, 274)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
         Me.DataGridView1.RowHeadersVisible = False
-        Me.DataGridView1.Size = New System.Drawing.Size(165, 92)
+        Me.DataGridView1.Size = New System.Drawing.Size(162, 92)
         Me.DataGridView1.TabIndex = 62
         Me.DataGridView1.Visible = False
         '
@@ -1995,6 +1996,40 @@ Partial Class POS
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(977, 70)
         Me.Panel3.TabIndex = 39
+        '
+        'TableLayoutPanel3
+        '
+        Me.TableLayoutPanel3.ColumnCount = 2
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel3.Controls.Add(Me.Label5, 0, 0)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label13, 1, 1)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label14, 0, 1)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label9, 1, 0)
+        Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Left
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(203, 0)
+        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
+        Me.TableLayoutPanel3.RowCount = 2
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(338, 34)
+        Me.TableLayoutPanel3.TabIndex = 160
+        '
+        'Button2
+        '
+        Me.Button2.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(160, Byte), Integer), CType(CType(34, Byte), Integer))
+        Me.Button2.FlatAppearance.BorderSize = 0
+        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button2.ForeColor = System.Drawing.Color.White
+        Me.Button2.Location = New System.Drawing.Point(679, 6)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(56, 20)
+        Me.Button2.TabIndex = 20
+        Me.Button2.Text = "Show"
+        Me.Button2.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.Button2.UseVisualStyleBackColor = False
+        Me.Button2.Visible = False
         '
         'POS
         '
@@ -2057,6 +2092,8 @@ Partial Class POS
         CType(Me.DataGridView3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridView2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TableLayoutPanel3.ResumeLayout(False)
+        Me.TableLayoutPanel3.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -2235,4 +2272,6 @@ Partial Class POS
     Friend WithEvents Column42 As DataGridViewTextBoxColumn
     Friend WithEvents Column45 As DataGridViewTextBoxColumn
     Friend WithEvents Panel20 As Panel
+    Friend WithEvents TableLayoutPanel3 As TableLayoutPanel
+    Friend WithEvents Button2 As Button
 End Class
