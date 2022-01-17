@@ -623,9 +623,9 @@ Module publicfunctions
     Public Function ReturnPrintSize() As Integer
         Dim PrintSize = 0
         If My.Settings.PrintSize = "57mm" Then
-            PrintSize = 200
-        Else
             PrintSize = 230
+        Else
+            PrintSize = 260
         End If
         Return PrintSize
     End Function
