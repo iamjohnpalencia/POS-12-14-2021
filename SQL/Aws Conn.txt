@@ -1,4 +1,4 @@
-pos-cloud-rev.calyqb34mfan.ap-southeast-1.rds.amazonaws.com
+pos-aws-cloud.cnk01mqwsyxf.ap-southeast-1.rds.amazonaws.com
 user id=masteradmin
 password=password2019
 database=posrev

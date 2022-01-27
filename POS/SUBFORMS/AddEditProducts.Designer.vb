@@ -226,7 +226,7 @@ Partial Class AddEditProducts
         'StatusStrip1
         '
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1, Me.ToolStripProgressBar1})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 292)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 297)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(462, 22)
         Me.StatusStrip1.TabIndex = 238
@@ -328,7 +328,7 @@ Partial Class AddEditProducts
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(462, 314)
+        Me.ClientSize = New System.Drawing.Size(462, 319)
         Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.TextBoxCriticalLimit)
         Me.Controls.Add(Me.StatusStrip1)

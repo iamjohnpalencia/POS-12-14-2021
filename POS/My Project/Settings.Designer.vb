@@ -173,6 +173,18 @@ Namespace My
                 Me("PrintSize") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property LocalScriptRunner() As Integer
+            Get
+                Return CType(Me("LocalScriptRunner"),Integer)
+            End Get
+            Set
+                Me("LocalScriptRunner") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

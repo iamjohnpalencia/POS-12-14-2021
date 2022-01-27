@@ -63,6 +63,8 @@ Public Class AddEditProducts
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         If TextboxIsEmpty(Me) = True Then
             SubmitbuttonClicked()
+            POS.new_Button_click_category(sender, e)
+            listviewproductsshow("Simply Perfect")
         Else
             MsgBox("All fields are required")
         End If

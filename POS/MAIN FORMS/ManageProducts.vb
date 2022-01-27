@@ -20,7 +20,7 @@ Public Class ManageProducts
 
             TabControl3.TabPages(0).Text = "Product Price Change(Pending)"
             TabControl3.TabPages(1).Text = "Product Price Change(Approved)"
-
+            LoadOthersApprove()
             LoadProductList()
             LoadPriceChange()
             LoadPriceChangeApprove()
@@ -158,19 +158,19 @@ Public Class ManageProducts
     End Sub
     Private Sub TabControl1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
         Try
-            If TabControl1.SelectedIndex = 1 Then
+            If TabControl1.SelectedIndex = 0 Then
                 Dim Loaded As Boolean = False
                 If Loaded = False Then
                     LoadOthersApprove()
                     Loaded = True
                 End If
-            ElseIf TabControl1.SelectedIndex = 2 Then
+            ElseIf TabControl1.SelectedIndex = 1 Then
                 Dim Loaded As Boolean = False
                 If Loaded = False Then
                     LoadOthersPending()
                     Loaded = True
                 End If
-            ElseIf TabControl1.SelectedIndex = 3 Then
+            ElseIf TabControl1.SelectedIndex = 2 Then
                 Dim Loaded As Boolean = False
                 If Loaded = False Then
                     LoadPriceChange()

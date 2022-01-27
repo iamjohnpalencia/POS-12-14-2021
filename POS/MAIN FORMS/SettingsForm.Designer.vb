@@ -119,10 +119,6 @@ Partial Class SettingsForm
         Me.TabPage9 = New System.Windows.Forms.TabPage()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.DataGridViewProducts = New System.Windows.Forms.DataGridView()
-        Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column20 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
@@ -377,6 +373,8 @@ Partial Class SettingsForm
         Me.TableLayoutPanel14 = New System.Windows.Forms.TableLayoutPanel()
         Me.GroupBox13 = New System.Windows.Forms.GroupBox()
         Me.Panel34 = New System.Windows.Forms.Panel()
+        Me.ComboBoxPrintSize = New System.Windows.Forms.ComboBox()
+        Me.Label109 = New System.Windows.Forms.Label()
         Me.NumericUpDownPrintCount = New System.Windows.Forms.NumericUpDown()
         Me.Label80 = New System.Windows.Forms.Label()
         Me.Panel33 = New System.Windows.Forms.Panel()
@@ -433,6 +431,12 @@ Partial Class SettingsForm
         Me.Label31 = New System.Windows.Forms.Label()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage16 = New System.Windows.Forms.TabPage()
+        Me.DataGridView7 = New System.Windows.Forms.DataGridView()
+        Me.DataGridViewTextBoxColumn24 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn25 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn26 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn27 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn28 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridView6 = New System.Windows.Forms.DataGridView()
         Me.DataGridViewTextBoxColumn6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -452,8 +456,10 @@ Partial Class SettingsForm
         Me.TabPage17 = New System.Windows.Forms.TabPage()
         Me.BackgroundWorkerLocalConnection = New System.ComponentModel.BackgroundWorker()
         Me.BackgroundWorkerCloudConnection = New System.ComponentModel.BackgroundWorker()
-        Me.Label109 = New System.Windows.Forms.Label()
-        Me.ComboBoxPrintSize = New System.Windows.Forms.ComboBox()
+        Me.Column20 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.DataGridViewTextBoxColumn5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TabPage6.SuspendLayout()
         CType(Me.DataGridViewReset, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel35.SuspendLayout()
@@ -559,6 +565,7 @@ Partial Class SettingsForm
         Me.GroupBox12.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.TabPage16.SuspendLayout()
+        CType(Me.DataGridView7, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridView6, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage17.SuspendLayout()
         Me.SuspendLayout()
@@ -833,10 +840,10 @@ Partial Class SettingsForm
         Me.DataGridView5.AllowUserToResizeRows = False
         Me.DataGridView5.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView5.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1})
-        Me.DataGridView5.Location = New System.Drawing.Point(410, 341)
+        Me.DataGridView5.Location = New System.Drawing.Point(782, 77)
         Me.DataGridView5.Name = "DataGridView5"
         Me.DataGridView5.ReadOnly = True
-        Me.DataGridView5.Size = New System.Drawing.Size(209, 137)
+        Me.DataGridView5.Size = New System.Drawing.Size(209, 244)
         Me.DataGridView5.TabIndex = 71
         Me.DataGridView5.Visible = False
         '
@@ -1029,7 +1036,7 @@ Partial Class SettingsForm
         Me.DataGridView2.AllowUserToResizeColumns = False
         Me.DataGridView2.AllowUserToResizeRows = False
         Me.DataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView2.Location = New System.Drawing.Point(208, 341)
+        Me.DataGridView2.Location = New System.Drawing.Point(36, 202)
         Me.DataGridView2.Name = "DataGridView2"
         Me.DataGridView2.ReadOnly = True
         Me.DataGridView2.RowHeadersVisible = False
@@ -1045,7 +1052,7 @@ Partial Class SettingsForm
         Me.DataGridView1.AllowUserToResizeRows = False
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn15, Me.DataGridViewTextBoxColumn16, Me.DataGridViewTextBoxColumn17, Me.DataGridViewTextBoxColumn18, Me.DataGridViewTextBoxColumn19, Me.DataGridViewTextBoxColumn20})
-        Me.DataGridView1.Location = New System.Drawing.Point(6, 341)
+        Me.DataGridView1.Location = New System.Drawing.Point(36, 61)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
         Me.DataGridView1.RowHeadersVisible = False
@@ -1266,33 +1273,11 @@ Partial Class SettingsForm
         DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.DataGridViewProducts.DefaultCellStyle = DataGridViewCellStyle6
         Me.DataGridViewProducts.Dock = System.Windows.Forms.DockStyle.Top
-        Me.DataGridViewProducts.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.DataGridViewProducts.EnableHeadersVisualStyles = False
         Me.DataGridViewProducts.Location = New System.Drawing.Point(3, 28)
         Me.DataGridViewProducts.Name = "DataGridViewProducts"
         Me.DataGridViewProducts.Size = New System.Drawing.Size(1005, 193)
         Me.DataGridViewProducts.TabIndex = 236
-        '
-        'DataGridViewTextBoxColumn3
-        '
-        Me.DataGridViewTextBoxColumn3.HeaderText = "Product ID"
-        Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
-        Me.DataGridViewTextBoxColumn3.Visible = False
-        '
-        'DataGridViewTextBoxColumn4
-        '
-        Me.DataGridViewTextBoxColumn4.HeaderText = "Product Name"
-        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
-        '
-        'DataGridViewTextBoxColumn5
-        '
-        Me.DataGridViewTextBoxColumn5.HeaderText = "Product Category"
-        Me.DataGridViewTextBoxColumn5.Name = "DataGridViewTextBoxColumn5"
-        '
-        'Column20
-        '
-        Me.Column20.HeaderText = "Select Product"
-        Me.Column20.Name = "Column20"
         '
         'CheckBox1
         '
@@ -4221,6 +4206,28 @@ Partial Class SettingsForm
         Me.Panel34.Size = New System.Drawing.Size(320, 39)
         Me.Panel34.TabIndex = 293
         '
+        'ComboBoxPrintSize
+        '
+        Me.ComboBoxPrintSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBoxPrintSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ComboBoxPrintSize.Font = New System.Drawing.Font("Tahoma", 9.0!)
+        Me.ComboBoxPrintSize.FormattingEnabled = True
+        Me.ComboBoxPrintSize.Items.AddRange(New Object() {"57mm", "80mm"})
+        Me.ComboBoxPrintSize.Location = New System.Drawing.Point(217, 7)
+        Me.ComboBoxPrintSize.Name = "ComboBoxPrintSize"
+        Me.ComboBoxPrintSize.Size = New System.Drawing.Size(82, 22)
+        Me.ComboBoxPrintSize.TabIndex = 295
+        '
+        'Label109
+        '
+        Me.Label109.AutoSize = True
+        Me.Label109.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label109.Location = New System.Drawing.Point(150, 10)
+        Me.Label109.Name = "Label109"
+        Me.Label109.Size = New System.Drawing.Size(61, 14)
+        Me.Label109.TabIndex = 294
+        Me.Label109.Text = "Print Size:"
+        '
         'NumericUpDownPrintCount
         '
         Me.NumericUpDownPrintCount.Font = New System.Drawing.Font("Tahoma", 9.75!)
@@ -4860,6 +4867,7 @@ Partial Class SettingsForm
         '
         'TabPage16
         '
+        Me.TabPage16.Controls.Add(Me.DataGridView7)
         Me.TabPage16.Controls.Add(Me.DataGridView6)
         Me.TabPage16.Controls.Add(Me.DataGridView5)
         Me.TabPage16.Controls.Add(Me.PictureBox1)
@@ -4876,6 +4884,52 @@ Partial Class SettingsForm
         Me.TabPage16.TabIndex = 6
         Me.TabPage16.Text = "TabPage16"
         Me.TabPage16.UseVisualStyleBackColor = True
+        '
+        'DataGridView7
+        '
+        Me.DataGridView7.AllowUserToAddRows = False
+        Me.DataGridView7.AllowUserToDeleteRows = False
+        Me.DataGridView7.AllowUserToResizeColumns = False
+        Me.DataGridView7.AllowUserToResizeRows = False
+        Me.DataGridView7.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridView7.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn24, Me.DataGridViewTextBoxColumn25, Me.DataGridViewTextBoxColumn26, Me.DataGridViewTextBoxColumn27, Me.DataGridViewTextBoxColumn28})
+        Me.DataGridView7.Location = New System.Drawing.Point(36, 338)
+        Me.DataGridView7.Name = "DataGridView7"
+        Me.DataGridView7.ReadOnly = True
+        Me.DataGridView7.RowHeadersVisible = False
+        Me.DataGridView7.Size = New System.Drawing.Size(196, 135)
+        Me.DataGridView7.TabIndex = 83
+        Me.DataGridView7.Visible = False
+        '
+        'DataGridViewTextBoxColumn24
+        '
+        Me.DataGridViewTextBoxColumn24.HeaderText = "Column19"
+        Me.DataGridViewTextBoxColumn24.Name = "DataGridViewTextBoxColumn24"
+        Me.DataGridViewTextBoxColumn24.ReadOnly = True
+        '
+        'DataGridViewTextBoxColumn25
+        '
+        Me.DataGridViewTextBoxColumn25.HeaderText = "Column20"
+        Me.DataGridViewTextBoxColumn25.Name = "DataGridViewTextBoxColumn25"
+        Me.DataGridViewTextBoxColumn25.ReadOnly = True
+        '
+        'DataGridViewTextBoxColumn26
+        '
+        Me.DataGridViewTextBoxColumn26.HeaderText = "Column21"
+        Me.DataGridViewTextBoxColumn26.Name = "DataGridViewTextBoxColumn26"
+        Me.DataGridViewTextBoxColumn26.ReadOnly = True
+        '
+        'DataGridViewTextBoxColumn27
+        '
+        Me.DataGridViewTextBoxColumn27.HeaderText = "Column22"
+        Me.DataGridViewTextBoxColumn27.Name = "DataGridViewTextBoxColumn27"
+        Me.DataGridViewTextBoxColumn27.ReadOnly = True
+        '
+        'DataGridViewTextBoxColumn28
+        '
+        Me.DataGridViewTextBoxColumn28.HeaderText = "Column23"
+        Me.DataGridViewTextBoxColumn28.Name = "DataGridViewTextBoxColumn28"
+        Me.DataGridViewTextBoxColumn28.ReadOnly = True
         '
         'DataGridView6
         '
@@ -5000,27 +5054,26 @@ Partial Class SettingsForm
         'BackgroundWorkerCloudConnection
         '
         '
-        'Label109
+        'Column20
         '
-        Me.Label109.AutoSize = True
-        Me.Label109.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label109.Location = New System.Drawing.Point(150, 10)
-        Me.Label109.Name = "Label109"
-        Me.Label109.Size = New System.Drawing.Size(61, 14)
-        Me.Label109.TabIndex = 294
-        Me.Label109.Text = "Print Size:"
+        Me.Column20.HeaderText = "Select Product"
+        Me.Column20.Name = "Column20"
         '
-        'ComboBoxPrintSize
+        'DataGridViewTextBoxColumn5
         '
-        Me.ComboBoxPrintSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBoxPrintSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ComboBoxPrintSize.Font = New System.Drawing.Font("Tahoma", 9.0!)
-        Me.ComboBoxPrintSize.FormattingEnabled = True
-        Me.ComboBoxPrintSize.Items.AddRange(New Object() {"57mm", "80mm"})
-        Me.ComboBoxPrintSize.Location = New System.Drawing.Point(217, 7)
-        Me.ComboBoxPrintSize.Name = "ComboBoxPrintSize"
-        Me.ComboBoxPrintSize.Size = New System.Drawing.Size(82, 22)
-        Me.ComboBoxPrintSize.TabIndex = 295
+        Me.DataGridViewTextBoxColumn5.HeaderText = "Product Category"
+        Me.DataGridViewTextBoxColumn5.Name = "DataGridViewTextBoxColumn5"
+        '
+        'DataGridViewTextBoxColumn4
+        '
+        Me.DataGridViewTextBoxColumn4.HeaderText = "Product Name"
+        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
+        '
+        'DataGridViewTextBoxColumn3
+        '
+        Me.DataGridViewTextBoxColumn3.HeaderText = "Product ID"
+        Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
+        Me.DataGridViewTextBoxColumn3.Visible = False
         '
         'SettingsForm
         '
@@ -5172,6 +5225,7 @@ Partial Class SettingsForm
         Me.GroupBox12.PerformLayout()
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage16.ResumeLayout(False)
+        CType(Me.DataGridView7, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridView6, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPage17.ResumeLayout(False)
         Me.ResumeLayout(False)
@@ -5440,10 +5494,6 @@ Partial Class SettingsForm
     Friend WithEvents DataGridViewProducts As DataGridView
     Friend WithEvents Label40 As Label
     Friend WithEvents Label38 As Label
-    Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn4 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn5 As DataGridViewTextBoxColumn
-    Friend WithEvents Column20 As DataGridViewCheckBoxColumn
     Friend WithEvents Label45 As Label
     Friend WithEvents Label44 As Label
     Friend WithEvents Label43 As Label
@@ -5583,4 +5633,14 @@ Partial Class SettingsForm
     Friend WithEvents Label103 As Label
     Friend WithEvents Label109 As Label
     Friend WithEvents ComboBoxPrintSize As ComboBox
+    Friend WithEvents DataGridView7 As DataGridView
+    Friend WithEvents DataGridViewTextBoxColumn24 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn25 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn26 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn27 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn28 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn4 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn5 As DataGridViewTextBoxColumn
+    Friend WithEvents Column20 As DataGridViewCheckBoxColumn
 End Class

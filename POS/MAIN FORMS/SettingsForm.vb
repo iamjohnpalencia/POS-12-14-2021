@@ -12,6 +12,8 @@ Public Class SettingsForm
     Dim PrintOptionsBoolean As Boolean = False
     Private Sub SettingsForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
+            LabelCheckingUpdates.Text = "Last Checked: " & My.Settings.Updatedatetime
+
             TabControl1.TabPages(0).Text = "General Settings"
             TabControl1.TabPages(1).Text = "Partners Transaction"
             TabControl1.TabPages(2).Text = "Formula"
@@ -225,6 +227,7 @@ Public Class SettingsForm
         Try
             If CheckForInternetConnection() = True Then
                 If POS.POSISUPDATING = False Then
+                    HASUPDATE = False
                     PictureBox1.Visible = True
                     Timer1.Start()
                     DataGridView5.Rows.Clear()
@@ -233,11 +236,15 @@ Public Class SettingsForm
                     Dim Inventory = count("inventory_id", "loc_pos_inventory")
                     Dim Formula = count("formula_id", "loc_product_formula")
                     Dim Coupons = count("ID", "tbcoupon")
+                    Dim Partners = count("id", "loc_partners_transaction")
+
                     DataGridView5.Rows.Add(Products)
                     DataGridView5.Rows.Add(Category)
                     DataGridView5.Rows.Add(Inventory)
                     DataGridView5.Rows.Add(Formula)
                     DataGridView5.Rows.Add(Coupons)
+                    DataGridView5.Rows.Add(Partners)
+
                     LabelCountAllRows.Text = SumOfColumnsToInt(DataGridView5, 0)
                     LabelCheckingUpdates.Text = "Checking for updates."
                     ProgressBar1.Maximum = Val(LabelCountAllRows.Text)
@@ -247,6 +254,7 @@ Public Class SettingsForm
                     BackgroundWorker1.WorkerSupportsCancellation = True
                     BackgroundWorker1.RunWorkerAsync()
                     Button4.Enabled = False
+                    HASUPDATE = False
                 Else
                     MsgBox("Updates is still on process please wait.")
                 End If
@@ -1636,10 +1644,15 @@ Public Class SettingsForm
                         thread = New Thread(AddressOf Function5)
                         thread.Start()
                         THREADLISTUPDATE.Add(thread)
+                        thread = New Thread(AddressOf Function6)
+                        thread.Start()
+                        THREADLISTUPDATE.Add(thread)
                         thread = New Thread(AddressOf CouponApproval)
                         thread.Start()
                         THREADLISTUPDATE.Add(thread)
-
+                        thread = New Thread(AddressOf CustomProductApproval)
+                        thread.Start()
+                        THREADLISTUPDATE.Add(thread)
                     End If
                 End If
                 For Each t In THREADLISTUPDATE
@@ -1663,13 +1676,15 @@ Public Class SettingsForm
             DataGridView2.DataSource = FillDatagridProduct
             Button4.Enabled = True
             UPDATEPRODUCTONLY = False
-            If DataGridView1.Rows.Count > 0 Or DataGridView2.Rows.Count > 0 Or DataGridView3.Rows.Count > 0 Or DataGridView4.Rows.Count > 0 Or PriceChangeDatatabe.Rows.Count > 0 Or DataGridView6.Rows.Count Then
+            If DataGridView1.Rows.Count > 0 Or DataGridView2.Rows.Count > 0 Or DataGridView3.Rows.Count > 0 Or DataGridView4.Rows.Count > 0 Or PriceChangeDatatabe.Rows.Count > 0 Or DataGridView6.Rows.Count Or DataGridView7.Rows.Count Then
                 Dim updatemessage = MessageBox.Show("New Updates are available. Would you like to update now ?", "New Updates", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
                 If updatemessage = DialogResult.Yes Then
+                    HASUPDATE = True
                     InstallUpdatesFormula()
                     InstallUpdatesInventory()
                     InstallUpdatesCategory()
                     InstallUpdatesCoupons()
+                    InstallUpdatesPartners()
                     InstallUpdatesProducts()
                     InstallUpdatesPriceChange()
                     If PRICECHANGE = True Then
@@ -1689,6 +1704,7 @@ Public Class SettingsForm
                     My.Settings.Updatedatetime = FullDate24HR()
                 End If
             Else
+                HASUPDATE = False
                 LabelCheckingUpdates.Text = "Complete Checking! No updates found."
                 My.Settings.Updatedatetime = FullDate24HR()
             End If
@@ -1767,6 +1783,25 @@ Public Class SettingsForm
                 CouponApp = True
             Else
                 CouponApp = False
+            End If
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
+    End Sub
+    Dim CustomProductsApproval As DataTable
+    Dim CustomProdctsAppBool As Boolean = False
+    Private Sub CustomProductApproval()
+        Try
+            Dim ConnectionServer As MySqlConnection = ServerCloudCon()
+            Dim Query = "SELECT loc_product_id FROM loc_product_list WHERE store_id = '" & ClientStoreID & "' AND guid = '" & ClientGuid & "' AND product_status = 1 AND synced = 'Unsynced'"
+            Dim CmdCheck As MySqlCommand = New MySqlCommand(Query, ConnectionServer)
+            Dim DaCheck As MySqlDataAdapter = New MySqlDataAdapter(CmdCheck)
+            CustomProductsApproval = New DataTable
+            DaCheck.Fill(CustomProductsApproval)
+            If CustomProductsApproval.Rows.Count > 0 Then
+                CustomProdctsAppBool = True
+            Else
+                CustomProdctsAppBool = False
             End If
         Catch ex As Exception
             SendErrorReport(ex.ToString)
@@ -2298,6 +2333,90 @@ Public Class SettingsForm
             'If table doesnt have data
         End Try
     End Sub
+    Private Function LoadPartnersCategory() As DataTable
+        Dim cmdlocal As MySqlCommand
+        Dim dalocal As MySqlDataAdapter
+        Dim dtlocal As DataTable = New DataTable
+        dtlocal.Columns.Add("date_modified")
+        dtlocal.Columns.Add("id")
+        Dim dtlocal1 As DataTable = New DataTable
+        Try
+            Dim sql = "SELECT date_modified, id FROM loc_partners_transaction"
+            cmdlocal = New MySqlCommand(sql, LocalhostConn())
+            dalocal = New MySqlDataAdapter(cmdlocal)
+            dalocal.Fill(dtlocal1)
+            For i As Integer = 0 To dtlocal1.Rows.Count - 1 Step +1
+                Dim Cat As DataRow = dtlocal.NewRow
+                Cat("date_modified") = dtlocal1(i)(0).ToString
+                Cat("id") = dtlocal1(i)(1)
+                dtlocal.Rows.Add(Cat)
+            Next
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
+        Return dtlocal
+    End Function
+    Private Sub Function6()
+        Try
+            Dim Query = "SELECT * FROM loc_partners_transaction"
+            Dim CmdCheck As MySqlCommand = New MySqlCommand(Query, LocalhostConn)
+            Dim DaCheck As MySqlDataAdapter = New MySqlDataAdapter(CmdCheck)
+            Dim DtCheck As DataTable = New DataTable
+            DaCheck.Fill(DtCheck)
+            Dim cmdserver As MySqlCommand
+            Dim daserver As MySqlDataAdapter
+            Dim dtserver As DataTable
+            If DtCheck.Rows.Count < 1 Then
+                Dim sql = "SELECT `id`, `arrid`, `bankname`, `date_modified`, `active` FROM admin_partners_transaction_org"
+                cmdserver = New MySqlCommand(sql, ServerCloudCon())
+                daserver = New MySqlDataAdapter(cmdserver)
+                dtserver = New DataTable
+                daserver.Fill(dtserver)
+                For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                    DataGridView7.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4))
+                    LabelNewRows.Text += Val(LabelNewRows.Text)
+                Next
+            Else
+                Dim Ids As String = ""
+                If ValidCloudConnection = True Then
+                    For i As Integer = 0 To LoadPartnersCategory.Rows.Count - 1 Step +1
+                        If Ids = "" Then
+                            Ids = "" & LoadPartnersCategory(i)(1) & ""
+                        Else
+                            Ids += "," & LoadPartnersCategory(i)(1) & ""
+                        End If
+                    Next
+                    Dim sql = "SELECT `id`, `arrid`, `bankname`, `date_modified`, `active` FROM admin_partners_transaction_org WHERE id IN (" & Ids & ")"
+                    cmdserver = New MySqlCommand(sql, ServerCloudCon())
+                    daserver = New MySqlDataAdapter(cmdserver)
+                    dtserver = New DataTable
+                    daserver.Fill(dtserver)
+                    For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                        If LoadPartnersCategory(i)(0).ToString <> dtserver(i)(3).ToString Then
+                            DataGridView7.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4))
+                        End If
+                        ProgressBar1.Value = ProgressBar1.Value + 1
+                        LabelStatus.Text = "Item(s) " & LabelCountAllRows.Text & " Checked " & ProgressBar1.Value & " of " & LabelCountAllRows.Text
+                    Next
+                    Dim sql2 = "SELECT `id`, `arrid`, `bankname`, `date_modified`, `active` FROM admin_partners_transaction_org WHERE id NOT IN (" & Ids & ")"
+                    cmdserver = New MySqlCommand(sql2, ServerCloudCon())
+                    daserver = New MySqlDataAdapter(cmdserver)
+                    dtserver = New DataTable
+                    daserver.Fill(dtserver)
+                    For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                        If LoadPartnersCategory(i)(0) <> dtserver(i)(3) Then
+                            DataGridView7.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4))
+                            LabelNewRows.Text += Val(LabelNewRows.Text)
+                        End If
+                    Next
+                End If
+            End If
+        Catch ex As Exception
+            BackgroundWorker1.CancelAsync()
+            SendErrorReport(ex.ToString)
+            'If table doesnt have data
+        End Try
+    End Sub
 #End Region
 #End Region
 #Region "Install Updates"
@@ -2353,6 +2472,46 @@ Public Class SettingsForm
                         cmdlocal.Parameters.Add("@15", MySqlDbType.Text).Value = "Server"
                         cmdlocal.Parameters.Add("@16", MySqlDbType.Text).Value = "Synced"
                         cmdlocal.Parameters.Add("@17", MySqlDbType.Text).Value = .Rows(i).Cells(12).Value.ToString()
+                        cmdlocal.ExecuteNonQuery()
+                    End If
+                Next
+            End With
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
+    End Sub
+    Private Sub InstallUpdatesPartners()
+        Try
+            Dim Connection As MySqlConnection = LocalhostConn()
+            Dim cmdlocal As MySqlCommand
+            With DataGridView7
+                For i As Integer = 0 To .Rows.Count - 1 Step +1
+                    Dim sql = "SELECT id FROM loc_partners_transaction WHERE id = " & .Rows(i).Cells(0).Value
+                    cmdlocal = New MySqlCommand(sql, Connection)
+                    Dim result As Integer = cmdlocal.ExecuteScalar
+                    If result = 0 Then
+                        Dim sqlinsert = "INSERT INTO `loc_partners_transaction`(`arrid`, `bankname`, `date_modified`, `crew_id`, `store_id`, `guid`, `active`, `synced`) VALUES (@0,@1,@2,@3,@4,@5,@6,@7)"
+                        cmdlocal = New MySqlCommand(sqlinsert, Connection)
+                        cmdlocal.Parameters.Add("@0", MySqlDbType.Int64).Value = .Rows(i).Cells(1).Value.ToString()
+                        cmdlocal.Parameters.Add("@1", MySqlDbType.VarChar).Value = .Rows(i).Cells(2).Value.ToString()
+                        cmdlocal.Parameters.Add("@2", MySqlDbType.Text).Value = .Rows(i).Cells(3).Value.ToString()
+                        cmdlocal.Parameters.Add("@3", MySqlDbType.VarChar).Value = "Admin"
+                        cmdlocal.Parameters.Add("@4", MySqlDbType.VarChar).Value = ClientStoreID
+                        cmdlocal.Parameters.Add("@5", MySqlDbType.VarChar).Value = ClientGuid
+                        cmdlocal.Parameters.Add("@6", MySqlDbType.Int64).Value = .Rows(i).Cells(4).Value.ToString()
+                        cmdlocal.Parameters.Add("@7", MySqlDbType.VarChar).Value = "Synced"
+                        cmdlocal.ExecuteNonQuery()
+                    Else
+                        Dim sqlupdate = "UPDATE `loc_partners_transaction` SET `arrid`=@0,`bankname`=@1,`date_modified`=@2,`crew_id`=@3,`store_id`=@4,`guid`=@5,`active`=@6,`synced`=@7 WHERE id = " & .Rows(i).Cells(0).Value
+                        cmdlocal = New MySqlCommand(sqlupdate, Connection)
+                        cmdlocal.Parameters.Add("@0", MySqlDbType.Int64).Value = .Rows(i).Cells(1).Value.ToString()
+                        cmdlocal.Parameters.Add("@1", MySqlDbType.VarChar).Value = .Rows(i).Cells(2).Value.ToString()
+                        cmdlocal.Parameters.Add("@2", MySqlDbType.Text).Value = .Rows(i).Cells(3).Value.ToString()
+                        cmdlocal.Parameters.Add("@3", MySqlDbType.VarChar).Value = "Admin"
+                        cmdlocal.Parameters.Add("@4", MySqlDbType.VarChar).Value = ClientStoreID
+                        cmdlocal.Parameters.Add("@5", MySqlDbType.VarChar).Value = ClientGuid
+                        cmdlocal.Parameters.Add("@6", MySqlDbType.Int64).Value = .Rows(i).Cells(4).Value.ToString()
+                        cmdlocal.Parameters.Add("@7", MySqlDbType.VarChar).Value = "Synced"
                         cmdlocal.ExecuteNonQuery()
                     End If
                 Next
@@ -2788,6 +2947,7 @@ Public Class SettingsForm
                 SystemLogDesc = "User Logout: " & returnfullname(where:=ClientCrewID)
                 SystemLogType = "LOG OUT"
                 GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
+                POS.Close()
                 EndBalance()
                 Login.Show()
                 Dispose()

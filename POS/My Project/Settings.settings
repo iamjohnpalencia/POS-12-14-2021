@@ -32,5 +32,8 @@
     <Setting Name="PrintSize" Type="System.String" Scope="User">
       <Value Profile="(Default)">57mm</Value>
     </Setting>
+    <Setting Name="LocalScriptRunner" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -41,6 +41,9 @@ Public Class Inventory
                 Button7.Enabled = False
                 Button7.Visible = False
             End If
+
+            '          DataGridViewRow row = DataGridView.Rows[0];
+            'row.Height = 15;
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
@@ -158,14 +161,16 @@ Public Class Inventory
     Dim inventoryid
     Sub loadstockadjustmentreport(searchdate As Boolean)
         Try
-            fields = "`crew_id`, `log_type`, `log_description`, `log_date_time`, `log_store`, `guid`, `loc_systemlog_id`, `synced`"
-            table = "loc_system_logs"
+            Dim StockAdjustmentReport As DataTable = New DataTable
+            Dim Fields = "`crew_id`, `log_type`, `log_description`, `log_date_time`, `log_store`, `guid`, `loc_systemlog_id`, `synced`"
+            Dim Table = "loc_system_logs"
+            Dim Where = ""
             If searchdate = False Then
-                where = " date(log_date_time) = CURRENT_DATE() AND log_type IN('NEW STOCK ADDED','STOCK REMOVAL','STOCK TRANSFER')"
-                GLOBAL_SELECT_ALL_FUNCTION_WHERE(table:=table, datagrid:=DataGridViewStockAdjustment, errormessage:="", fields:=fields, successmessage:="", where:=where)
+                Where = " WHERE date(log_date_time) = CURRENT_DATE() AND log_type IN('NEW STOCK ADDED','STOCK REMOVAL','STOCK TRANSFER')"
+                StockAdjustmentReport = AsDatatable(table & where, fields, DataGridViewStockAdjustment)
             Else
-                where = " log_type IN('NEW STOCK ADDED','STOCK REMOVAL','STOCK TRANSFER') AND date(log_date_time) >= '" & Format(DateTimePicker1.Value, "yyyy-MM-dd") & "' AND date(log_date_time) <= '" & Format(DateTimePicker2.Value, "yyyy-MM-dd") & "'"
-                GLOBAL_SELECT_ALL_FUNCTION_WHERE(table:=table, datagrid:=DataGridViewStockAdjustment, errormessage:="", fields:=fields, successmessage:="", where:=where)
+                Where = " WHERE log_type IN('NEW STOCK ADDED','STOCK REMOVAL','STOCK TRANSFER') AND date(log_date_time) >= '" & Format(DateTimePicker1.Value, "yyyy-MM-dd") & "' AND date(log_date_time) <= '" & Format(DateTimePicker2.Value, "yyyy-MM-dd") & "'"
+                StockAdjustmentReport = AsDatatable(Table & Where, Fields, DataGridViewStockAdjustment)
             End If
             With DataGridViewStockAdjustment
                 .Columns(0).HeaderText = "Service Crew"
@@ -176,8 +181,12 @@ Public Class Inventory
                 .Columns(5).Visible = False
                 .Columns(6).Visible = False
                 .Columns(7).Visible = False
-                For Each row As DataRow In dt.Rows
-                    row("crew_id") = GLOBAL_SELECT_FUNCTION_RETURN(table:="loc_users", fields:="full_name", returnvalrow:="full_name", values:="uniq_id ='" & row("crew_id") & "'")
+                .Columns(0).Width = 150
+                .Columns(1).Width = 150
+                .Columns(3).Width = 200
+                For Each row As DataRow In StockAdjustmentReport.Rows
+                    Dim CrewID = returnfullname(row("crew_id"))
+                    DataGridViewStockAdjustment.Rows.Add(CrewID, row("log_type"), row("log_description"), row("log_date_time"), row("log_store"), row("guid"), row("loc_systemlog_id"), row("synced"))
                 Next
             End With
         Catch ex As Exception

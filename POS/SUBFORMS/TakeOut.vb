@@ -231,8 +231,9 @@ Public Class TakeOut
     End Sub
     Private Sub TakeOut_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
-            ComboBoxTakeout.SelectedIndex = 0
+
             LoadSettings()
+
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
@@ -251,7 +252,7 @@ Public Class TakeOut
                 Dim res = cmd.ExecuteScalar()
                 ComboBoxTakeout.Items.Add(res)
             Next
-
+            ComboBoxTakeout.SelectedIndex = 0
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try

@@ -70,7 +70,7 @@ Partial Class Loading
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(384, 94)
+        Me.Panel1.Size = New System.Drawing.Size(385, 95)
         Me.Panel1.TabIndex = 21
         '
         'Label3
@@ -107,9 +107,9 @@ Partial Class Loading
         '
         Me.Panel23.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(160, Byte), Integer), CType(CType(34, Byte), Integer))
         Me.Panel23.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel23.Location = New System.Drawing.Point(0, 62)
+        Me.Panel23.Location = New System.Drawing.Point(0, 63)
         Me.Panel23.Name = "Panel23"
-        Me.Panel23.Size = New System.Drawing.Size(382, 10)
+        Me.Panel23.Size = New System.Drawing.Size(383, 10)
         Me.Panel23.TabIndex = 22
         '
         'Panel24
@@ -119,9 +119,9 @@ Partial Class Loading
         Me.Panel24.Controls.Add(Me.LabelVersion)
         Me.Panel24.Controls.Add(Me.Panel2)
         Me.Panel24.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel24.Location = New System.Drawing.Point(0, 72)
+        Me.Panel24.Location = New System.Drawing.Point(0, 73)
         Me.Panel24.Name = "Panel24"
-        Me.Panel24.Size = New System.Drawing.Size(382, 20)
+        Me.Panel24.Size = New System.Drawing.Size(383, 20)
         Me.Panel24.TabIndex = 21
         '
         'LabelFOOTER
@@ -130,7 +130,7 @@ Partial Class Loading
         Me.LabelFOOTER.Dock = System.Windows.Forms.DockStyle.Right
         Me.LabelFOOTER.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LabelFOOTER.ForeColor = System.Drawing.Color.White
-        Me.LabelFOOTER.Location = New System.Drawing.Point(337, 3)
+        Me.LabelFOOTER.Location = New System.Drawing.Point(338, 3)
         Me.LabelFOOTER.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelFOOTER.Name = "LabelFOOTER"
         Me.LabelFOOTER.Size = New System.Drawing.Size(45, 16)
@@ -157,7 +157,7 @@ Partial Class Loading
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel2.Location = New System.Drawing.Point(0, 0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(382, 3)
+        Me.Panel2.Size = New System.Drawing.Size(383, 3)
         Me.Panel2.TabIndex = 18
         '
         'PictureBox1
@@ -173,9 +173,9 @@ Partial Class Loading
         'DataGridViewScript
         '
         Me.DataGridViewScript.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridViewScript.Location = New System.Drawing.Point(3, 69)
+        Me.DataGridViewScript.Location = New System.Drawing.Point(51, 84)
         Me.DataGridViewScript.Name = "DataGridViewScript"
-        Me.DataGridViewScript.Size = New System.Drawing.Size(121, 48)
+        Me.DataGridViewScript.Size = New System.Drawing.Size(113, 63)
         Me.DataGridViewScript.TabIndex = 28
         '
         'BackgroundWorker2
@@ -188,7 +188,7 @@ Partial Class Loading
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(384, 94)
+        Me.ClientSize = New System.Drawing.Size(385, 95)
         Me.Controls.Add(Me.Panel1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)

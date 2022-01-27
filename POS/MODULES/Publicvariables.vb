@@ -158,4 +158,8 @@ Module publicVariables
     Public HASOTHERSLOCALPRODUCT As Boolean = False
     Public HASOTHERSSERVERPRODUCT As Boolean = False
 
+    Public BegBalanceBool As Boolean = False
+
+    Public HASUPDATE As Boolean = False
+
 End Module

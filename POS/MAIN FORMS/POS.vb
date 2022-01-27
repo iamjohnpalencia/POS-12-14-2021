@@ -43,6 +43,7 @@ Public Class POS
             If Application.OpenForms().OfType(Of SynctoCloud).Any Then
                 SynctoCloud.BringToFront()
             End If
+
             LabelStorename.Text = ClientStorename
             Label11.Focus()
             Timer1.Start()
@@ -57,14 +58,15 @@ Public Class POS
             Next
             DataGridViewOrders.CellBorderStyle = DataGridViewCellBorderStyle.None
             Enabled = False
-            BegBalance.Show()
-            BegBalance.TopMost = True
+            CheckingForUpdates.Show()
+            CheckingForUpdates.TopMost = True
+
             If ValidCloudConnection = True Then
                 BackgroundWorker2.WorkerReportsProgress = True
                 BackgroundWorker2.WorkerSupportsCancellation = True
                 BackgroundWorker2.RunWorkerAsync()
             Else
-                LabelCheckingUpdates.Text = "Invalid cloud server connection."
+                CheckingForUpdates.LabelCheckingUpdates.Text = "Invalid cloud server connection."
             End If
         Catch ex As Exception
             SendErrorReport(ex.ToString)
@@ -101,7 +103,7 @@ Public Class POS
                         .Height = 53
                         .Cursor = Cursors.Hand
                         Location_control.X += .Height + 65
-                        AddHandler .Click, AddressOf new_Button_click
+                        AddHandler .Click, AddressOf new_Button_click_category
                     End With
                     Panel3.Controls.Add(new_Button)
                 Next
@@ -110,7 +112,7 @@ Public Class POS
             SendErrorReport(ex.ToString)
         End Try
     End Sub
-    Private Sub new_Button_click(ByVal sender As Object, ByVal e As EventArgs)
+    Public Sub new_Button_click_category(ByVal sender As Object, ByVal e As EventArgs)
         'NEW BUTTON ON CLICK EVENT 
         If TypeOf sender Is Button Then
             Dim btn = sender
@@ -126,6 +128,8 @@ Public Class POS
             MessageBox.Show("Sync is on process please wait.", "Syncing", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
             If MessageBox.Show("Are you sure you really want to Logout ?", "Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = vbYes Then
+                HASUPDATE = False
+                BegBalanceBool = False
                 FormIsOpen()
                 SystemLogDesc = "User Logout: " & returnfullname(where:=ClientCrewID)
                 SystemLogType = "LOG OUT"
@@ -245,16 +249,16 @@ Public Class POS
                     If Shift = "" Then
                         MessageBox.Show("Input cashier balance first", "", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                     Else
-                        If S_Zreading <> Format(Now(), "yyyy-MM-dd") Then
-                            MessageBox.Show("Z-read first", "Z-Reading", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                        Else
-                            Enabled = False
-                            PaymentForm.Show()
-                            Application.DoEvents()
-                            PaymentForm.TextBoxMONEY.Focus()
-                            PaymentForm.TextBoxTOTALPAY.Text = TextBoxGRANDTOTAL.Text
-                            PaymentForm.Focus()
-                        End If
+                        'If S_Zreading <> Format(Now(), "yyyy-MM-dd") Then
+                        '    MessageBox.Show("Z-read first", "Z-Reading", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                        'Else
+                        Enabled = False
+                        PaymentForm.Show()
+                        Application.DoEvents()
+                        PaymentForm.TextBoxMONEY.Focus()
+                        PaymentForm.TextBoxTOTALPAY.Text = TextBoxGRANDTOTAL.Text
+                        PaymentForm.Focus()
+                        'End If
                     End If
                 Else
                     BackgroundWorker3.WorkerReportsProgress = True
@@ -273,9 +277,12 @@ Public Class POS
             If WaffleUpgrade = False Then
                 WaffleUpgrade = True
                 ButtonWaffleUpgrade.Text = "Cancel Upgrade"
+                ButtonWaffleUpgrade.BackColor = Color.Brown
             Else
                 WaffleUpgrade = False
-                ButtonWaffleUpgrade.Text = "Brownie Upgrade"
+                ButtonWaffleUpgrade.Text = "Classic Waffle"
+                ButtonWaffleUpgrade.BackColor = Color.FromArgb(221, 114, 46)
+
             End If
         Catch ex As Exception
             MsgBox(ex.ToString)
@@ -445,14 +452,7 @@ Public Class POS
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Try
-            Label11.Text = Date.Now.ToString("hh:mm:ss tt")
-            If LabelCheckingUpdates.Text = "Checking for updates." Then
-                LabelCheckingUpdates.Text = "Checking for updates.."
-            ElseIf LabelCheckingUpdates.Text = "Checking for updates.." Then
-                LabelCheckingUpdates.Text = "Checking for updates..."
-            ElseIf LabelCheckingUpdates.Text = "Checking for updates..." Then
-                LabelCheckingUpdates.Text = "Checking for updates."
-            End If
+            Label11.Text = Date.Now.ToString("hh:mm:ss tt").ToUpper
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
@@ -781,9 +781,10 @@ Public Class POS
                     TotalQuantity = .Rows(i).Cells(2).Value
                     TotalServingValue = Double.Parse(.Rows(i).Cells(0).Value.ToString)
                     If .Rows(i).Cells(9).Value.ToString = "Server" Then
-                        Query = "SELECT `secondary_value` FROM `loc_product_formula` WHERE formula_id = " & .Rows(i).Cells(1).Value
-                    Else
                         Query = "SELECT `secondary_value` FROM `loc_product_formula` WHERE server_formula_id = " & .Rows(i).Cells(1).Value
+                    Else
+                        Query = "SELECT `secondary_value` FROM `loc_product_formula` WHERE formula_id = " & .Rows(i).Cells(1).Value
+
                     End If
                     SqlCommand = New MySqlCommand(Query, UpdateInventoryCon)
                     SqlAdapter = New MySqlDataAdapter(SqlCommand)
@@ -808,16 +809,18 @@ Public Class POS
                     ServingValue = Secondary / Double.Parse(.Rows(i).Cells(5).Value.ToString)
                     TotalPrimary = Secondary / secondary_value
                     If .Rows(i).Cells(9).Value.ToString = "Server" Then
-                        Query = "UPDATE loc_pos_inventory SET `stock_secondary` = " & Secondary & " , `stock_no_of_servings` = " & ServingValue & " , `stock_primary` = " & TotalPrimary & ", `date_modified` = '" & FullDate24HR() & "' WHERE `server_inventory_id` = " & .Rows(i).Cells(1).Value
+                        Query = "UPDATE loc_pos_inventory SET stock_secondary = " & Secondary & " , stock_no_of_servings = " & ServingValue & " , stock_primary = " & TotalPrimary & ", date_modified = '" & FullDate24HR() & "' WHERE server_inventory_id = " & .Rows(i).Cells(1).Value
                     Else
-                        Query = "UPDATE loc_pos_inventory SET `stock_secondary` = " & Secondary & " , `stock_no_of_servings` = " & ServingValue & " , `stock_primary` = " & TotalPrimary & ", `date_modified` = '" & FullDate24HR() & "' WHERE `inventory_id` = " & .Rows(i).Cells(1).Value
+                        Query = "UPDATE loc_pos_inventory SET stock_secondary = " & Secondary & " , stock_no_of_servings = " & ServingValue & " , stock_primary = " & TotalPrimary & ", date_modified = '" & FullDate24HR() & "' WHERE inventory_id = " & .Rows(i).Cells(1).Value
                     End If
+                    Console.Write(Query)
                     SqlCommand = New MySqlCommand(Query, UpdateInventoryCon)
                     SqlCommand.ExecuteNonQuery()
                 Next
                 UpdateInventoryCon.Close()
             End With
         Catch ex As Exception
+            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -1194,7 +1197,7 @@ Public Class POS
             ZERORATEDSALES = 0
             DISABLESERVEROTHERSPRODUCT = False
             WaffleUpgrade = False
-            ButtonWaffleUpgrade.Text = "Brownie Upgrade"
+            ButtonWaffleUpgrade.Text = "Classic Waffle"
             SeniorGCDiscount = False
             SENIORDETAILSBOOL = False
             SeniorDetailsID = ""
@@ -1265,7 +1268,7 @@ Public Class POS
                 Dim aNumber1 As Double = TEXTBOXCHANGEVALUE
                 Dim change = String.Format("{0:n2}", aNumber1)
 
-                RightToLeftDisplay(sender, e, RowA, "AMOUNT DUE:", "P" & NETSALES, Font2Bold, 0, 0)
+                RightToLeftDisplay(sender, e, RowA, "AMOUNT DUE:", "P" & String.Format("{0:n2}", NETSALES), Font2Bold, 0, 0)
                 RightToLeftDisplay(sender, e, RowA + 15, "CASH:", "P" & cash, Font1Bold, 0, 0)
                 RightToLeftDisplay(sender, e, RowA + 25, "CHANGE:", "P" & change, Font1Bold, 0, 0)
 
@@ -1380,7 +1383,7 @@ Public Class POS
 #End Region
 #Region "Updates"
 #Region "Categories Update"
-    Dim PriceChangeDatatabe As DataTable
+    Public PriceChangeDatatabe As DataTable
     Private Sub CheckPriceChanges()
         Try
             Dim ConnectionServer As MySqlConnection = ServerCloudCon()
@@ -1398,7 +1401,7 @@ Public Class POS
             SendErrorReport(ex.ToString)
         End Try
     End Sub
-    Dim CouponDatatable As DataTable
+    Public CouponDatatable As DataTable
     Dim CouponApp As Boolean = False
     Private Sub CouponApproval()
         Try
@@ -1417,12 +1420,12 @@ Public Class POS
             SendErrorReport(ex.ToString)
         End Try
     End Sub
-    Dim CustomProductsApproval As DataTable
+    Public CustomProductsApproval As DataTable
     Dim CustomProdctsAppBool As Boolean = False
     Private Sub CustomProductApproval()
         Try
             Dim ConnectionServer As MySqlConnection = ServerCloudCon()
-            Dim Query = "SELECT loc_product_id FROM loc_product_list WHERE store_id = '" & ClientStoreID & "' AND guid = '" & ClientGuid & "' AND product_status = 1 AND synced = 'Unsynced'"
+            Dim Query = "SELECT loc_product_id, product_formula_id FROM loc_product_list WHERE store_id = '" & ClientStoreID & "' AND guid = '" & ClientGuid & "' AND product_status = 1 AND synced = 'Unsynced'"
             Dim CmdCheck As MySqlCommand = New MySqlCommand(Query, ConnectionServer)
             Dim DaCheck As MySqlDataAdapter = New MySqlDataAdapter(CmdCheck)
             CustomProductsApproval = New DataTable
@@ -1497,6 +1500,12 @@ Public Class POS
                         If LoadCouponsLocal(i)(0).ToString <> dtserver(i)(12).ToString Then
                             DataGridView5.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4), dtserver(i)(5), dtserver(i)(6), dtserver(i)(7), dtserver(i)(8), dtserver(i)(9), dtserver(i)(10), dtserver(i)(11), dtserver(i)(12))
                         End If
+                        CheckingForUpdates.Instance.Invoke(Sub()
+                                                               If CheckingForUpdates.DataGridViewUpdate.Rows.Count > 0 Then
+                                                                   CheckingForUpdates.ProgressBar1.Value += 1
+                                                                   CheckingForUpdates.Label1.Text = CheckingForUpdates.ProgressBar1.Value
+                                                               End If
+                                                           End Sub)
                     Next
                     Dim sql2 = "SELECT `ID`,`Couponname_`,`Desc_`,`Discountvalue_`,`Referencevalue_`,`Type`,`Bundlebase_`,`BBValue_`,`Bundlepromo_`,`BPValue_`,`Effectivedate`,`Expirydate`,`date_created` FROM admin_coupon WHERE ID NOT IN (" & Ids & ")"
                     cmdserver = New MySqlCommand(sql2, ServerCloudCon())
@@ -1577,6 +1586,12 @@ Public Class POS
                         If LoadCategoryLocal(i)(0).ToString <> dtserver(i)(3).ToString Then
                             DataGridView1.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4), dtserver(i)(5))
                         End If
+                        CheckingForUpdates.Instance.Invoke(Sub()
+                                                               If CheckingForUpdates.DataGridViewUpdate.Rows.Count > 0 Then
+                                                                   CheckingForUpdates.ProgressBar1.Value += 1
+                                                                   CheckingForUpdates.Label1.Text = CheckingForUpdates.ProgressBar1.Value
+                                                               End If
+                                                           End Sub)
                     Next
                     Dim sql2 = "SELECT `category_id`, `category_name`, `brand_name`, `updated_at`, `origin`, `status` FROM admin_category WHERE category_id NOT IN (" & Ids & ")"
                     cmdserver = New MySqlCommand(sql2, ServerCloudCon())
@@ -1603,18 +1618,22 @@ Public Class POS
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         Try
-            UPDATEPRODUCTONLY = True
-            Button3.Enabled = False
+            'UPDATEPRODUCTONLY = True
+            HASUPDATE = False
             DataGridView1.Rows.Clear()
-            DataGridView2.Rows.Clear()
+            DataGridView2.DataSource = Nothing
             DataGridView3.Rows.Clear()
             DataGridView4.Rows.Clear()
             DataGridView5.Rows.Clear()
-
+            DataGridViewPartners.Rows.Clear()
             BackgroundWorker2.WorkerReportsProgress = True
             BackgroundWorker2.WorkerSupportsCancellation = True
             BackgroundWorker2.RunWorkerAsync()
-            LabelCheckingUpdates.Text = "Checking for updates."
+
+            Enabled = False
+            CheckingForUpdates.Show()
+            CheckingForUpdates.TopMost = True
+            CheckingForUpdates.LabelCheckingUpdates.Text = "Checking for updates."
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
@@ -1653,63 +1672,66 @@ Public Class POS
                         End If
                     Next
                     If ServerCloudCon.State = ConnectionState.Open Then
-                        If UPDATEPRODUCTONLY = False Then
-                            POSISUPDATING = True
-                            thread = New Thread(AddressOf CheckPriceChanges)
-                            thread.Start()
-                            THREADLISTUPDATE.Add(thread)
+                        'If UPDATEPRODUCTONLY = False Then
+                        POSISUPDATING = True
+                        thread = New Thread(AddressOf CheckPriceChanges)
+                        thread.Start()
+                        THREADLISTUPDATE.Add(thread)
 
-                            For Each t In THREADLISTUPDATE
-                                t.Join()
-                                If (BackgroundWorker2.CancellationPending) Then
-                                    ' Indicate that the task was canceled.
-                                    e.Cancel = True
-                                    WorkerCancel = True
-                                    Exit For
-                                End If
-                            Next
+                        For Each t In THREADLISTUPDATE
+                            t.Join()
+                            If (BackgroundWorker2.CancellationPending) Then
+                                ' Indicate that the task was canceled.
+                                e.Cancel = True
+                                WorkerCancel = True
+                                Exit For
+                            End If
+                        Next
 
-                            thread = New Thread(AddressOf PromptMessage)
-                            thread.Start()
-                            THREADLISTUPDATE.Add(thread)
-                            thread = New Thread(AddressOf Function1)
-                            thread.Start()
-                            THREADLISTUPDATE.Add(thread)
-                            thread = New Thread(AddressOf GetProducts)
-                            thread.Start()
-                            THREADLISTUPDATE.Add(thread)
-                            thread = New Thread(AddressOf Function3)
-                            thread.Start()
-                            THREADLISTUPDATE.Add(thread)
-                            thread = New Thread(AddressOf Function4)
-                            thread.Start()
-                            THREADLISTUPDATE.Add(thread)
-                            thread = New Thread(AddressOf Function5)
-                            thread.Start()
-                            THREADLISTUPDATE.Add(thread)
-                            thread = New Thread(AddressOf CouponApproval)
-                            thread.Start()
-                            THREADLISTUPDATE.Add(thread)
-                            thread = New Thread(AddressOf CustomProductApproval)
-                            thread.Start()
-                            THREADLISTUPDATE.Add(thread)
-                        Else
-                            thread = New Thread(AddressOf CheckPriceChanges)
-                            thread.Start()
-                            THREADLISTUPDATE.Add(thread)
-                            For Each t In THREADLISTUPDATE
-                                t.Join()
-                                If (BackgroundWorker2.CancellationPending) Then
-                                    ' Indicate that the task was canceled.
-                                    e.Cancel = True
-                                    WorkerCancel = True
-                                    Exit For
-                                End If
-                            Next
-                            thread = New Thread(AddressOf GetProducts)
-                            thread.Start()
-                            THREADLISTUPDATE.Add(thread)
-                        End If
+                        thread = New Thread(AddressOf PromptMessage)
+                        thread.Start()
+                        THREADLISTUPDATE.Add(thread)
+                        thread = New Thread(AddressOf Function1)
+                        thread.Start()
+                        THREADLISTUPDATE.Add(thread)
+                        thread = New Thread(AddressOf GetProducts)
+                        thread.Start()
+                        THREADLISTUPDATE.Add(thread)
+                        thread = New Thread(AddressOf Function3)
+                        thread.Start()
+                        THREADLISTUPDATE.Add(thread)
+                        thread = New Thread(AddressOf Function4)
+                        thread.Start()
+                        THREADLISTUPDATE.Add(thread)
+                        thread = New Thread(AddressOf Function5)
+                        thread.Start()
+                        THREADLISTUPDATE.Add(thread)
+                        thread = New Thread(AddressOf Function6)
+                        thread.Start()
+                        THREADLISTUPDATE.Add(thread)
+                        thread = New Thread(AddressOf CouponApproval)
+                        thread.Start()
+                        THREADLISTUPDATE.Add(thread)
+                        thread = New Thread(AddressOf CustomProductApproval)
+                        thread.Start()
+                        THREADLISTUPDATE.Add(thread)
+                        'Else
+                        '    thread = New Thread(AddressOf CheckPriceChanges)
+                        '    thread.Start()
+                        '    THREADLISTUPDATE.Add(thread)
+                        '    For Each t In THREADLISTUPDATE
+                        '        t.Join()
+                        '        If (BackgroundWorker2.CancellationPending) Then
+                        '            ' Indicate that the task was canceled.
+                        '            e.Cancel = True
+                        '            WorkerCancel = True
+                        '            Exit For
+                        '        End If
+                        '    Next
+                        '    thread = New Thread(AddressOf GetProducts)
+                        '    thread.Start()
+                        '    THREADLISTUPDATE.Add(thread)
+                        'End If
                     End If
                 End If
                 For Each t In THREADLISTUPDATE
@@ -1735,11 +1757,14 @@ Public Class POS
                 If ValidCloudConnection Then
                     DataGridView2.DataSource = FillDatagridProduct
                     Button3.Enabled = True
-                    UPDATEPRODUCTONLY = False
+                    'UPDATEPRODUCTONLY = False
                     POSISUPDATING = False
-                    If DataGridView1.Rows.Count > 0 Or DataGridView2.Rows.Count > 0 Or DataGridView3.Rows.Count > 0 Or DataGridView4.Rows.Count > 0 Or PriceChangeDatatabe.Rows.Count > 0 Or CouponDatatable.Rows.Count > 0 Or CustomProductsApproval.Rows.Count Or DataGridView5.Rows.Count > 0 Then
+                    If DataGridView1.Rows.Count > 0 Or DataGridView2.Rows.Count > 0 Or DataGridView3.Rows.Count > 0 Or DataGridView4.Rows.Count > 0 Or PriceChangeDatatabe.Rows.Count > 0 Or CouponDatatable.Rows.Count > 0 Or CustomProductsApproval.Rows.Count Or DataGridView5.Rows.Count > 0 Or DataGridViewPartners.Rows.Count > 0 Then
+                        CheckingForUpdates.CheckingUpdatesUPDATED = True
+                        CheckingForUpdates.Close()
                         Dim updatemessage = MessageBox.Show("New Updates are available. Would you like to update now ?", "New Updates", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
                         If updatemessage = DialogResult.Yes Then
+                            HASUPDATE = True
                             InstallUpdatesFormula()
                             InstallUpdatesInventory()
                             InstallUpdatesCategory()
@@ -1748,6 +1773,7 @@ Public Class POS
                             InstallUpdatesPriceChange()
                             InstallCoupons()
                             InstallProducts()
+                            InstallUpdatesPartners()
                             If PRICECHANGE = True Then
                                 MsgBox("Product price changes approved")
                                 PRICECHANGE = False
@@ -1764,12 +1790,26 @@ Public Class POS
                                     btn.PerformClick()
                                 End If
                             Next
-                            LabelCheckingUpdates.Text = "Update Completed."
+                            If BegBalanceBool = False Then
+                                BegBalance.Show()
+                                BegBalance.TopMost = True
+                                BegBalanceBool = True
+                            End If
+                            'LabelCheckingUpdates.Text = "Update Completed."
                         Else
-                            LabelCheckingUpdates.Text = "Completed."
+                            If BegBalanceBool = False Then
+                                BegBalance.Show()
+                                BegBalance.TopMost = True
+                                BegBalanceBool = True
+                            End If
+                            'LabelCheckingUpdates.Text = "Completed."
                         End If
                     Else
-                        LabelCheckingUpdates.Text = "Complete Checking! No updates found."
+                        HASUPDATE = False
+                        CheckingForUpdates.CheckingUpdatesUPDATED = True
+                        'LabelCheckingUpdates.Text = "Complete Checking! No updates found."
+                        CheckingForUpdates.LabelCheckingUpdates.Text = "Complete Checking! No updates found."
+
                     End If
                     If DtMessage.Rows.Count > 0 Then
                         Dim ConnectionLocal As MySqlConnection = LocalhostConn()
@@ -1803,14 +1843,14 @@ Public Class POS
                     End If
                 Else
                     Button3.Enabled = True
-                    LabelCheckingUpdates.Text = "Invalid cloud connection."
+                    'LabelCheckingUpdates.Text = "Invalid cloud connection."
                 End If
             End If
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
     End Sub
-    Dim UPDATEPRODUCTONLY As Boolean = False
+    'Dim UPDATEPRODUCTONLY As Boolean = False
     Dim FillDatagridProduct As DataTable
     Private Sub GetProducts()
         Try
@@ -1850,6 +1890,12 @@ Public Class POS
                 Dim FillDt As DataTable = New DataTable
 
                 For a = 1 To result
+                    CheckingForUpdates.Instance.Invoke(Sub()
+                                                           If CheckingForUpdates.DataGridViewUpdate.Rows.Count > 0 Then
+                                                               CheckingForUpdates.ProgressBar1.Value += 1
+                                                               CheckingForUpdates.Label1.Text = CheckingForUpdates.ProgressBar1.Value
+                                                           End If
+                                                       End Sub)
                     Dim Query1 As String = "SELECT date_modified, price_change FROM loc_admin_products WHERE server_product_id = " & a
                     Dim cmd As MySqlCommand = New MySqlCommand(Query1, ConnectionLocal)
                     DaCount = New MySqlDataAdapter(cmd)
@@ -1947,6 +1993,14 @@ Public Class POS
             Dim DaCount As MySqlDataAdapter
             Dim FillDt As DataTable = New DataTable
             For a = 1 To result
+                CheckingForUpdates.Instance.Invoke(Sub()
+
+                                                       If CheckingForUpdates.ProgressBar1.Maximum > 0 Then
+                                                           CheckingForUpdates.ProgressBar1.Value += 1
+                                                           CheckingForUpdates.Label1.Text = CheckingForUpdates.ProgressBar1.Value
+                                                       End If
+
+                                                   End Sub)
                 Dim Query As String = "SELECT * FROM admin_products_org WHERE product_id = " & a
                 Cmd = New MySqlCommand(Query, Connection)
                 DaCount = New MySqlDataAdapter(Cmd)
@@ -2043,6 +2097,12 @@ Public Class POS
                         If FormulaLocal(i)(0).ToString <> dtserver(i)(10).ToString Then
                             DataGridView3.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3), dtserver(i)(4), dtserver(i)(5), dtserver(i)(6), dtserver(i)(7), dtserver(i)(8), dtserver(i)(9), dtserver(i)(10).ToString, dtserver(i)(11), dtserver(i)(12))
                         End If
+                        CheckingForUpdates.Instance.Invoke(Sub()
+                                                               If CheckingForUpdates.DataGridViewUpdate.Rows.Count > 0 Then
+                                                                   CheckingForUpdates.ProgressBar1.Value += 1
+                                                                   CheckingForUpdates.Label1.Text = CheckingForUpdates.ProgressBar1.Value
+                                                               End If
+                                                           End Sub)
                     Next
                     Dim sql2 = "SELECT `server_formula_id`, `product_ingredients`, `primary_unit`, `primary_value`, `secondary_unit`, `secondary_value`, `serving_unit`, `serving_value`, `no_servings`, `status`, `date_modified`, `unit_cost`, `origin` FROM admin_product_formula_org WHERE server_formula_id NOT IN (" & Ids & ") "
                     cmdserver = New MySqlCommand(sql2, ConnectionServer)
@@ -2130,6 +2190,12 @@ Public Class POS
                         If InventoryLocal(i)(0).ToString <> dtserver(i)(8).ToString Then
                             DataGridView4.Rows.Add(dtserver(i)(0), 0, dtserver(i)(1), dtserver(i)(2), dtserver(i)(3), dtserver(i)(4), dtserver(i)(5), dtserver(i)(6), dtserver(i)(7), dtserver(i)(8).ToString, dtserver(i)(9).ToString, dtserver(i)(10).ToString)
                         End If
+                        CheckingForUpdates.Instance.Invoke(Sub()
+                                                               If CheckingForUpdates.DataGridViewUpdate.Rows.Count > 0 Then
+                                                                   CheckingForUpdates.ProgressBar1.Value += 1
+                                                                   CheckingForUpdates.Label1.Text = CheckingForUpdates.ProgressBar1.Value
+                                                               End If
+                                                           End Sub)
                     Next
                     Dim sql2 = "SELECT `server_inventory_id`, `product_ingredients`, `sku`, `stock_primary`, `stock_secondary`, `stock_no_of_servings`, `stock_status`, `critical_limit`, `date_modified`,`main_inventory_id`, `origin` FROM admin_pos_inventory_org WHERE server_inventory_id NOT IN (" & Ids & ")"
                     cmdserver = New MySqlCommand(sql2, ConnectionServer)
@@ -2147,6 +2213,92 @@ Public Class POS
         Catch ex As Exception
             BackgroundWorker2.CancelAsync()
             SendErrorReport(ex.ToString)
+        End Try
+    End Sub
+    Private Function LoadPartnersCategory() As DataTable
+        Dim cmdlocal As MySqlCommand
+        Dim dalocal As MySqlDataAdapter
+        Dim dtlocal As DataTable = New DataTable
+        dtlocal.Columns.Add("date_modified")
+        dtlocal.Columns.Add("id")
+        Dim dtlocal1 As DataTable = New DataTable
+        Try
+            Dim sql = "SELECT date_modified, id FROM loc_partners_transaction"
+            cmdlocal = New MySqlCommand(sql, LocalhostConn())
+            dalocal = New MySqlDataAdapter(cmdlocal)
+            dalocal.Fill(dtlocal1)
+            For i As Integer = 0 To dtlocal1.Rows.Count - 1 Step +1
+                Dim Cat As DataRow = dtlocal.NewRow
+                Cat("date_modified") = dtlocal1(i)(0).ToString
+                Cat("id") = dtlocal1(i)(1)
+                dtlocal.Rows.Add(Cat)
+            Next
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
+        Return dtlocal
+    End Function
+    Private Sub Function6()
+        Try
+            Dim Query = "SELECT * FROM loc_partners_transaction"
+            Dim CmdCheck As MySqlCommand = New MySqlCommand(Query, LocalhostConn)
+            Dim DaCheck As MySqlDataAdapter = New MySqlDataAdapter(CmdCheck)
+            Dim DtCheck As DataTable = New DataTable
+            DaCheck.Fill(DtCheck)
+            Dim cmdserver As MySqlCommand
+            Dim daserver As MySqlDataAdapter
+            Dim dtserver As DataTable
+            If DtCheck.Rows.Count < 1 Then
+                Dim sql = "SELECT `id`, `arrid`, `bankname`, `date_modified`, `active` FROM admin_partners_transaction_org"
+                cmdserver = New MySqlCommand(sql, ServerCloudCon())
+                daserver = New MySqlDataAdapter(cmdserver)
+                dtserver = New DataTable
+                daserver.Fill(dtserver)
+                For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                    DataGridViewPartners.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4))
+                Next
+            Else
+                Dim Ids As String = ""
+                If ValidCloudConnection = True Then
+                    For i As Integer = 0 To LoadPartnersCategory.Rows.Count - 1 Step +1
+                        If Ids = "" Then
+                            Ids = "" & LoadPartnersCategory(i)(1) & ""
+                        Else
+                            Ids += "," & LoadPartnersCategory(i)(1) & ""
+                        End If
+                    Next
+                    Dim sql = "SELECT `id`, `arrid`, `bankname`, `date_modified`, `active` FROM admin_partners_transaction_org WHERE id IN (" & Ids & ")"
+                    cmdserver = New MySqlCommand(sql, ServerCloudCon())
+                    daserver = New MySqlDataAdapter(cmdserver)
+                    dtserver = New DataTable
+                    daserver.Fill(dtserver)
+                    For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                        If LoadPartnersCategory(i)(0).ToString <> dtserver(i)(3).ToString Then
+                            DataGridViewPartners.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4))
+                        End If
+                        CheckingForUpdates.Instance.Invoke(Sub()
+                                                               If CheckingForUpdates.DataGridViewUpdate.Rows.Count > 0 Then
+                                                                   CheckingForUpdates.ProgressBar1.Value += 1
+                                                                   CheckingForUpdates.Label1.Text = CheckingForUpdates.ProgressBar1.Value
+                                                               End If
+                                                           End Sub)
+                    Next
+                    Dim sql2 = "SELECT `id`, `arrid`, `bankname`, `date_modified`, `active` FROM admin_partners_transaction_org WHERE id NOT IN (" & Ids & ")"
+                    cmdserver = New MySqlCommand(sql2, ServerCloudCon())
+                    daserver = New MySqlDataAdapter(cmdserver)
+                    dtserver = New DataTable
+                    daserver.Fill(dtserver)
+                    For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                        If LoadPartnersCategory(i)(0) <> dtserver(i)(3) Then
+                            DataGridViewPartners.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4))
+                        End If
+                    Next
+                End If
+            End If
+        Catch ex As Exception
+            BackgroundWorker2.CancelAsync()
+            SendErrorReport(ex.ToString)
+            'If table doesnt have data
         End Try
     End Sub
 
@@ -2184,6 +2336,48 @@ Public Class POS
             SendErrorReport(ex.ToString)
         End Try
     End Sub
+
+    Private Sub InstallUpdatesPartners()
+        Try
+            Dim Connection As MySqlConnection = LocalhostConn()
+            Dim cmdlocal As MySqlCommand
+            With DataGridViewPartners
+                For i As Integer = 0 To .Rows.Count - 1 Step +1
+                    Dim sql = "SELECT id FROM loc_partners_transaction WHERE id = " & .Rows(i).Cells(0).Value
+                    cmdlocal = New MySqlCommand(sql, Connection)
+                    Dim result As Integer = cmdlocal.ExecuteScalar
+                    If result = 0 Then
+                        Dim sqlinsert = "INSERT INTO `loc_partners_transaction`(`arrid`, `bankname`, `date_modified`, `crew_id`, `store_id`, `guid`, `active`, `synced`) VALUES (@0,@1,@2,@3,@4,@5,@6,@7)"
+                        cmdlocal = New MySqlCommand(sqlinsert, Connection)
+                        cmdlocal.Parameters.Add("@0", MySqlDbType.Int64).Value = .Rows(i).Cells(1).Value.ToString()
+                        cmdlocal.Parameters.Add("@1", MySqlDbType.VarChar).Value = .Rows(i).Cells(2).Value.ToString()
+                        cmdlocal.Parameters.Add("@2", MySqlDbType.Text).Value = .Rows(i).Cells(3).Value.ToString()
+                        cmdlocal.Parameters.Add("@3", MySqlDbType.VarChar).Value = "Admin"
+                        cmdlocal.Parameters.Add("@4", MySqlDbType.VarChar).Value = ClientStoreID
+                        cmdlocal.Parameters.Add("@5", MySqlDbType.VarChar).Value = ClientGuid
+                        cmdlocal.Parameters.Add("@6", MySqlDbType.Int64).Value = .Rows(i).Cells(4).Value.ToString()
+                        cmdlocal.Parameters.Add("@7", MySqlDbType.VarChar).Value = "Synced"
+                        cmdlocal.ExecuteNonQuery()
+                    Else
+                        Dim sqlupdate = "UPDATE `loc_partners_transaction` SET `arrid`=@0,`bankname`=@1,`date_modified`=@2,`crew_id`=@3,`store_id`=@4,`guid`=@5,`active`=@6,`synced`=@7 WHERE id = " & .Rows(i).Cells(0).Value
+                        cmdlocal = New MySqlCommand(sqlupdate, Connection)
+                        cmdlocal.Parameters.Add("@0", MySqlDbType.Int64).Value = .Rows(i).Cells(1).Value.ToString()
+                        cmdlocal.Parameters.Add("@1", MySqlDbType.VarChar).Value = .Rows(i).Cells(2).Value.ToString()
+                        cmdlocal.Parameters.Add("@2", MySqlDbType.Text).Value = .Rows(i).Cells(3).Value.ToString()
+                        cmdlocal.Parameters.Add("@3", MySqlDbType.VarChar).Value = "Admin"
+                        cmdlocal.Parameters.Add("@4", MySqlDbType.VarChar).Value = ClientStoreID
+                        cmdlocal.Parameters.Add("@5", MySqlDbType.VarChar).Value = ClientGuid
+                        cmdlocal.Parameters.Add("@6", MySqlDbType.Int64).Value = .Rows(i).Cells(4).Value.ToString()
+                        cmdlocal.Parameters.Add("@7", MySqlDbType.VarChar).Value = "Synced"
+                        cmdlocal.ExecuteNonQuery()
+                    End If
+                Next
+            End With
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
+    End Sub
+
     Private Sub InstallUpdatesCoupons()
         Try
             Dim Connection As MySqlConnection = LocalhostConn()
@@ -2477,10 +2671,19 @@ Public Class POS
                 Dim sql = "UPDATE loc_admin_products SET product_status = 1 WHERE product_id = " & CustomProductsApproval(i)(0) & ""
                 CmdCheck = New MySqlCommand(sql, ConnectionLocal)
                 CmdCheck.ExecuteNonQuery()
+
+                Dim sql1 = "UPDATE loc_product_formula SET status = 1 WHERE formula_id = " & CustomProductsApproval(i)(1) & ""
+                CmdCheck = New MySqlCommand(sql1, ConnectionLocal)
+                CmdCheck.ExecuteNonQuery()
+
+                Dim sql0 = "UPDATE loc_pos_inventory SET stock_status = 1 WHERE formula_id = " & CustomProductsApproval(i)(1) & ""
+                CmdCheck = New MySqlCommand(sql0, ConnectionLocal)
+                CmdCheck.ExecuteNonQuery()
+
                 Dim sql2 = "UPDATE loc_product_list SET synced = 'Synced' WHERE loc_product_id = " & CustomProductsApproval(i)(0) & ""
                 CmdCheck = New MySqlCommand(sql2, ConnectionServer)
                 CmdCheck.ExecuteNonQuery()
-                GLOBAL_SYSTEM_LOGS("UPDATE CUSTOM PRODUCTS", "Store ID: " & ClientStoreID & ", Product ID: " & CouponDatatable(i)(0))
+                GLOBAL_SYSTEM_LOGS("UPDATE CUSTOM PRODUCTS", "Store ID: " & ClientStoreID & ", Product ID: " & CustomProductsApproval(i)(0))
             Next
             ConnectionLocal.Close()
             ConnectionServer.Close()
@@ -2491,6 +2694,8 @@ Public Class POS
 #End Region
 #Region "Message"
     Public DtMessage As DataTable
+
+
     Private Sub PromptMessage()
         Dim LocMessageDatatable As DataTable
 

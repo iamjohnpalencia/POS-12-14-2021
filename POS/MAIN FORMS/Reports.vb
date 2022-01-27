@@ -72,10 +72,10 @@ Public Class Reports
             End If
 
 
-            If S_Zreading = Format(Now(), "yyyy-MM-dd") Then
-                ButtonZread.Enabled = False
-                ButtonZreadAdmin.Enabled = False
-            End If
+            'If S_Zreading = Format(Now(), "yyyy-MM-dd") Then
+            '    ButtonZread.Enabled = False
+            '    ButtonZreadAdmin.Enabled = False
+            'End If
             If DataGridViewDaily.Rows.Count > 0 Then
                 Dim arg = New DataGridViewCellEventArgs(0, 0)
                 DataGridViewDaily_CellClick(sender, arg)
@@ -804,7 +804,7 @@ Public Class Reports
     Private Sub pdoc_PrintPage(sender As Object, e As System.Drawing.Printing.PrintPageEventArgs) Handles printdoc.PrintPage
         Try
             Dim totalDisplay = Format(DataGridViewDaily.SelectedRows(0).Cells(8).Value, "###,###,##0.00")
-            a = 30
+            a = 40
             Dim font1 As New Font("Tahoma", 6, FontStyle.Bold)
             Dim font2 As New Font("Tahoma", 7, FontStyle.Bold)
             Dim font As New Font("Tahoma", 6)
@@ -819,9 +819,9 @@ Public Class Reports
             Dim format1st As StringFormat = New StringFormat(StringFormatFlags.DirectionRightToLeft)
             Dim abc As Integer = 0
             If DataGridViewDaily.SelectedRows(0).Cells(17).Value = 2 Then
-                abc = 40
+                abc = 50
             Else
-                abc = 30
+                abc = 40
             End If
             Try
                 Dim Query1 As String = "SELECT senior_name FROM loc_senior_details WHERE transaction_number = '" & DataGridViewDaily.SelectedRows(0).Cells(0).Value & "'"
@@ -970,6 +970,7 @@ Public Class Reports
             SystemLogDesc = "X Reading : " & FullDate24HR() & " Crew : " & returnfullname(ClientCrewID)
             SystemLogType = "X-READ"
             GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
+
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
@@ -1375,7 +1376,6 @@ Public Class Reports
             'SimpleTextDisplay(sender, e, "-------------------------------------------------------------", font, 0, 755 + ZreadOrXread)
             PrintLine(sender, e, font, 755 + ZreadOrXread)
             CenterTextDisplay(sender, e, S_Zreading & " " & Format(Now(), "HH:mm:ss"), font, 810)
-
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
@@ -2348,10 +2348,10 @@ Public Class Reports
                 cmd.Dispose()
                 'Insert to local zread inv
                 XZreadingInventory(S_Zreading)
-                If S_Zreading = Format(Now(), "yyyy-MM-dd") Then
-                    ButtonZread.Enabled = False
-                    ButtonZreadAdmin.Enabled = False
-                End If
+                'If S_Zreading = Format(Now(), "yyyy-MM-dd") Then
+                '    ButtonZread.Enabled = False
+                '    ButtonZreadAdmin.Enabled = False
+                'End If
                 Button7.PerformClick()
             End If
         Catch ex As Exception
@@ -2392,10 +2392,10 @@ Public Class Reports
                     LocalhostConn.Close()
                     'Insert to local zread inv
                     XZreadingInventory(S_Zreading)
-                    If S_Zreading = Format(Now(), "yyyy-MM-dd") Then
-                        ButtonZread.Enabled = False
-                        ButtonZreadAdmin.Enabled = False
-                    End If
+                    'If S_Zreading = Format(Now(), "yyyy-MM-dd") Then
+                    '    ButtonZread.Enabled = False
+                    '    ButtonZreadAdmin.Enabled = False
+                    'End If
                     Button7.PerformClick()
                 Catch ex As Exception
                     SendErrorReport(ex.ToString)

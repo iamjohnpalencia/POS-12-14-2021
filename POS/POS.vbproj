@@ -224,6 +224,12 @@
     <Compile Include="SUBFORMS\Changeproductformula.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SUBFORMS\CheckingForUpdates.Designer.vb">
+      <DependentUpon>CheckingForUpdates.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SUBFORMS\CheckingForUpdates.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SUBFORMS\ExpenseImage.Designer.vb">
       <DependentUpon>ExpenseImage.vb</DependentUpon>
     </Compile>
@@ -453,6 +459,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SUBFORMS\Changeproductformula.resx">
       <DependentUpon>Changeproductformula.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SUBFORMS\CheckingForUpdates.resx">
+      <DependentUpon>CheckingForUpdates.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SUBFORMS\ExpenseImage.resx">
       <DependentUpon>ExpenseImage.vb</DependentUpon>

@@ -74,6 +74,13 @@ Public Class BegBalance
                 POS.Enabled = False
             Else
                 POS.Enabled = True
+                If HASUPDATE Then
+                    For Each btn As Button In POS.Panel3.Controls.OfType(Of Button)()
+                        If btn.Text = "Simply Perfect" Then
+                            btn.PerformClick()
+                        End If
+                    Next
+                End If
             End If
         End If
     End Sub

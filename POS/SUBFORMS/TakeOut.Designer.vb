@@ -22,6 +22,7 @@ Partial Class TakeOut
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TakeOut))
         Me.Button2 = New System.Windows.Forms.Button()
         Me.ButtonNo00 = New System.Windows.Forms.Button()
         Me.ButtonNo0 = New System.Windows.Forms.Button()
@@ -236,6 +237,7 @@ Partial Class TakeOut
         '
         'ComboBoxTakeout
         '
+        Me.ComboBoxTakeout.BackColor = System.Drawing.SystemColors.Control
         Me.ComboBoxTakeout.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxTakeout.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.ComboBoxTakeout.FormattingEnabled = True
@@ -251,6 +253,7 @@ Partial Class TakeOut
         Me.TextBoxQuantity.Name = "TextBoxQuantity"
         Me.TextBoxQuantity.Size = New System.Drawing.Size(239, 16)
         Me.TextBoxQuantity.TabIndex = 130
+        Me.TextBoxQuantity.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label21
         '
@@ -285,6 +288,7 @@ Partial Class TakeOut
         Me.Controls.Add(Me.Label21)
         Me.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(3, 4, 3, 4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False

@@ -61,7 +61,15 @@ Public Class Loading
                         thread = New Thread(AddressOf LoadMasterList)
                         thread.Start()
                         threadList.Add(thread)
-
+                        For Each t In threadList
+                            t.Join()
+                        Next
+                        'thread = New Thread(AddressOf RunLocalScriptRunner)
+                        'thread.Start()
+                        'threadList.Add(thread)
+                        'For Each t In threadList
+                        '    t.Join()
+                        'Next
                         thread = New Thread(AddressOf FillScript)
                         thread.Start()
                         threadList.Add(thread)
@@ -128,11 +136,13 @@ Public Class Loading
             Next
             For Each t In threadList
                 t.Join()
+                If BackgroundWorker1.CancellationPending = True Then
+                    e.Cancel = True
+                End If
             Next
-            If BackgroundWorker1.CancellationPending = True Then
-                e.Cancel = True
-            End If
+
         Catch ex As Exception
+            MsgBox(ex.ToString)
             SendErrorReport(ex.ToString)
         End Try
     End Sub
@@ -420,9 +430,23 @@ Public Class Loading
         Login.txtusername.Focus()
     End Sub
 #Region "Script Runner"
+    Private Sub RunLocalScriptRunner()
+        Try
+            If My.Settings.LocalScriptRunner = 0 Then
+                Dim ConnectionLocal As MySqlConnection = LocalhostConn()
+                Dim query = "ALTER TABLE `loc_script_runner` ADD `created_at` TEXT NOT NULL AFTER `script_command`;"
+                cmd = New MySqlCommand(query, ConnectionLocal)
+                cmd.ExecuteNonQuery()
+                My.Settings.LocalScriptRunner = 1
+                My.Settings.Save()
+            End If
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
+    End Sub
     Private Sub FillScript()
         Try
-            GLOBAL_SELECT_ALL_FUNCTION("loc_script_runner", "script_id", DataGridViewScript)
+            GLOBAL_SELECT_ALL_FUNCTION("loc_script_runner", "created_at", DataGridViewScript)
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
@@ -431,13 +455,14 @@ Public Class Loading
         Try
             Dim ConnectionLocal As MySqlConnection = LocalhostConn()
             Dim ConnectionCloud As MySqlConnection = ServerCloudCon()
-            Dim Ids = ""
+            Dim CreatedAt = ""
             For i As Integer = 0 To DataGridViewScript.Rows.Count - 1 Step +1
-                Ids += DataGridViewScript.Rows(i).Cells(0).Value.ToString & ","
+                CreatedAt += "'" & DataGridViewScript.Rows(i).Cells(0).Value.ToString & "',"
             Next
-            Ids = Ids.TrimEnd(CChar(","))
+            CreatedAt = CreatedAt.TrimEnd(CChar(","))
             If DataGridViewScript.Rows.Count > 0 Then
-                Dim sql = "SELECT * FROM admin_script_runner WHERE script_id NOT IN (" & Ids & ")"
+                Dim sql = "SELECT * FROM admin_script_runner WHERE created_at NOT IN (" & CreatedAt & ") AND store_id IN ('All', '" & ClientStoreID & "')"
+                Console.Write(sql)
                 Dim cmd As MySqlCommand = New MySqlCommand(sql, ServerCloudCon)
                 Dim da As MySqlDataAdapter = New MySqlDataAdapter(cmd)
                 Dim dt As DataTable = New DataTable
@@ -447,24 +472,30 @@ Public Class Loading
                     Console.Write(query)
                     cmd = New MySqlCommand(query, ConnectionLocal)
                     cmd.ExecuteNonQuery()
-                    query = "INSERT INTO loc_script_runner (script_command, active) VALUES ('" & row("script_id") & "', " & row("active") & ")"
-                    cmd = New MySqlCommand(query, ConnectionLocal)
-                    cmd.ExecuteNonQuery()
+                    If row("truncatescript") = "NO" Then
+                        query = "INSERT INTO loc_script_runner (script_command, created_at, active) VALUES ('" & row("script_id") & "','" & row("created_at") & "', " & row("active") & ")"
+                        cmd = New MySqlCommand(query, ConnectionLocal)
+                        cmd.ExecuteNonQuery()
+                    End If
                     GLOBAL_SYSTEM_LOGS("ALTER", "Store ID: " & ClientStoreID & ", Script ID: " & row("script_id"))
                 Next
             Else
-                Dim sql = "SELECT * FROM admin_script_runner"
+
+                Dim sql = "SELECT * FROM admin_script_runner WHERE store_id IN ('All', '" & ClientStoreID & "')"
                 Dim cmd As MySqlCommand = New MySqlCommand(sql, ServerCloudCon)
                 Dim da As MySqlDataAdapter = New MySqlDataAdapter(cmd)
                 Dim dt As DataTable = New DataTable
                 da.Fill(dt)
                 For Each row As DataRow In dt.Rows
+                    MsgBox(row("script_command"))
                     Dim query = "" & row("script_command") & ""
                     cmd = New MySqlCommand(query, ConnectionLocal)
                     cmd.ExecuteNonQuery()
-                    query = "INSERT INTO loc_script_runner (script_command, active) VALUES ('" & row("script_id") & "', " & row("active") & ")"
-                    cmd = New MySqlCommand(query, ConnectionLocal)
-                    cmd.ExecuteNonQuery()
+                    If row("truncatescript") = "NO" Then
+                        query = "INSERT INTO loc_script_runner (script_command, created_at, active) VALUES ('" & row("script_id") & "','" & row("created_at") & "', " & row("active") & ")"
+                        cmd = New MySqlCommand(query, ConnectionLocal)
+                        cmd.ExecuteNonQuery()
+                    End If
                     GLOBAL_SYSTEM_LOGS("ALTER", "Store ID: " & ClientStoreID & ", Script ID: " & row("script_id"))
                 Next
             End If

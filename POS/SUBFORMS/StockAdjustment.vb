@@ -4,81 +4,34 @@ Public Class StockAdjustment
     Private Sub StockAdjustment_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
             Me.TopMost = True
-            loadpanelstockadjustment()
             LoadReasonCategories()
             LoadReasonCategoriesDeactivated()
             countingredients()
+            loadcomboboxingredients()
             TabControl3.TabPages(0).Text = "Stock Adjustment (Add/Deduct/Transfer)"
             TabControl3.TabPages(1).Text = "Stock Adjustment (Settings)"
             TabControl4.TabPages(0).Text = "Active"
             TabControl4.TabPages(1).Text = "Deactivated"
-
-            Dim arg = New DataGridViewCellEventArgs(0, 0)
-            DataGridViewPanelStockAdjustment_CellClick(sender, arg)
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
     End Sub
-
-    Private Sub loadpanelstockadjustment()
+    Sub loadcomboboxingredients()
         Try
-            Dim table = "`loc_pos_inventory` WHERE `main_inventory_id` = 0 AND `stock_status` = 1 AND `store_id` = " & ClientStoreID & " ORDER BY product_ingredients ASC"
-            fields = "`formula_id`, `product_ingredients`, ROUND(stock_primary,0) AS P, `stock_secondary`, ROUND(stock_no_of_servings,0) AS S, `server_inventory_id`"
-            Dim StockAdj = AsDatatable(table, fields, DataGridViewPanelStockAdjustment)
-            DataGridViewPanelStockAdjustment.Rows.Clear()
-            For Each row As DataRow In StockAdj.Rows
-                DataGridViewPanelStockAdjustment.Rows.Add(row("formula_id"), row("product_ingredients"), row("P"), row("stock_secondary"), row("S"), row("server_inventory_id"))
-            Next
-        Catch ex As Exception
-            SendErrorReport(ex.ToString)
-        End Try
-    End Sub
-    Private Sub DataGridViewPanelStockAdjustment_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewPanelStockAdjustment.CellClick
-        IngredientIndex = DataGridViewPanelStockAdjustment.SelectedCells.Item(0).RowIndex
-
-        Try
-            TextBoxIPrimaryVal.Text = DataGridViewPanelStockAdjustment.SelectedRows(0).Cells(2).Value
-            TextBoxISecondaryTotal.Text = DataGridViewPanelStockAdjustment.SelectedRows(0).Cells(3).Value
-            Dim FormulaID As Integer = 0
-            Dim Origin As String = ""
-            If DataGridViewPanelStockAdjustment.SelectedRows(0).Cells(0).Value = 0 Then
-                FormulaID = DataGridViewPanelStockAdjustment.SelectedRows(0).Cells(5).Value
-                Origin = "Server"
-            Else
-                FormulaID = DataGridViewPanelStockAdjustment.SelectedRows(0).Cells(0).Value
-                Origin = "Local"
-            End If
-            SelectFormula(FormulaID, Origin)
-        Catch ex As Exception
-            SendErrorReport(ex.ToString)
-        End Try
-    End Sub
-    Private Sub SelectFormula(FormulaID, Origin)
-        Try
-            Dim sql As String = ""
-            If Origin = "Local" Then
-                sql = "SELECT `primary_unit`, `primary_value`, `secondary_unit`, `secondary_value`, `serving_unit`, `serving_value`, `no_servings` FROM loc_product_formula WHERE formula_id = " & FormulaID
-            ElseIf Origin = "Server" Then
-                sql = "SELECT `primary_unit`, `primary_value`, `secondary_unit`, `secondary_value`, `serving_unit`, `serving_value`, `no_servings` FROM loc_product_formula WHERE server_formula_id = " & FormulaID
-            End If
+            Dim sql = "SELECT product_ingredients FROM loc_pos_inventory WHERE main_inventory_id = 0 AND stock_status = 1 ORDER BY product_ingredients ASC"
             Dim cmd As MySqlCommand = New MySqlCommand(sql, LocalhostConn)
             Dim da As MySqlDataAdapter = New MySqlDataAdapter(cmd)
             Dim dt As DataTable = New DataTable
             da.Fill(dt)
-            For Each row As DataRow In dt.Rows
-                TextBoxIPrimaryUnit.Text = row("primary_unit")
-                TextBoxFPrimaryVal.Text = row("primary_value")
-                TextBoxFSecondaryUnit.Text = row("secondary_unit")
-                TextBoxFSecondary.Text = row("secondary_value")
-                TextBox7.Text = row("serving_unit")
-                TextBox8.Text = row("serving_value")
-                TextBoxFnoofservings.Text = row("no_servings")
+            For i As Integer = 0 To dt.Rows.Count - 1 Step +1
+                ComboBoxDESC.Items.Add(dt(i)(0))
             Next
-            LocalhostConn.Close()
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
     End Sub
+
+
     Private Sub LoadOutlets()
         Try
             GLOBAL_SELECT_ALL_FUNCTION_COMBOBOX("admin_outlets WHERE user_guid = '" & ClientGuid & "' AND store_id NOT IN(" & ClientStoreID & ")", "store_name", ComboBoxtransfer, False)
@@ -115,18 +68,20 @@ Public Class StockAdjustment
     Private Sub ButtonSave_Click(sender As Object, e As EventArgs) Handles ButtonSave.Click
         Try
             Dim SQL = ""
-            Dim Ingredient = DataGridViewPanelStockAdjustment.SelectedRows(0).Cells(1).Value
+            Dim Ingredient = ComboBoxDESC.Text
             Dim Origin As String = ""
             Dim ID As Integer = 0
-            If DataGridViewPanelStockAdjustment.SelectedRows(0).Cells(0).Value = 0 Then
+
+            If Val(TextBoxFormulaID.Text) = 0 Then
                 Origin = "Server"
-                ID = DataGridViewPanelStockAdjustment.SelectedRows(0).Cells(5).Value
+                ID = TextBoxServerInventoryID.Text
                 SQL = "SELECT `stock_primary`, `stock_secondary`, `stock_no_of_servings` FROM  `loc_pos_inventory` WHERE `server_inventory_id` = " & ID
             Else
                 Origin = "Local"
-                ID = DataGridViewPanelStockAdjustment.SelectedRows(0).Cells(0).Value
+                ID = TextBox1.Text
                 SQL = "SELECT `stock_primary`, `stock_secondary`, `stock_no_of_servings` FROM  `loc_pos_inventory` WHERE `inventory_id` = " & ID
             End If
+
 
             If ComboBoxAction.Text <> "" Then
                 If TextboxIsEmpty(Panel23) Then
@@ -203,7 +158,7 @@ Public Class StockAdjustment
                         GLOBAL_FUNCTION_UPDATE(table, fields, where)
                     End If
                     GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
-                    loadpanelstockadjustment()
+
                     MDIFORM.newMDIchildInventory.loadinventory()
                     MDIFORM.newMDIchildInventory.loadstockadjustmentreport(False)
                     MDIFORM.newMDIchildInventory.loadcriticalstocks()
@@ -215,7 +170,7 @@ Public Class StockAdjustment
             Else
                 MessageBox.Show("Select action first", "No Action Selected", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
-            DataGridViewPanelStockAdjustment.CurrentCell = DataGridViewPanelStockAdjustment.Rows(IngredientIndex).Cells(1)
+
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
@@ -353,7 +308,7 @@ Public Class StockAdjustment
         End Try
     End Sub
 
-    Private Sub TextBoxIReason_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBoxIReason.KeyPress
+    Private Sub TextBoxIReason_KeyPress(sender As Object, e As KeyPressEventArgs)
         Try
             If InStr(DisallowedCharacters, e.KeyChar) > 0 Then
                 e.Handled = True
@@ -362,4 +317,51 @@ Public Class StockAdjustment
             SendErrorReport(ex.ToString)
         End Try
     End Sub
+
+    Private Sub ComboBoxDESC_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxDESC.SelectedIndexChanged
+        Try
+            Dim sql = "SELECT inventory_id, stock_primary, stock_secondary, origin, server_inventory_id FROM loc_pos_inventory WHERE product_ingredients = '" & ComboBoxDESC.Text & "'"
+            Dim cmd As MySqlCommand = New MySqlCommand(sql, LocalhostConn)
+            Dim da As MySqlDataAdapter = New MySqlDataAdapter(cmd)
+            Dim dt As DataTable = New DataTable
+            da.Fill(dt)
+            TextBoxIPrimaryVal.Text = dt(0)(1)
+            TextBoxISecondaryTotal.Text = dt(0)(2)
+            TextBox1.Text = dt(0)(0)
+            TextBoxFormulaID.Text = dt(0)(3)
+            TextBoxServerInventoryID.Text = dt(0)(4)
+            SelectFormulaEntry(dt(0)(0), dt(0)(3))
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
+    End Sub
+    Private Sub SelectFormulaEntry(FormulaID, Origin)
+        Try
+            Dim sql As String = ""
+            If Origin = "Local" Then
+                sql = "SELECT `primary_unit`, `primary_value`, `secondary_unit`, `secondary_value`, `serving_unit`, `serving_value`, `no_servings` FROM loc_product_formula WHERE formula_id = " & FormulaID
+            ElseIf Origin = "Server" Then
+                sql = "SELECT `primary_unit`, `primary_value`, `secondary_unit`, `secondary_value`, `serving_unit`, `serving_value`, `no_servings` FROM loc_product_formula WHERE server_formula_id = " & FormulaID
+            End If
+            Dim cmd As MySqlCommand = New MySqlCommand(sql, LocalhostConn)
+            Dim da As MySqlDataAdapter = New MySqlDataAdapter(cmd)
+            Dim dt As DataTable = New DataTable
+            da.Fill(dt)
+            For Each row As DataRow In dt.Rows
+                TextBoxFPrimaryVal.Text = row("primary_value")
+                TextBoxIPrimaryUnit.Text = row("primary_unit")
+
+                TextBoxFSecondary.Text = row("secondary_value")
+                TextBoxFSecondaryUnit.Text = row("secondary_unit")
+
+                TextBoxServingValue.Text = row("serving_value")
+                TextBoxServingUnit.Text = row("serving_unit")
+                TextBoxFnoofservings.Text = row("no_servings")
+            Next
+            LocalhostConn.Close()
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
+    End Sub
+
 End Class

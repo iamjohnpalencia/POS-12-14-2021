@@ -1,5 +1,0 @@
-server=gator3218.hostgator.com
-user id=johnpale_master
-password=password2020
-database=johnpale_posrev
-port=3306

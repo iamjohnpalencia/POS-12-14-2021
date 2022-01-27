@@ -566,20 +566,22 @@ Module publicfunctions
             Dim ComPort As String = My.Settings.SpPort
             Dim BaudRate As Integer = My.Settings.SpBaudrate
 
-            Dim sp As New System.IO.Ports.SerialPort(ComPort, BaudRate, IO.Ports.Parity.None And IO.Ports.StopBits.One)
-            sp.Open()
-            sp.Write(Convert.ToString(ChrW(12)))
-            If TotalOrChange Then
-                'Displays Price Amount AND word TOTAL in the pole display
-                sp.WriteLine(Chr(27) + Chr(81) + Chr(65) + TextToDisplay + Chr(13) + Chr(27) + Chr(115) + ”2”)
-            Else
-                'Displays Price Amount AND word CHANGE in the pole display
-                sp.WriteLine(Chr(27) + Chr(81) + Chr(65) + TextToDisplay + Chr(13) + Chr(27) + Chr(115) + ”4”)
+            If ComPort <> "" And BaudRate <> 0 Then
+                Dim sp As New System.IO.Ports.SerialPort(ComPort, BaudRate, IO.Ports.Parity.None And IO.Ports.StopBits.One)
+                sp.Open()
+                sp.Write(Convert.ToString(ChrW(12)))
+                If TotalOrChange Then
+                    'Displays Price Amount AND word TOTAL in the pole display
+                    sp.WriteLine(Chr(27) + Chr(81) + Chr(65) + TextToDisplay + Chr(13) + Chr(27) + Chr(115) + ”2”)
+                Else
+                    'Displays Price Amount AND word CHANGE in the pole display
+                    sp.WriteLine(Chr(27) + Chr(81) + Chr(65) + TextToDisplay + Chr(13) + Chr(27) + Chr(115) + ”4”)
+                End If
+                ' sp.WriteLine(Chr(27) + Chr(115) + ”2”)
+                sp.Close()
+                sp.Dispose()
+                sp = Nothing
             End If
-            ' sp.WriteLine(Chr(27) + Chr(115) + ”2”)
-            sp.Close()
-            sp.Dispose()
-            sp = Nothing
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
@@ -623,9 +625,9 @@ Module publicfunctions
     Public Function ReturnPrintSize() As Integer
         Dim PrintSize = 0
         If My.Settings.PrintSize = "57mm" Then
-            PrintSize = 230
+            PrintSize = 205
         Else
-            PrintSize = 260
+            PrintSize = 235
         End If
         Return PrintSize
     End Function

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 15, 2021 at 06:22 AM
+-- Generation Time: Jan 26, 2022 at 05:04 AM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.7
 
@@ -546,6 +546,7 @@ DROP TABLE IF EXISTS `loc_script_runner`;
 CREATE TABLE IF NOT EXISTS `loc_script_runner` (
   `script_id` int(11) NOT NULL AUTO_INCREMENT,
   `script_command` text NOT NULL,
+  `created_at` text NOT NULL,
   `active` text NOT NULL,
   PRIMARY KEY (`script_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
