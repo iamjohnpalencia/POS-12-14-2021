@@ -857,7 +857,7 @@ Partial Class POS
         Me.ButtonWaffleUpgrade.Name = "ButtonWaffleUpgrade"
         Me.ButtonWaffleUpgrade.Size = New System.Drawing.Size(143, 48)
         Me.ButtonWaffleUpgrade.TabIndex = 66
-        Me.ButtonWaffleUpgrade.Text = "Classic Waffle"
+        Me.ButtonWaffleUpgrade.Text = "Brownie Upgrade"
         Me.ButtonWaffleUpgrade.UseVisualStyleBackColor = False
         '
         'ButtonPayMent

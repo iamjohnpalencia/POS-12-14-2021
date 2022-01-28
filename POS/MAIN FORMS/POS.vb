@@ -285,11 +285,11 @@ Public Class POS
         Try
             If WaffleUpgrade = False Then
                 WaffleUpgrade = True
-                ButtonWaffleUpgrade.Text = "Cancel Upgrade"
+                ButtonWaffleUpgrade.Text = "Classic Waffle"
                 ButtonWaffleUpgrade.BackColor = Color.Brown
             Else
                 WaffleUpgrade = False
-                ButtonWaffleUpgrade.Text = "Classic Waffle"
+                ButtonWaffleUpgrade.Text = "Brownie Upgrade"
                 ButtonWaffleUpgrade.BackColor = Color.FromArgb(221, 114, 46)
 
             End If
@@ -1818,7 +1818,7 @@ Public Class POS
                         CheckingForUpdates.CheckingUpdatesUPDATED = True
                         'LabelCheckingUpdates.Text = "Complete Checking! No updates found."
                         CheckingForUpdates.LabelCheckingUpdates.Text = "Complete Checking! No updates found."
-
+                        CheckingForUpdates.Close()
                     End If
                     If DtMessage.Rows.Count > 0 Then
                         Dim ConnectionLocal As MySqlConnection = LocalhostConn()
