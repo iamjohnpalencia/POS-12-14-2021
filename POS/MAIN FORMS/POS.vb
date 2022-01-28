@@ -899,7 +899,7 @@ Public Class POS
                 cmd.Parameters.Add("@7", MySqlDbType.VarChar).Value = ClientCrewID
                 cmd.Parameters.Add("@8", MySqlDbType.VarChar).Value = TextBoxMAXID.Text
                 cmd.Parameters.Add("@9", MySqlDbType.Int64).Value = ACTIVE
-                cmd.Parameters.Add("@10", MySqlDbType.Text).Value = FullDate24HR()
+                cmd.Parameters.Add("@10", MySqlDbType.Text).Value = INSERTTHISDATE
                 cmd.Parameters.Add("@11", MySqlDbType.VarChar).Value = ClientGuid
                 cmd.Parameters.Add("@12", MySqlDbType.VarChar).Value = ClientStoreID
                 cmd.Parameters.Add("@13", MySqlDbType.VarChar).Value = "Unsynced"
