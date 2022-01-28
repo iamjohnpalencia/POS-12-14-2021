@@ -631,4 +631,10 @@ Module publicfunctions
         End If
         Return PrintSize
     End Function
+
+    Public Function ReturnStringToDate(StringToDate) As DateTime
+        Dim iDate As String = StringToDate
+        Dim oDate As DateTime = Convert.ToDateTime(iDate)
+        Return oDate.Year & "-" & oDate.Month & "-" & oDate.Day
+    End Function
 End Module

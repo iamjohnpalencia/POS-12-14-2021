@@ -184,7 +184,7 @@ Public Class SynctoCloud
             For Each row As DataRow In ThisDT.Rows
                 DataGridViewZREADINVENTORY.Rows.Add(row("zreadinv_id"), row("inventory_id"), row("store_id"), row("formula_id"), row("product_ingredients"), row("sku"), row("stock_primary"), row("stock_secondary"), row("stock_no_of_servings"), row("stock_status"), row("critical_limit"), row("guid"), row("created_at"), row("crew_id"), row("server_date_modified"), row("server_inventory_id"), row("zreading"))
             Next
-            gettablesize(tablename:="loc_pos_inventory")
+            gettablesize(tablename:="loc_zread_inventory")
             countrows(tablename:=table)
         Catch ex As Exception
             SendErrorReport(ex.ToString)
@@ -1636,6 +1636,7 @@ Public Class SynctoCloud
                     Label1.Text = "Syncing " & LabelRowtoSync.Text & " of " & LabelTTLRowtoSync.Text & " "
                     '====================================================================
                     cmd.ExecuteNonQuery()
+
                     Dim table = " loc_refund_return_details "
                     Dim where = " refret_id = '" & .Rows(i).Cells(0).Value.ToString & "'"
                     Dim fields = "`synced`='Synced' "

@@ -249,15 +249,24 @@ Public Class POS
                     If Shift = "" Then
                         MessageBox.Show("Input cashier balance first", "", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                     Else
-                        'If S_Zreading <> Format(Now(), "yyyy-MM-dd") Then
-                        '    MessageBox.Show("Z-read first", "Z-Reading", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                        If S_Zreading = Format(Now(), "yyyy-MM-dd") Or S_Zreading = Format(Now().AddDays(1), "yyyy-MM-dd") Then
+                            Enabled = False
+                            PaymentForm.Show()
+                            Application.DoEvents()
+                            PaymentForm.TextBoxMONEY.Focus()
+                            PaymentForm.TextBoxTOTALPAY.Text = TextBoxGRANDTOTAL.Text
+                            PaymentForm.Focus()
+                        Else
+                            MessageBox.Show("Z-read first", "Z-Reading", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                        End If
+                        'If S_Zreading <> Format(Now(), "yyyy-MM-dd") Or Format(Now(), "yyyy-MM-dd") > Format(ReturnStringToDate(S_Zreading).AddDays(1), "yyyy-MM-dd") Then
                         'Else
-                        Enabled = False
-                        PaymentForm.Show()
-                        Application.DoEvents()
-                        PaymentForm.TextBoxMONEY.Focus()
-                        PaymentForm.TextBoxTOTALPAY.Text = TextBoxGRANDTOTAL.Text
-                        PaymentForm.Focus()
+
+                        'End If
+                        'If S_Zreading <> Format(Now(), "yyyy-MM-dd") Then
+                        '    
+                        'Else
+
                         'End If
                     End If
                 Else

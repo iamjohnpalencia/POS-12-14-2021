@@ -71,11 +71,11 @@ Public Class Reports
 
             End If
 
+            If S_Zreading = Format(Now().AddDays(1), "yyyy-MM-dd") Then
+                ButtonZread.Enabled = False
+                ButtonZreadAdmin.Enabled = False
+            End If
 
-            'If S_Zreading = Format(Now(), "yyyy-MM-dd") Then
-            '    ButtonZread.Enabled = False
-            '    ButtonZreadAdmin.Enabled = False
-            'End If
             If DataGridViewDaily.Rows.Count > 0 Then
                 Dim arg = New DataGridViewCellEventArgs(0, 0)
                 DataGridViewDaily_CellClick(sender, arg)
@@ -2348,10 +2348,12 @@ Public Class Reports
                 cmd.Dispose()
                 'Insert to local zread inv
                 XZreadingInventory(S_Zreading)
-                'If S_Zreading = Format(Now(), "yyyy-MM-dd") Then
-                '    ButtonZread.Enabled = False
-                '    ButtonZreadAdmin.Enabled = False
-                'End If
+
+
+                If S_Zreading = Format(Now().AddDays(1), "yyyy-MM-dd") Then
+                    ButtonZread.Enabled = False
+                    ButtonZreadAdmin.Enabled = False
+                End If
                 Button7.PerformClick()
             End If
         Catch ex As Exception
@@ -2391,11 +2393,14 @@ Public Class Reports
                     cmd.Dispose()
                     LocalhostConn.Close()
                     'Insert to local zread inv
-                    XZreadingInventory(S_Zreading)
-                    'If S_Zreading = Format(Now(), "yyyy-MM-dd") Then
-                    '    ButtonZread.Enabled = False
-                    '    ButtonZreadAdmin.Enabled = False
-                    'End If
+
+
+                    'MsgBox(ReturnStringToDate(S_Zreading))
+                    'XZreadingInventory(S_Zreading)
+                    If S_Zreading = Format(Now().AddDays(1), "yyyy-MM-dd") Then
+                        ButtonZread.Enabled = False
+                        ButtonZreadAdmin.Enabled = False
+                    End If
                     Button7.PerformClick()
                 Catch ex As Exception
                     SendErrorReport(ex.ToString)

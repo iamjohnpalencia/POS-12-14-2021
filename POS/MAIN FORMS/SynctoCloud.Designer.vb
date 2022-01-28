@@ -520,9 +520,9 @@ Partial Class SynctoCloud
         Me.Panel7.Controls.Add(Me.Label4)
         Me.Panel7.Controls.Add(Me.ProgressBar1)
         Me.Panel7.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel7.Location = New System.Drawing.Point(0, 313)
+        Me.Panel7.Location = New System.Drawing.Point(0, 467)
         Me.Panel7.Name = "Panel7"
-        Me.Panel7.Size = New System.Drawing.Size(491, 31)
+        Me.Panel7.Size = New System.Drawing.Size(980, 31)
         Me.Panel7.TabIndex = 24
         '
         'Label8
@@ -543,7 +543,7 @@ Partial Class SynctoCloud
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Right
         Me.Label5.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label5.ForeColor = System.Drawing.Color.White
-        Me.Label5.Location = New System.Drawing.Point(491, 0)
+        Me.Label5.Location = New System.Drawing.Point(980, 0)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(0, 16)
         Me.Label5.TabIndex = 28
@@ -599,7 +599,7 @@ Partial Class SynctoCloud
         Me.ProgressBar1.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.ProgressBar1.Location = New System.Drawing.Point(0, 20)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(491, 11)
+        Me.ProgressBar1.Size = New System.Drawing.Size(980, 11)
         Me.ProgressBar1.TabIndex = 11
         '
         'DataGridViewINV
@@ -1292,7 +1292,6 @@ Partial Class SynctoCloud
         '
         'GroupBox1
         '
-        Me.GroupBox1.Controls.Add(Me.DataGridViewZREADINVENTORY)
         Me.GroupBox1.Controls.Add(Me.DatagridviewSenior)
         Me.GroupBox1.Controls.Add(Me.DataGridViewERRORS)
         Me.GroupBox1.Controls.Add(Me.DataGridViewCoupons)
@@ -1315,9 +1314,9 @@ Partial Class SynctoCloud
         Me.GroupBox1.Controls.Add(Me.DataGridViewSYSLOG4)
         Me.GroupBox1.Controls.Add(Me.DataGridViewEXPDET)
         Me.GroupBox1.Controls.Add(Me.DataGridViewSYSLOG3)
-        Me.GroupBox1.Location = New System.Drawing.Point(506, 127)
+        Me.GroupBox1.Location = New System.Drawing.Point(506, 57)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(228, 15)
+        Me.GroupBox1.Size = New System.Drawing.Size(228, 85)
         Me.GroupBox1.TabIndex = 28
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "GroupBox1"
@@ -1331,10 +1330,10 @@ Partial Class SynctoCloud
         Me.DataGridViewZREADINVENTORY.AllowUserToResizeRows = False
         Me.DataGridViewZREADINVENTORY.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridViewZREADINVENTORY.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column116, Me.Column117, Me.Column118, Me.Column119, Me.Column120, Me.Column121, Me.Column122, Me.Column123, Me.Column124, Me.Column125, Me.Column126, Me.Column127, Me.Column128, Me.Column129, Me.Column130, Me.Column131, Me.Column132})
-        Me.DataGridViewZREADINVENTORY.Location = New System.Drawing.Point(6, 19)
+        Me.DataGridViewZREADINVENTORY.Location = New System.Drawing.Point(48, 270)
         Me.DataGridViewZREADINVENTORY.Name = "DataGridViewZREADINVENTORY"
         Me.DataGridViewZREADINVENTORY.ReadOnly = True
-        Me.DataGridViewZREADINVENTORY.Size = New System.Drawing.Size(230, 80)
+        Me.DataGridViewZREADINVENTORY.Size = New System.Drawing.Size(852, 85)
         Me.DataGridViewZREADINVENTORY.TabIndex = 44
         '
         'Column116
@@ -2352,9 +2351,9 @@ Partial Class SynctoCloud
         Me.Panel1.Controls.Add(Me.RadioButton2)
         Me.Panel1.Controls.Add(Me.RadioButton1)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel1.Location = New System.Drawing.Point(0, 232)
+        Me.Panel1.Location = New System.Drawing.Point(0, 386)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(491, 71)
+        Me.Panel1.Size = New System.Drawing.Size(980, 71)
         Me.Panel1.TabIndex = 59
         '
         'Button2
@@ -2397,9 +2396,9 @@ Partial Class SynctoCloud
         '
         Me.Panel3.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(160, Byte), Integer), CType(CType(34, Byte), Integer))
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel3.Location = New System.Drawing.Point(0, 303)
+        Me.Panel3.Location = New System.Drawing.Point(0, 457)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(491, 10)
+        Me.Panel3.Size = New System.Drawing.Size(980, 10)
         Me.Panel3.TabIndex = 61
         '
         'TableLayoutPanel1
@@ -2513,7 +2512,8 @@ Partial Class SynctoCloud
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(491, 344)
+        Me.ClientSize = New System.Drawing.Size(980, 498)
+        Me.Controls.Add(Me.DataGridViewZREADINVENTORY)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.Panel3)
