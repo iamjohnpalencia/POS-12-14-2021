@@ -19,7 +19,6 @@ Module serverlocalconn
                 ValidCloudConnection = True
             End If
         Catch ex As Exception
-            SendErrorReport(ex.ToString)
             ValidCloudConnection = False
         End Try
         Return servercloudconn

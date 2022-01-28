@@ -1407,7 +1407,9 @@ Public Class POS
                 PRICECHANGE = False
             End If
         Catch ex As Exception
-            SendErrorReport(ex.ToString)
+            BackgroundWorker2.CancelAsync()
+            'SendErrorReport(ex.ToString)
+            Exit Sub
         End Try
     End Sub
     Public CouponDatatable As DataTable
@@ -1426,7 +1428,9 @@ Public Class POS
                 CouponApp = False
             End If
         Catch ex As Exception
-            SendErrorReport(ex.ToString)
+            BackgroundWorker2.CancelAsync()
+            'SendErrorReport(ex.ToString)
+            Exit Sub
         End Try
     End Sub
     Public CustomProductsApproval As DataTable
@@ -1445,7 +1449,9 @@ Public Class POS
                 CustomProdctsAppBool = False
             End If
         Catch ex As Exception
-            SendErrorReport(ex.ToString)
+            BackgroundWorker2.CancelAsync()
+            'SendErrorReport(ex.ToString)
+            Exit Sub
         End Try
     End Sub
     Private Function LoadCouponsLocal() As DataTable
@@ -1530,7 +1536,8 @@ Public Class POS
             End If
         Catch ex As Exception
             BackgroundWorker2.CancelAsync()
-            SendErrorReport(ex.ToString)
+            'SendErrorReport(ex.ToString)
+            Exit Sub
             'If table doesnt have data
         End Try
     End Sub
@@ -1616,9 +1623,9 @@ Public Class POS
                 End If
             End If
         Catch ex As Exception
-
             BackgroundWorker2.CancelAsync()
-            SendErrorReport(ex.ToString)
+            'SendErrorReport(ex.ToString)
+            Exit Sub
             'If table doesnt have data
         End Try
     End Sub
@@ -1664,7 +1671,7 @@ Public Class POS
                         ' Indicate that the task was canceled.
                         e.Cancel = True
                         WorkerCancel = True
-                        Exit For
+                        Exit Sub
                     End If
                 Next
                 If TestInternetCon Then
@@ -1677,7 +1684,7 @@ Public Class POS
                             ' Indicate that the task was canceled.
                             e.Cancel = True
                             WorkerCancel = True
-                            Exit For
+                            Exit Sub
                         End If
                     Next
                     If ServerCloudCon.State = ConnectionState.Open Then
@@ -1693,7 +1700,7 @@ Public Class POS
                                 ' Indicate that the task was canceled.
                                 e.Cancel = True
                                 WorkerCancel = True
-                                Exit For
+                                Exit Sub
                             End If
                         Next
 
@@ -1749,15 +1756,18 @@ Public Class POS
                         ' Indicate that the task was canceled.
                         e.Cancel = True
                         WorkerCancel = True
-                        Exit For
+                        Exit Sub
                     End If
                 Next
             End If
         Catch ex As Exception
+            ValidCloudConnection = False
+            BackgroundWorker2.CancelAsync()
             If WorkerCancel Then
                 MsgBox("Cannot fetch data. Please check your internet connection")
             End If
             SendErrorReport(ex.ToString)
+            Exit Sub
         End Try
     End Sub
     Private Sub BackgroundWorker2_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker2.RunWorkerCompleted
@@ -1974,7 +1984,8 @@ Public Class POS
             End If
         Catch ex As Exception
             BackgroundWorker2.CancelAsync()
-            SendErrorReport(ex.ToString)
+            'SendErrorReport(ex.ToString)
+            Exit Sub
         End Try
     End Sub
     Private Sub GetAllProducts()
@@ -2003,12 +2014,10 @@ Public Class POS
             Dim FillDt As DataTable = New DataTable
             For a = 1 To result
                 CheckingForUpdates.Instance.Invoke(Sub()
-
                                                        If CheckingForUpdates.ProgressBar1.Maximum > 0 Then
                                                            CheckingForUpdates.ProgressBar1.Value += 1
                                                            CheckingForUpdates.Label1.Text = CheckingForUpdates.ProgressBar1.Value
                                                        End If
-
                                                    End Sub)
                 Dim Query As String = "SELECT * FROM admin_products_org WHERE product_id = " & a
                 Cmd = New MySqlCommand(Query, Connection)
@@ -2035,7 +2044,9 @@ Public Class POS
                 Next
             Next
         Catch ex As Exception
-            SendErrorReport(ex.ToString)
+            BackgroundWorker2.CancelAsync()
+            'SendErrorReport(ex.ToString)
+            Exit Sub
         End Try
     End Sub
 #End Region
@@ -2127,7 +2138,8 @@ Public Class POS
             End If
         Catch ex As Exception
             BackgroundWorker2.CancelAsync()
-            SendErrorReport(ex.ToString)
+            'SendErrorReport(ex.ToString)
+            Exit Sub
         End Try
     End Sub
 #End Region
@@ -2221,7 +2233,8 @@ Public Class POS
             End If
         Catch ex As Exception
             BackgroundWorker2.CancelAsync()
-            SendErrorReport(ex.ToString)
+            'SendErrorReport(ex.ToString)
+            Exit Sub
         End Try
     End Sub
     Private Function LoadPartnersCategory() As DataTable
@@ -2306,7 +2319,8 @@ Public Class POS
             End If
         Catch ex As Exception
             BackgroundWorker2.CancelAsync()
-            SendErrorReport(ex.ToString)
+            'SendErrorReport(ex.ToString)
+            Exit Sub
             'If table doesnt have data
         End Try
     End Sub

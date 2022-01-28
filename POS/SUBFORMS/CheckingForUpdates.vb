@@ -26,13 +26,38 @@ Public Class CheckingForUpdates
 
     Private Sub CheckingForUpdates_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         Try
-            If CheckingUpdatesUPDATED Then
+            'MsgBox(POS.BackgroundWorker2.IsBusy)
+            'MsgBox("CheckingUpdatesUPDATED " & CheckingUpdatesUPDATED)
+            'MsgBox("BegBalanceBool " & BegBalanceBool)
+            'MsgBox("ValidCloudConnection " & ValidCloudConnection)
+            'If CheckingUpdatesUPDATED Then
+            '    If BegBalanceBool = False Then
+            '        With POS
+            '            If .DataGridView1.Rows.Count > 0 Or .DataGridView2.Rows.Count > 0 Or .DataGridView3.Rows.Count > 0 Or .DataGridView4.Rows.Count > 0 Or .PriceChangeDatatabe.Rows.Count > 0 Or .CouponDatatable.Rows.Count > 0 Or .CustomProductsApproval.Rows.Count Or .DataGridView5.Rows.Count > 0 Or .DataGridViewPartners.Rows.Count > 0 Then
+
+            '            Else
+            '                BegBalance.Show()
+            '                BegBalance.TopMost = True
+            '                BegBalanceBool = True
+            '            End If
+            '        End With
+            '    Else
+            '        POS.Enabled = True
+            '    End If
+            'Else
+            '    If BegBalanceBool = False Then
+            '        BegBalance.Show()
+            '        BegBalance.TopMost = True
+            '        BegBalanceBool = True
+            '    End If
+            'End If
+
+            If POS.BackgroundWorker2.IsBusy Then
+                e.Cancel = True
+            Else
                 If BegBalanceBool = False Then
-
                     With POS
-                        If .DataGridView1.Rows.Count > 0 Or .DataGridView2.Rows.Count > 0 Or .DataGridView3.Rows.Count > 0 Or .DataGridView4.Rows.Count > 0 Or .PriceChangeDatatabe.Rows.Count > 0 Or .CouponDatatable.Rows.Count > 0 Or .CustomProductsApproval.Rows.Count Or .DataGridView5.Rows.Count > 0 Or .DataGridViewPartners.Rows.Count > 0 Then
-
-                        Else
+                        If .DataGridView1.Rows.Count = 0 Or .DataGridView2.Rows.Count = 0 Or .DataGridView3.Rows.Count = 0 Or .DataGridView4.Rows.Count = 0 Or .PriceChangeDatatabe.Rows.Count = 0 Or .CouponDatatable.Rows.Count = 0 Or .CustomProductsApproval.Rows.Count Or .DataGridView5.Rows.Count = 0 Or .DataGridViewPartners.Rows.Count = 0 Then
                             BegBalance.Show()
                             BegBalance.TopMost = True
                             BegBalanceBool = True
@@ -40,10 +65,6 @@ Public Class CheckingForUpdates
                     End With
                 Else
                     POS.Enabled = True
-                End If
-            Else
-                If ValidCloudConnection Then
-                    e.Cancel = True
                 End If
             End If
         Catch ex As Exception

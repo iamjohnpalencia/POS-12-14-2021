@@ -31,6 +31,7 @@ Partial Class CheckingForUpdates
         Me.LabelCheckingUpdates = New System.Windows.Forms.Label()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
+        Me.Timer2 = New System.Windows.Forms.Timer(Me.components)
         CType(Me.DataGridViewUpdate, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -88,6 +89,10 @@ Partial Class CheckingForUpdates
         'BackgroundWorker1
         '
         '
+        'Timer2
+        '
+        Me.Timer2.Interval = 1000
+        '
         'CheckingForUpdates
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -120,4 +125,5 @@ Partial Class CheckingForUpdates
     Friend WithEvents LabelCheckingUpdates As Label
     Friend WithEvents Timer1 As Timer
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
+    Friend WithEvents Timer2 As Timer
 End Class
