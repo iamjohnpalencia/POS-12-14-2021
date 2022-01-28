@@ -974,7 +974,7 @@ Public Class POS
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         Try
             With WaitFrm
-                INSERTTHISDATE = FullDate24HR()
+                INSERTTHISDATE = S_Zreading & " " & Format(Now(), "HH:mm:ss")
                 SUPERAMOUNTDUE = Convert.ToDecimal(Double.Parse(TextBoxGRANDTOTAL.Text))
                 If TRANSACTIONMODE = "Representation Expenses" Then
                     ACTIVE = 3

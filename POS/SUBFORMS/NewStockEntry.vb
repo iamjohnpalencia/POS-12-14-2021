@@ -46,6 +46,7 @@ Public Class NewStockEntry
                 Else
                     where = "formula_id = " & TextBox1.Text
                 End If
+                TextBoxEQuantity.Clear()
                 GLOBAL_FUNCTION_UPDATE(table, fields, where)
                 MDIFORM.newMDIchildInventory.loadstockentry(False)
                 MDIFORM.newMDIchildInventory.loadinventory()

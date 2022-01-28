@@ -967,7 +967,7 @@ Public Class Reports
                 PrintPreviewDialogXread.ShowDialog()
             End If
 
-            SystemLogDesc = "X Reading : " & FullDate24HR() & " Crew : " & returnfullname(ClientCrewID)
+            SystemLogDesc = "X-Reading : " & FullDate24HR() & " Crew : " & returnfullname(ClientCrewID)
             SystemLogType = "X-READ"
             GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
 
@@ -2368,6 +2368,11 @@ Public Class Reports
                     ButtonZreadAdmin.Enabled = False
                 End If
                 Button7.PerformClick()
+
+                SystemLogDesc = "Z-Reading : " & FullDate24HR() & " Crew : " & returnfullname(ClientCrewID)
+                SystemLogType = "Z-READ"
+                GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
+
             End If
         Catch ex As Exception
             SendErrorReport(ex.ToString)

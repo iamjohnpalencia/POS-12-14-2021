@@ -157,6 +157,7 @@ Public Class StockAdjustment
                         End If
                         GLOBAL_FUNCTION_UPDATE(table, fields, where)
                     End If
+                    TextBoxIPQuantity.Clear()
                     GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
 
                     MDIFORM.newMDIchildInventory.loadinventory()
