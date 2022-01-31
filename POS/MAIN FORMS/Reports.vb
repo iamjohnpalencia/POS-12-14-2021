@@ -1297,13 +1297,26 @@ Public Class Reports
 
             Dim ZreadOrXread As Integer = 0
             If XreadOrZread = "Z-READ" Then
+
                 Dim ResetCounter = 0
-                ThreadZXRead = New Thread(Sub() ResetCounter = GLOBAL_SELECT_FUNCTION_RETURN("tbcountertable", "counter_value", "counter_id = 1", "counter_value"))
-                ThreadZXRead.Start()
-                ThreadlistZXRead.Add(ThreadZXRead)
-                For Each t In ThreadlistZXRead
-                    t.Join()
-                Next
+                Dim ConnectionLocal As MySqlConnection = LocalhostConn()
+                Dim Query = " SELECT counter_value FROM tbcountertable WHERE counter_id = 1"
+                Dim Cmd As MySqlCommand = New MySqlCommand(Query, ConnectionLocal)
+                Using reader As MySqlDataReader = Cmd.ExecuteReader
+                    If reader.HasRows Then
+                        While reader.Read
+                            ResetCounter = reader("counter_value")
+                        End While
+                    End If
+                End Using
+
+
+                'ThreadZXRead = New Thread(Sub() ResetCounter = GLOBAL_SELECT_FUNCTION_RETURN("tbcountertable", "counter_value", "counter_id = 1", "counter_value"))
+                'ThreadZXRead.Start()
+                'ThreadlistZXRead.Add(ThreadZXRead)
+                'For Each t In ThreadlistZXRead
+                '    t.Join()
+                'Next
                 RightToLeftDisplay(sender, e, 675, "RESET COUNTER", ResetCounter, font, 10, 0)
                 RightToLeftDisplay(sender, e, 685, "Z-COUNTER", My.Settings.zcounter, font, 10, 0)
                 ZreadOrXread += 20
@@ -1314,7 +1327,7 @@ Public Class Reports
 
             Dim ADDONS = 0
             ThreadZXRead = New Thread(Sub() ADDONS = sum("quantity", "loc_daily_transaction_details WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Walk-in' AND product_category = 'Add-Ons'"))
-            ThreadZXRead.Start()
+                            ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
