@@ -57,11 +57,18 @@ Public Class CheckingForUpdates
             Else
                 If BegBalanceBool = False Then
                     With POS
-                        If .DataGridView1.Rows.Count = 0 Or .DataGridView2.Rows.Count = 0 Or .DataGridView3.Rows.Count = 0 Or .DataGridView4.Rows.Count = 0 Or .PriceChangeDatatabe.Rows.Count = 0 Or .CouponDatatable.Rows.Count = 0 Or .CustomProductsApproval.Rows.Count Or .DataGridView5.Rows.Count = 0 Or .DataGridViewPartners.Rows.Count = 0 Then
+                        If CheckForInternetConnection() Then
+                            If .DataGridView1.Rows.Count = 0 Or .DataGridView2.Rows.Count = 0 Or .DataGridView3.Rows.Count = 0 Or .DataGridView4.Rows.Count = 0 Or .PriceChangeDatatabe.Rows.Count = 0 Or .CouponDatatable.Rows.Count = 0 Or .CustomProductsApproval.Rows.Count Or .DataGridView5.Rows.Count = 0 Or .DataGridViewPartners.Rows.Count = 0 Then
+                                BegBalance.Show()
+                                BegBalance.TopMost = True
+                                BegBalanceBool = True
+                            End If
+                        Else
                             BegBalance.Show()
                             BegBalance.TopMost = True
                             BegBalanceBool = True
                         End If
+
                     End With
                 Else
                     POS.Enabled = True

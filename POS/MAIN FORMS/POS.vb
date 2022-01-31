@@ -57,17 +57,23 @@ Public Class POS
                 End If
             Next
             DataGridViewOrders.CellBorderStyle = DataGridViewCellBorderStyle.None
-            Enabled = False
-            CheckingForUpdates.Show()
-            CheckingForUpdates.TopMost = True
 
-            If ValidCloudConnection = True Then
-                BackgroundWorker2.WorkerReportsProgress = True
-                BackgroundWorker2.WorkerSupportsCancellation = True
-                BackgroundWorker2.RunWorkerAsync()
-            Else
-                CheckingForUpdates.LabelCheckingUpdates.Text = "Invalid cloud server connection."
+
+            If CheckForInternetConnection() Then
+                Enabled = False
+                CheckingForUpdates.Show()
+                CheckingForUpdates.TopMost = True
+
+                If ValidCloudConnection = True Then
+                    BackgroundWorker2.WorkerReportsProgress = True
+                    BackgroundWorker2.WorkerSupportsCancellation = True
+                    BackgroundWorker2.RunWorkerAsync()
+                Else
+                    CheckingForUpdates.LabelCheckingUpdates.Text = "Invalid cloud server connection."
+                End If
+
             End If
+
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
