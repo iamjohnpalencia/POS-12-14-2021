@@ -69,9 +69,15 @@ Public Class POS
                     BackgroundWorker2.WorkerSupportsCancellation = True
                     BackgroundWorker2.RunWorkerAsync()
                 Else
-                    CheckingForUpdates.LabelCheckingUpdates.Text = "Invalid cloud server connection."
+                    Enabled = False
+                    BegBalance.Show()
+                    BegBalance.TopMost = True
+                    'CheckingForUpdates.LabelCheckingUpdates.Text = "Invalid cloud server connection."
                 End If
-
+            Else
+                Enabled = False
+                BegBalance.Show()
+                BegBalance.TopMost = True
             End If
 
         Catch ex As Exception
