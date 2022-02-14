@@ -338,7 +338,8 @@ Public Class POS
                     Ingredient = .Rows(i).Cells(0).Value
                     Console.WriteLine("INV ID - " & inventory_id)
                     If .Rows(i).Cells(14).Value > 0 Then
-                        Query = "SELECT `primary_value`, `secondary_value`, `serving_value`, `no_servings` FROM loc_product_formula WHERE server_formula_id = " & inventory_id
+                        Query = "SELECT `primary_value`, `secondary_value`, `serving_value`, `no_servings` FROM loc_product_formula WHERE server_formula_id = " & .Rows(i).Cells(14).Value
+                        'Console.WriteLine("HALF BATCH" & Query)
                         SqlCommand = New MySqlCommand(Query, LocalhostConn)
                         SqlAdapter = New MySqlDataAdapter(SqlCommand)
                         SqlDt = New DataTable
@@ -349,7 +350,7 @@ Public Class POS
                             FORMServingval = row("serving_value") / 2
                             FORMNoofservings = row("no_servings") / 2
 
-                            Console.WriteLine("INVENTORY PV - " & FORMPrimaryval & ", SV - " & FORMSecondaryval & ", SERVAL - " & FORMServingval & ", NO. SERV - " & FORMNoofservings)
+                            ' Console.WriteLine("INVENTORY PV - " & FORMPrimaryval & ", SV - " & FORMSecondaryval & ", SERVAL - " & FORMServingval & ", NO. SERV - " & FORMNoofservings)
                         Next
                     Else
                         Query = "SELECT `primary_value`, `secondary_value`, `serving_value`, `no_servings` FROM loc_product_formula WHERE server_formula_id = " & inventory_id
@@ -363,7 +364,7 @@ Public Class POS
                             FORMServingval = row("serving_value")
                             FORMNoofservings = row("no_servings")
 
-                            Console.WriteLine("INVENTORY PV - " & FORMPrimaryval & ", SV - " & FORMSecondaryval & ", SERVAL - " & FORMServingval & ", NO. SERV - " & FORMNoofservings)
+                            'Console.WriteLine("INVENTORY PV - " & FORMPrimaryval & ", SV - " & FORMSecondaryval & ", SERVAL - " & FORMServingval & ", NO. SERV - " & FORMNoofservings)
                         Next
                     End If
 
@@ -373,10 +374,14 @@ Public Class POS
                     TotalSecondaryVal = FORMSecondaryval * totalQuantity
                     TotalNoOfServings = FORMNoofservings * totalQuantity
 
-                    Console.WriteLine("TOTAL PV - " & TotalPrimaryVal & ", TOTAL SEC - " & TotalSecondaryVal & ", TOTAL NO. SERV - " & TotalNoOfServings)
+                    ' Console.WriteLine("TOTAL PV - " & TotalPrimaryVal & ", TOTAL SEC - " & TotalSecondaryVal & ", TOTAL NO. SERV - " & TotalNoOfServings)
 
+                    If .Rows(i).Cells(14).Value > 0 Then
+                        Query = "SELECT `stock_primary`,`stock_secondary`,`stock_no_of_servings` FROM `loc_pos_inventory` WHERE server_inventory_id = " & .Rows(i).Cells(14).Value
+                    Else
+                        Query = "SELECT `stock_primary`,`stock_secondary`,`stock_no_of_servings` FROM `loc_pos_inventory` WHERE server_inventory_id = " & inventory_id
+                    End If
 
-                    Query = "SELECT `stock_primary`,`stock_secondary`,`stock_no_of_servings` FROM `loc_pos_inventory` WHERE server_inventory_id = " & inventory_id
                     SqlCommand = New MySqlCommand(Query, LocalhostConn)
                     SqlAdapter = New MySqlDataAdapter(SqlCommand)
                     SqlDt = New DataTable
@@ -386,7 +391,7 @@ Public Class POS
                         RetStockSec = row("stock_secondary")
                         RetNoServ = row("stock_no_of_servings")
 
-                        Console.WriteLine("RetStockPrim - " & RetStockPrim & ", RetStockSec - " & RetStockSec & ", RetNoServ - " & RetNoServ)
+                        'Console.WriteLine("RetStockPrim - " & RetStockPrim & ", RetStockSec - " & RetStockSec & ", RetNoServ - " & RetNoServ)
                     Next
 
                     Dim TotalPrimary As Double = RetStockPrim + TotalPrimaryVal
@@ -394,9 +399,14 @@ Public Class POS
                     Dim ServingValue As Double = RetNoServ + TotalNoOfServings
 
 
-                    Console.WriteLine("TOTAL Primary - " & TotalPrimary & ", TOTAL Secondary - " & Secondary & ", TOTAL ServingValue - " & ServingValue)
-                    Query = "UPDATE loc_pos_inventory SET `stock_secondary` = " & Secondary & " , `stock_no_of_servings` = " & ServingValue & " , `stock_primary` = " & TotalPrimary & ", `date_modified` = '" & FullDate24HR() & "' WHERE `server_inventory_id` = " & inventory_id
-                    Console.WriteLine(Query)
+                    ' Console.WriteLine("TOTAL Primary - " & TotalPrimary & ", TOTAL Secondary - " & Secondary & ", TOTAL ServingValue - " & ServingValue)
+
+                    If .Rows(i).Cells(14).Value > 0 Then
+                        Query = "UPDATE loc_pos_inventory SET `stock_secondary` = " & Secondary & " , `stock_no_of_servings` = " & ServingValue & " , `stock_primary` = " & TotalPrimary & ", `date_modified` = '" & FullDate24HR() & "' WHERE `server_inventory_id` = " & .Rows(i).Cells(14).Value
+                    Else
+                        Query = "UPDATE loc_pos_inventory SET `stock_secondary` = " & Secondary & " , `stock_no_of_servings` = " & ServingValue & " , `stock_primary` = " & TotalPrimary & ", `date_modified` = '" & FullDate24HR() & "' WHERE `server_inventory_id` = " & inventory_id
+                    End If
+                    'Console.WriteLine(Query)
                     SqlCommand = New MySqlCommand(Query, LocalhostConn())
                     SqlCommand.ExecuteNonQuery()
                     GLOBAL_SYSTEM_LOGS("MIX", "MIXED : " & Ingredient & ", Crew : " & ClientCrewID)
@@ -1264,7 +1274,7 @@ Public Class POS
             TextBoxDISCOUNT.Text = "0.00"
             TextBoxSUBTOTAL.Text = "0.00"
             TextBoxGRANDTOTAL.Text = "0.00"
-
+            LabelTransactionType.Text = "Walk-In"
             WaffleUpgrade = False
             ButtonWaffleUpgrade.Text = "Brownie Upgrade"
             ButtonWaffleUpgrade.BackColor = Color.FromArgb(221, 114, 46)
@@ -1915,7 +1925,7 @@ Public Class POS
                             BackgroundWorkerInstallUpdates.WorkerSupportsCancellation = True
                             BackgroundWorkerInstallUpdates.RunWorkerAsync()
                         Else
-                            MsgBox(BegBalanceBool & 1)
+
                             If BegBalanceBool = False Then
                                 BegBalance.Show()
                                 BegBalance.TopMost = True
@@ -1924,7 +1934,7 @@ Public Class POS
                             End If
                         End If
                     Else
-                        MsgBox(BegBalanceBool & 2)
+
                         If BegBalanceBool = False Then
                             BegBalance.Show()
                             BegBalance.TopMost = True
@@ -3011,7 +3021,7 @@ Public Class POS
                     cmdlocal = New MySqlCommand(sql, Connection)
                     Dim result As Integer = cmdlocal.ExecuteScalar
                     If result = 0 Then
-                        Dim sqlinsert = "INSERT INTO loc_admin_products (`server_product_id`, `product_sku`, `product_name`, `formula_id`, `product_barcode`, `product_category`, `product_price`, `product_desc`, `product_image`, `product_status`, `origin`, `date_modified`, `server_inventory_id`, `guid`, `store_id`, `crew_id`, `synced`, `addontype`) VALUES
+                        Dim sqlinsert = "INSERT INTO loc_admin_products (`server_product_id`, `product_sku`, `product_name`, `formula_id`, `product_barcode`, `product_category`, `product_price`, `product_desc`, `product_image`, `product_status`, `origin`, `date_modified`, `server_inventory_id`, `guid`, `store_id`, `crew_id`, `synced`, `addontype`, `half_batch`) VALUES
                                         (@0 ,@1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11, @12, @13, @14, @15, @16, @17)"
                         cmdlocal = New MySqlCommand(sqlinsert, Connection)
                         cmdlocal.Parameters.Add("@0", MySqlDbType.Int64).Value = .Rows(i).Cells(0).Value.ToString()
@@ -3032,6 +3042,7 @@ Public Class POS
                         cmdlocal.Parameters.Add("@15", MySqlDbType.VarChar).Value = "0"
                         cmdlocal.Parameters.Add("@16", MySqlDbType.VarChar).Value = "Synced"
                         cmdlocal.Parameters.Add("@17", MySqlDbType.Text).Value = .Rows(i).Cells(13).Value.ToString()
+                        cmdlocal.Parameters.Add("@18", MySqlDbType.Text).Value = .Rows(i).Cells(14).Value.ToString()
                         cmdlocal.ExecuteNonQuery()
                         If WorkerUpdateCancel = False Then
                             CheckingForUpdates.Instance.Invoke(Sub()
@@ -3040,7 +3051,7 @@ Public Class POS
                                                                End Sub)
                         End If
                     Else
-                        Dim sqlupdate = "UPDATE `loc_admin_products` SET `server_product_id`=@0,`product_sku`=@1,`product_name`=@2,`product_barcode`=@4,`product_category`=@5,`product_price`=@6,`product_desc`=@7,`product_image`=@8,`product_status`=@9,`origin`=@10,`date_modified`=@11,`server_inventory_id`=@12,`guid`=@13,`store_id`=@14,`crew_id`=@15,`synced`=@16,`addontype`=@17 WHERE server_product_id =  " & .Rows(i).Cells(0).Value
+                        Dim sqlupdate = "UPDATE `loc_admin_products` SET `server_product_id`=@0,`product_sku`=@1,`product_name`=@2,`product_barcode`=@4,`product_category`=@5,`product_price`=@6,`product_desc`=@7,`product_image`=@8,`product_status`=@9,`origin`=@10,`date_modified`=@11,`server_inventory_id`=@12,`guid`=@13,`store_id`=@14,`crew_id`=@15,`synced`=@16,`addontype`=@17,`half_batch`=@18 WHERE server_product_id =  " & .Rows(i).Cells(0).Value
                         cmdlocal = New MySqlCommand(sqlupdate, Connection)
                         cmdlocal.Parameters.Add("@0", MySqlDbType.Int64).Value = .Rows(i).Cells(0).Value.ToString()
                         cmdlocal.Parameters.Add("@1", MySqlDbType.VarChar).Value = .Rows(i).Cells(1).Value.ToString()
@@ -3059,6 +3070,7 @@ Public Class POS
                         cmdlocal.Parameters.Add("@15", MySqlDbType.VarChar).Value = "0"
                         cmdlocal.Parameters.Add("@16", MySqlDbType.VarChar).Value = "Synced"
                         cmdlocal.Parameters.Add("@17", MySqlDbType.Text).Value = .Rows(i).Cells(13).Value.ToString()
+                        cmdlocal.Parameters.Add("@18", MySqlDbType.Text).Value = .Rows(i).Cells(14).Value.ToString()
                         cmdlocal.ExecuteNonQuery()
                         If WorkerUpdateCancel = False Then
                             CheckingForUpdates.Instance.Invoke(Sub()
@@ -3243,6 +3255,14 @@ Public Class POS
             SynctoCloud.WindowState = FormWindowState.Minimized
             Button2.Text = "Show"
         End If
+    End Sub
+
+    Private Sub LabelTransactionType_TextChanged(sender As Object, e As EventArgs) Handles LabelTransactionType.TextChanged
+        Try
+            LabelTransactionType.Text = LabelTransactionType.Text.ToUpper
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        End Try
     End Sub
 
 

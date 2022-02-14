@@ -51,7 +51,8 @@
         TransactionTypeInfo.Show()
     End Sub
     Private Sub ButtonRepEx_Click(sender As Object, e As EventArgs) Handles ButtonRepEx.Click
-        transactionmode = "Representation Expenses"
+        TRANSACTIONMODE = "Representation Expenses"
+        POS.LabelTransactionType.Text = TRANSACTIONMODE
         If Application.OpenForms().OfType(Of TransactionTypeInfo).Any Then
             TransactionTypeInfo.Close()
         End If
@@ -70,7 +71,8 @@
         TransactionTypeInfo.Show()
     End Sub
     Private Sub TransactionType(btn)
-        transactionmode = btn.text
+        TRANSACTIONMODE = btn.text
+        POS.LabelTransactionType.Text = TRANSACTIONMODE
         ButtonEnableability(Me, False)
     End Sub
 End Class

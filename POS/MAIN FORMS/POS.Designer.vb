@@ -77,7 +77,6 @@ Partial Class POS
         Me.Panel14 = New System.Windows.Forms.Panel()
         Me.Panel21 = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Panel25 = New System.Windows.Forms.Panel()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.TextBoxGRANDTOTAL = New System.Windows.Forms.Label()
         Me.Label73 = New System.Windows.Forms.Label()
@@ -200,6 +199,9 @@ Partial Class POS
         Me.BackgroundWorker3 = New System.ComponentModel.BackgroundWorker()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.BackgroundWorkerInstallUpdates = New System.ComponentModel.BackgroundWorker()
+        Me.Panel33 = New System.Windows.Forms.Panel()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.LabelTransactionType = New System.Windows.Forms.Label()
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -225,7 +227,6 @@ Partial Class POS
         Me.Panel14.SuspendLayout()
         Me.Panel21.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.Panel25.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel11.SuspendLayout()
         CType(Me.DataGridViewOrders, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -244,6 +245,7 @@ Partial Class POS
         CType(Me.DataGridView4, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridView3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel33.SuspendLayout()
         Me.SuspendLayout()
         '
         'Panel7
@@ -744,31 +746,24 @@ Partial Class POS
         Me.TableLayoutPanel1.ColumnCount = 2
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.Panel25, 1, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label73, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxDISCOUNT, 1, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxSUBTOTAL, 1, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label6, 0, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label71, 0, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.LabelTransactionType, 1, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label12, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.Panel33, 1, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label71, 0, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label6, 0, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxSUBTOTAL, 1, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label73, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxDISCOUNT, 1, 1)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Right
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(544, 0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 3
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
+        Me.TableLayoutPanel1.RowCount = 4
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 23.33233!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 23.33233!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 23.33233!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30.003!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(433, 70)
         Me.TableLayoutPanel1.TabIndex = 67
-        '
-        'Panel25
-        '
-        Me.Panel25.Controls.Add(Me.Label10)
-        Me.Panel25.Controls.Add(Me.TextBoxGRANDTOTAL)
-        Me.Panel25.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel25.Location = New System.Drawing.Point(176, 45)
-        Me.Panel25.Name = "Panel25"
-        Me.Panel25.Size = New System.Drawing.Size(254, 22)
-        Me.Panel25.TabIndex = 80
         '
         'Label10
         '
@@ -777,7 +772,7 @@ Partial Class POS
         Me.Label10.ForeColor = System.Drawing.Color.FromArgb(CType(CType(74, Byte), Integer), CType(CType(74, Byte), Integer), CType(CType(74, Byte), Integer))
         Me.Label10.Location = New System.Drawing.Point(191, 0)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(20, 22)
+        Me.Label10.Size = New System.Drawing.Size(20, 16)
         Me.Label10.TabIndex = 77
         Me.Label10.Text = "₱"
         '
@@ -795,58 +790,53 @@ Partial Class POS
         '
         'Label73
         '
-        Me.Label73.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label73.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label73.ForeColor = System.Drawing.Color.FromArgb(CType(CType(136, Byte), Integer), CType(CType(146, Byte), Integer), CType(CType(143, Byte), Integer))
-        Me.Label73.Location = New System.Drawing.Point(3, 0)
+        Me.Label73.Location = New System.Drawing.Point(3, 16)
         Me.Label73.Name = "Label73"
-        Me.Label73.Size = New System.Drawing.Size(167, 21)
+        Me.Label73.Size = New System.Drawing.Size(167, 16)
         Me.Label73.TabIndex = 67
         Me.Label73.Text = "DISCOUNT"
         '
         'TextBoxDISCOUNT
         '
-        Me.TextBoxDISCOUNT.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxDISCOUNT.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxDISCOUNT.ForeColor = System.Drawing.Color.FromArgb(CType(CType(136, Byte), Integer), CType(CType(146, Byte), Integer), CType(CType(143, Byte), Integer))
-        Me.TextBoxDISCOUNT.Location = New System.Drawing.Point(176, 0)
+        Me.TextBoxDISCOUNT.Location = New System.Drawing.Point(176, 16)
         Me.TextBoxDISCOUNT.Name = "TextBoxDISCOUNT"
-        Me.TextBoxDISCOUNT.Size = New System.Drawing.Size(254, 21)
+        Me.TextBoxDISCOUNT.Size = New System.Drawing.Size(254, 16)
         Me.TextBoxDISCOUNT.TabIndex = 59
         Me.TextBoxDISCOUNT.Text = "0.00"
         Me.TextBoxDISCOUNT.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'TextBoxSUBTOTAL
         '
-        Me.TextBoxSUBTOTAL.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxSUBTOTAL.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxSUBTOTAL.ForeColor = System.Drawing.Color.FromArgb(CType(CType(136, Byte), Integer), CType(CType(146, Byte), Integer), CType(CType(143, Byte), Integer))
-        Me.TextBoxSUBTOTAL.Location = New System.Drawing.Point(176, 21)
+        Me.TextBoxSUBTOTAL.Location = New System.Drawing.Point(176, 32)
         Me.TextBoxSUBTOTAL.Name = "TextBoxSUBTOTAL"
-        Me.TextBoxSUBTOTAL.Size = New System.Drawing.Size(254, 21)
+        Me.TextBoxSUBTOTAL.Size = New System.Drawing.Size(254, 16)
         Me.TextBoxSUBTOTAL.TabIndex = 58
         Me.TextBoxSUBTOTAL.Text = "0.00"
         Me.TextBoxSUBTOTAL.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Label6
         '
-        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label6.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(136, Byte), Integer), CType(CType(146, Byte), Integer), CType(CType(143, Byte), Integer))
-        Me.Label6.Location = New System.Drawing.Point(3, 21)
+        Me.Label6.Location = New System.Drawing.Point(3, 32)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(167, 21)
+        Me.Label6.Size = New System.Drawing.Size(167, 16)
         Me.Label6.TabIndex = 72
         Me.Label6.Text = "SUB TOTAL"
         '
         'Label71
         '
-        Me.Label71.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label71.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Bold)
         Me.Label71.ForeColor = System.Drawing.Color.FromArgb(CType(CType(74, Byte), Integer), CType(CType(74, Byte), Integer), CType(CType(74, Byte), Integer))
-        Me.Label71.Location = New System.Drawing.Point(3, 42)
+        Me.Label71.Location = New System.Drawing.Point(3, 48)
         Me.Label71.Name = "Label71"
-        Me.Label71.Size = New System.Drawing.Size(167, 28)
+        Me.Label71.Size = New System.Drawing.Size(167, 22)
         Me.Label71.TabIndex = 66
         Me.Label71.Text = "GRAND TOTAL"
         '
@@ -2002,6 +1992,38 @@ Partial Class POS
         'BackgroundWorkerInstallUpdates
         '
         '
+        'Panel33
+        '
+        Me.Panel33.Controls.Add(Me.Label10)
+        Me.Panel33.Controls.Add(Me.TextBoxGRANDTOTAL)
+        Me.Panel33.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel33.Location = New System.Drawing.Point(176, 51)
+        Me.Panel33.Name = "Panel33"
+        Me.Panel33.Size = New System.Drawing.Size(254, 16)
+        Me.Panel33.TabIndex = 82
+        '
+        'Label12
+        '
+        Me.Label12.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.ForeColor = System.Drawing.Color.FromArgb(CType(CType(136, Byte), Integer), CType(CType(146, Byte), Integer), CType(CType(143, Byte), Integer))
+        Me.Label12.Location = New System.Drawing.Point(3, 0)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(167, 15)
+        Me.Label12.TabIndex = 68
+        Me.Label12.Text = "TRANSACTION TYPE"
+        '
+        'LabelTransactionType
+        '
+        Me.LabelTransactionType.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LabelTransactionType.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelTransactionType.ForeColor = System.Drawing.Color.FromArgb(CType(CType(136, Byte), Integer), CType(CType(146, Byte), Integer), CType(CType(143, Byte), Integer))
+        Me.LabelTransactionType.Location = New System.Drawing.Point(176, 0)
+        Me.LabelTransactionType.Name = "LabelTransactionType"
+        Me.LabelTransactionType.Size = New System.Drawing.Size(254, 16)
+        Me.LabelTransactionType.TabIndex = 69
+        Me.LabelTransactionType.Text = "Walk-In"
+        Me.LabelTransactionType.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'Column1
         '
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
@@ -2139,8 +2161,6 @@ Partial Class POS
         Me.Panel21.ResumeLayout(False)
         Me.Panel21.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.Panel25.ResumeLayout(False)
-        Me.Panel25.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         Me.Panel11.ResumeLayout(False)
         CType(Me.DataGridViewOrders, System.ComponentModel.ISupportInitialize).EndInit()
@@ -2165,6 +2185,8 @@ Partial Class POS
         CType(Me.DataGridView4, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridView3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel33.ResumeLayout(False)
+        Me.Panel33.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -2308,7 +2330,6 @@ Partial Class POS
     Friend WithEvents Panel34 As Panel
     Friend WithEvents ProgressBar1 As ProgressBar
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
-    Friend WithEvents Panel25 As Panel
     Public WithEvents Panel3 As Panel
     Friend WithEvents DataGridView5 As DataGridView
     Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
@@ -2339,6 +2360,9 @@ Partial Class POS
     Friend WithEvents DataGridViewUpdate As DataGridView
     Friend WithEvents Column65 As DataGridViewTextBoxColumn
     Friend WithEvents BackgroundWorkerInstallUpdates As System.ComponentModel.BackgroundWorker
+    Friend WithEvents LabelTransactionType As Label
+    Friend WithEvents Label12 As Label
+    Friend WithEvents Panel33 As Panel
     Friend WithEvents Column1 As DataGridViewTextBoxColumn
     Friend WithEvents Column2 As DataGridViewTextBoxColumn
     Friend WithEvents Column3 As DataGridViewTextBoxColumn

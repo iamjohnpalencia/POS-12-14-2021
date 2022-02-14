@@ -2980,17 +2980,9 @@ Public Class SettingsForm
                         Query = "UPDATE `tbcountertable` SET counter_value = '" & counterValue & "' WHERE counter_id = 1"
                         cmd = New MySqlCommand(Query, ConnectionLocal)
                         cmd.ExecuteNonQuery()
-
-                        Query = "UPDATE `loc_pos_inventory` SET stock_primary = 0, stock_secondary = 0, stock_no_of_servings = 0, date_modified = '" & FullDate24HR() & "'"
-                        cmd = New MySqlCommand(Query, ConnectionLocal)
-                        cmd.ExecuteNonQuery()
                     Else
                         counterValue = 1
                         Query = "INSERT INTO `tbcountertable` (counter_value, date_created) VALUES ('" & counterValue & "', '" & FullDate24HR() & "')"
-                        cmd = New MySqlCommand(Query, ConnectionLocal)
-                        cmd.ExecuteNonQuery()
-
-                        Query = "UPDATE `loc_pos_inventory` SET stock_primary = 0, stock_secondary = 0, stock_no_of_servings = 0, date_modified = '" & FullDate24HR() & "'"
                         cmd = New MySqlCommand(Query, ConnectionLocal)
                         cmd.ExecuteNonQuery()
                     End If
@@ -3000,23 +2992,11 @@ Public Class SettingsForm
                         Query = "UPDATE `tbcountertable` SET counter_value = '" & counterValue & "' WHERE counter_id = 1"
                         cmd = New MySqlCommand(Query, ConnectionLocal)
                         cmd.ExecuteNonQuery()
-                        If DataGridViewReset.Rows(8).Cells(1).Selected Then
-                            Query = "UPDATE `loc_pos_inventory` SET stock_primary = 0, stock_secondary = 0, stock_no_of_servings = 0, date_modified = '" & FullDate24HR() & "'"
-                            cmd = New MySqlCommand(Query, ConnectionLocal)
-                            cmd.ExecuteNonQuery()
-                        End If
-
                     Else
                         counterValue = 1
                         Query = "INSERT INTO `tbcountertable` (counter_value, date_created) VALUES ('" & counterValue & "', '" & FullDate24HR() & "')"
                         cmd = New MySqlCommand(Query, ConnectionLocal)
                         cmd.ExecuteNonQuery()
-
-                        If DataGridViewReset.Rows(8).Cells(1).Selected Then
-                            Query = "UPDATE `loc_pos_inventory` SET stock_primary = 0, stock_secondary = 0, stock_no_of_servings = 0, date_modified = '" & FullDate24HR() & "'"
-                            cmd = New MySqlCommand(Query, ConnectionLocal)
-                            cmd.ExecuteNonQuery()
-                        End If
                     End If
                 End If
                 LabelResetStatus.Text = counterValue

@@ -1562,7 +1562,7 @@ Public Class Reports
         Try
             loopa = 100
             loopb = 0
-            Dim sql = "SELECT  product_sku , SUM(quantity), SUM(total), product_category FROM loc_daily_transaction_details WHERE zreading >= '" & Format(DateTimePicker3.Value, "yyyy-MM-dd") & "' AND zreading <= '" & Format(DateTimePicker4.Value, "yyyy-MM-dd") & "' AND active = 1  AND store_id = '" & ClientStoreID & "' AND guid = '" & ClientGuid & "' GROUP BY product_name"
+            Dim sql = "SELECT product_sku , SUM(quantity), SUM(total), product_category FROM loc_daily_transaction_details WHERE zreading >= '" & Format(DateTimePicker3.Value, "yyyy-MM-dd") & "' AND zreading <= '" & Format(DateTimePicker4.Value, "yyyy-MM-dd") & "' AND active = 1  AND store_id = '" & ClientStoreID & "' AND guid = '" & ClientGuid & "' GROUP BY product_name"
             Dim cmd As MySqlCommand = New MySqlCommand(sql, LocalhostConn)
             Dim da As MySqlDataAdapter = New MySqlDataAdapter(cmd)
             PrintSalesDatatable = New DataTable
@@ -1627,9 +1627,9 @@ Public Class Reports
 
                     Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales * 100
                     SimplyPerfectPercentage += Percentage
-                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 60, 77)
+                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2) & "%", font, 60, 77)
                     loopa += 10
-                    SimplyPerfectQty += 1
+                    SimplyPerfectQty += DataGridViewSales.Rows(i).Cells(2).Value
                     SimplyPerfectTotalSales += DataGridViewSales.Rows(i).Cells(4).Value
                     RightDisplay1(sender, e, loopa + 40, "", Math.Round(DataGridViewSales.Rows(i).Cells(4).Value, 2), font, 60, 145)
                 End If
@@ -1639,7 +1639,7 @@ Public Class Reports
             PrintSmallLine(sender, e, font, loopa)
             SimpleTextDisplay(sender, e, "SUBTOTAL", font, 0, loopa + 10)
             SimplyPerfectPercentage = SimplyPerfectTotalSales / TotalSales * 100
-            RightDisplay1(sender, e, loopa + 30, SimplyPerfectQty, Math.Round(SimplyPerfectPercentage, 2), font, 60, 77)
+            RightDisplay1(sender, e, loopa + 30, SimplyPerfectQty, Math.Round(SimplyPerfectPercentage, 2) & "%", font, 60, 77)
             RightDisplay1(sender, e, loopa + 30, "", Math.Round(SimplyPerfectTotalSales, 2), font, 60, 145)
             loopa += 10
             PrintSmallLine(sender, e, font, loopa + 30)
@@ -1665,9 +1665,9 @@ Public Class Reports
 
                     Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales * 100
                     PerfectCombinationPercentage += Percentage
-                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 60, 77)
+                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2) & "%", font, 60, 77)
                     loopa += 10
-                    PerfectCombinationQty += 1
+                    PerfectCombinationQty += DataGridViewSales.Rows(i).Cells(2).Value
                     PerfectCombinationTotalSales += DataGridViewSales.Rows(i).Cells(4).Value
                     RightDisplay1(sender, e, loopa + 40, "", Math.Round(DataGridViewSales.Rows(i).Cells(4).Value, 2), font, 60, 145)
                 End If
@@ -1677,7 +1677,7 @@ Public Class Reports
             PrintSmallLine(sender, e, font, loopa)
             SimpleTextDisplay(sender, e, "SUBTOTAL", font, 0, loopa + 10)
             PerfectCombinationPercentage = PerfectCombinationTotalSales / TotalSales * 100
-            RightDisplay1(sender, e, loopa + 30, PerfectCombinationQty, Math.Round(PerfectCombinationPercentage, 2), font, 60, 77)
+            RightDisplay1(sender, e, loopa + 30, PerfectCombinationQty, Math.Round(PerfectCombinationPercentage, 2) & "%", font, 60, 77)
             RightDisplay1(sender, e, loopa + 30, "", Math.Round(PerfectCombinationTotalSales, 2), font, 60, 145)
             loopa += 10
             PrintSmallLine(sender, e, font, loopa + 30)
@@ -1703,9 +1703,9 @@ Public Class Reports
 
                     Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales * 100
                     PremiumPercentage += Percentage
-                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 60, 77)
+                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2) & "%", font, 60, 77)
                     loopa += 10
-                    PremiumQty += 1
+                    PremiumQty += DataGridViewSales.Rows(i).Cells(2).Value
                     PremiumTotalSales += DataGridViewSales.Rows(i).Cells(4).Value
                     RightDisplay1(sender, e, loopa + 40, "", Math.Round(DataGridViewSales.Rows(i).Cells(4).Value, 2), font, 60, 145)
                 End If
@@ -1715,7 +1715,7 @@ Public Class Reports
             PrintSmallLine(sender, e, font, loopa)
             SimpleTextDisplay(sender, e, "SUBTOTAL", font, 0, loopa + 10)
             PremiumPercentage = PremiumTotalSales / TotalSales * 100
-            RightDisplay1(sender, e, loopa + 30, PremiumQty, Math.Round(PremiumPercentage, 2), font, 60, 77)
+            RightDisplay1(sender, e, loopa + 30, PremiumQty, Math.Round(PremiumPercentage, 2) & "%", font, 60, 77)
             RightDisplay1(sender, e, loopa + 30, "", Math.Round(PremiumTotalSales, 2), font, 60, 145)
             loopa += 10
             PrintSmallLine(sender, e, font, loopa + 30)
@@ -1743,9 +1743,9 @@ Public Class Reports
 
                     Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales * 100
                     ComboPercentage += Percentage
-                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 60, 77)
+                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2) & "%", font, 60, 77)
                     loopa += 10
-                    ComboQty += 1
+                    ComboQty += DataGridViewSales.Rows(i).Cells(2).Value
                     ComboTotalSales += DataGridViewSales.Rows(i).Cells(4).Value
                     RightDisplay1(sender, e, loopa + 40, "", Math.Round(DataGridViewSales.Rows(i).Cells(4).Value, 2), font, 60, 145)
                 End If
@@ -1755,7 +1755,7 @@ Public Class Reports
             PrintSmallLine(sender, e, font, loopa)
             SimpleTextDisplay(sender, e, "SUBTOTAL", font, 0, loopa + 10)
             ComboPercentage = ComboTotalSales / TotalSales * 100
-            RightDisplay1(sender, e, loopa + 30, ComboQty, Math.Round(ComboPercentage, 2), font, 60, 77)
+            RightDisplay1(sender, e, loopa + 30, ComboQty, Math.Round(ComboPercentage, 2) & "%", font, 60, 77)
             RightDisplay1(sender, e, loopa + 30, "", Math.Round(ComboTotalSales, 2), font, 60, 145)
             loopa += 10
             PrintSmallLine(sender, e, font, loopa + 30)
@@ -1782,9 +1782,9 @@ Public Class Reports
 
                     Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales * 100
                     SavoryPercentage += Percentage
-                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 60, 77)
+                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2) & "%", font, 60, 77)
                     loopa += 10
-                    SavoryQty += 1
+                    SavoryQty += DataGridViewSales.Rows(i).Cells(2).Value
                     SavoryTotalSales += DataGridViewSales.Rows(i).Cells(4).Value
                     RightDisplay1(sender, e, loopa + 40, "", Math.Round(DataGridViewSales.Rows(i).Cells(4).Value, 2), font, 60, 145)
                 End If
@@ -1794,7 +1794,7 @@ Public Class Reports
             PrintSmallLine(sender, e, font, loopa)
             SimpleTextDisplay(sender, e, "SUBTOTAL", font, 0, loopa + 10)
             SavoryPercentage = SavoryTotalSales / TotalSales * 100
-            RightDisplay1(sender, e, loopa + 30, SavoryQty, Math.Round(SavoryPercentage, 2), font, 60, 77)
+            RightDisplay1(sender, e, loopa + 30, SavoryQty, Math.Round(SavoryPercentage, 2) & "%", font, 60, 77)
             RightDisplay1(sender, e, loopa + 30, "", Math.Round(SavoryTotalSales, 2), font, 60, 145)
             loopa += 10
             PrintSmallLine(sender, e, font, loopa + 30)
@@ -1821,9 +1821,9 @@ Public Class Reports
 
                     Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales * 100
                     FamousBlendsPercentage += Percentage
-                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 60, 77)
+                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2) & "%", font, 60, 77)
                     loopa += 10
-                    FamousBlendsQty += 1
+                    FamousBlendsQty += DataGridViewSales.Rows(i).Cells(2).Value
                     FamousBlendsTotalSales += DataGridViewSales.Rows(i).Cells(4).Value
                     RightDisplay1(sender, e, loopa + 40, "", Math.Round(DataGridViewSales.Rows(i).Cells(4).Value, 2), font, 60, 145)
                 End If
@@ -1833,7 +1833,7 @@ Public Class Reports
             PrintSmallLine(sender, e, font, loopa)
             SimpleTextDisplay(sender, e, "SUBTOTAL", font, 0, loopa + 10)
             FamousBlendsPercentage = FamousBlendsTotalSales / TotalSales * 100
-            RightDisplay1(sender, e, loopa + 30, FamousBlendsQty, Math.Round(FamousBlendsPercentage, 2), font, 60, 77)
+            RightDisplay1(sender, e, loopa + 30, FamousBlendsQty, Math.Round(FamousBlendsPercentage, 2) & "%", font, 60, 77)
             RightDisplay1(sender, e, loopa + 30, "", Math.Round(FamousBlendsTotalSales, 2), font, 60, 145)
             loopa += 10
             PrintSmallLine(sender, e, font, loopa + 30)
@@ -1859,9 +1859,9 @@ Public Class Reports
 
                     Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales * 100
                     AddOnsPercentage += Percentage
-                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 60, 77)
+                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2) & "%", font, 60, 77)
                     loopa += 10
-                    AddOnsQty += 1
+                    AddOnsQty += DataGridViewSales.Rows(i).Cells(2).Value
                     AddOnsTotalSales += DataGridViewSales.Rows(i).Cells(4).Value
                     RightDisplay1(sender, e, loopa + 40, "", Math.Round(DataGridViewSales.Rows(i).Cells(4).Value, 2), font, 60, 145)
                 End If
@@ -1871,7 +1871,7 @@ Public Class Reports
             PrintSmallLine(sender, e, font, loopa)
             SimpleTextDisplay(sender, e, "SUBTOTAL", font, 0, loopa + 10)
             AddOnsPercentage = AddOnsTotalSales / TotalSales * 100
-            RightDisplay1(sender, e, loopa + 30, AddOnsQty, Math.Round(AddOnsPercentage, 2), font, 60, 77)
+            RightDisplay1(sender, e, loopa + 30, AddOnsQty, Math.Round(AddOnsPercentage, 2) & "%", font, 60, 77)
             RightDisplay1(sender, e, loopa + 30, "", Math.Round(AddOnsTotalSales, 2), font, 60, 145)
 
             loopa += 10
@@ -1900,9 +1900,9 @@ Public Class Reports
 
                     Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales * 100
                     OthersPercentage += Percentage
-                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 60, 77)
+                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2) & "%", font, 60, 77)
                     loopa += 10
-                    OthersQty += 1
+                    OthersQty += DataGridViewSales.Rows(i).Cells(2).Value
                     OthersTotalSales += DataGridViewSales.Rows(i).Cells(4).Value
                     RightDisplay1(sender, e, loopa + 40, "", Math.Round(DataGridViewSales.Rows(i).Cells(4).Value, 2), font, 60, 145)
                 End If
@@ -1912,7 +1912,7 @@ Public Class Reports
             PrintSmallLine(sender, e, font, loopa)
             SimpleTextDisplay(sender, e, "SUBTOTAL", font, 0, loopa + 10)
             OthersPercentage = OthersTotalSales / TotalSales * 100
-            RightDisplay1(sender, e, loopa + 30, OthersQty, Math.Round(OthersPercentage, 2), font, 60, 77)
+            RightDisplay1(sender, e, loopa + 30, OthersQty, Math.Round(OthersPercentage, 2) & "%", font, 60, 77)
             RightDisplay1(sender, e, loopa + 30, "", Math.Round(OthersTotalSales, 2), font, 60, 145)
 
             TotalPercentage += OthersPercentage

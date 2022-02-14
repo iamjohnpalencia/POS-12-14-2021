@@ -212,7 +212,7 @@ Module NEWPOSMODULE
                                     MsgBox("Add-Ons are exclusive for fbw waffles only")
                                 Else
                                     ThisIsMyInventoryID = .TextBoxINC.Text
-                                    .DataGridViewOrders.Rows.Insert(DatagridviewRowIndex + 1, Name, TotalQuantity, ProductOriginalPrice, TotalAddOnPrice, .TextBoxINC.Text, ProductID, Code, Category, .DataGridViewOrders.SelectedRows(0).Cells(5).Value.ToString, "AOCLASSIC", InventoryID, 0, Origin, Addontype)
+                                    .DataGridViewOrders.Rows.Insert(DatagridviewRowIndex + 1, Name, TotalQuantity, ProductOriginalPrice, TotalAddOnPrice, .TextBoxINC.Text, ProductID, Code, Category, .DataGridViewOrders.SelectedRows(0).Cells(5).Value.ToString, "AOCLASSIC", InventoryID, 0, Origin, Addontype, halfbatch)
                                 End If
                             Else
                                 ThisIsMyInventoryID = .TextBoxINC.Text
