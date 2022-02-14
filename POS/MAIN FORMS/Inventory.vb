@@ -36,7 +36,7 @@ Public Class Inventory
             loadinventorycustomdisapp()
 
             If ClientRole = "Crew" Then
-                TabControl1.TabPages.Remove(TabControl1.TabPages(4))
+                'TabControl1.TabPages.Remove(TabControl1.TabPages(4))
                 TabControl1.TabPages.Remove(TabControl1.TabPages(3))
                 Button7.Enabled = False
                 Button7.Visible = False

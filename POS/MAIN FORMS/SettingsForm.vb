@@ -643,6 +643,8 @@ Public Class SettingsForm
             GLOBAL_INSERT_FUNCTION(table:="`loc_refund_return_details`", fields:=fields, values:=value)
             GLOBAL_FUNCTION_UPDATE("loc_daily_transaction", "active = 2 , synced = 'Unsynced'", "transaction_number = '" & transaction_num & "'")
             GLOBAL_FUNCTION_UPDATE("loc_daily_transaction_details", "active = 2 , synced = 'Unsynced'", "transaction_number = '" & transaction_num & "'")
+            GLOBAL_FUNCTION_UPDATE("loc_coupon_data", "status = 2 , synced = 'Unsynced'", "transaction_number = '" & transaction_num & "'")
+
             GLOBAL_SYSTEM_LOGS("RETURN", "Reason: " & TextBoxIRREASON.Text & " Trn.Number: " & transaction_num & " Total Amount: " & grandtotal)
             LabelITEMRET.Text = 0
             loaditemreturn(True)
@@ -1849,6 +1851,9 @@ Public Class SettingsForm
                 dtserver = New DataTable
                 daserver.Fill(dtserver)
                 For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                    If WorkerCanceled Then
+                        Exit Sub
+                    End If
                     DataGridView1.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4), dtserver(i)(5))
                     LabelNewRows.Text += Val(LabelNewRows.Text)
                 Next
@@ -1868,6 +1873,9 @@ Public Class SettingsForm
                     dtserver = New DataTable
                     daserver.Fill(dtserver)
                     For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                        If WorkerCanceled Then
+                            Exit Sub
+                        End If
                         If LoadCategoryLocal(i)(0).ToString <> dtserver(i)(3).ToString Then
                             DataGridView1.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4), dtserver(i)(5))
                         End If
@@ -1881,6 +1889,9 @@ Public Class SettingsForm
                     daserver.Fill(dtserver)
                     For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
                         If LoadCategoryLocal(i)(0) <> dtserver(i)(3) Then
+                            If WorkerCanceled Then
+                                Exit Sub
+                            End If
                             DataGridView1.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4), dtserver(i)(5))
                             LabelNewRows.Text += Val(LabelNewRows.Text)
                         End If
@@ -1935,6 +1946,9 @@ Public Class SettingsForm
                 Dim FillDt As DataTable = New DataTable
 
                 For a = 1 To result
+                    If WorkerCanceled Then
+                        Exit Sub
+                    End If
                     Dim Query1 As String = "SELECT date_modified, price_change FROM loc_admin_products WHERE server_product_id = " & a
                     Dim cmd As MySqlCommand = New MySqlCommand(Query1, ConnectionLocal)
                     DaCount = New MySqlDataAdapter(cmd)
@@ -2035,6 +2049,9 @@ Public Class SettingsForm
             Dim DaCount As MySqlDataAdapter
             Dim FillDt As DataTable = New DataTable
             For a = 1 To result
+                If WorkerCanceled Then
+                    Exit Sub
+                End If
                 Dim Query As String = "SELECT * FROM admin_products_org WHERE product_id = " & a
                 Cmd = New MySqlCommand(Query, Connection)
                 DaCount = New MySqlDataAdapter(Cmd)
@@ -2111,6 +2128,9 @@ Public Class SettingsForm
                 dtserver = New DataTable
                 daserver.Fill(dtserver)
                 For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                    If WorkerCanceled Then
+                        Exit Sub
+                    End If
                     DataGridView3.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3), dtserver(i)(4), dtserver(i)(5), dtserver(i)(6), dtserver(i)(7), dtserver(i)(8), dtserver(i)(9), dtserver(i)(10).ToString, dtserver(i)(11), dtserver(i)(12))
                     LabelNewRows.Text += Val(LabelNewRows.Text)
                 Next
@@ -2131,6 +2151,9 @@ Public Class SettingsForm
                     dtserver = New DataTable
                     daserver.Fill(dtserver)
                     For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                        If WorkerCanceled Then
+                            Exit Sub
+                        End If
                         If FormulaLocal(i)(0).ToString <> dtserver(i)(10).ToString Then
                             DataGridView3.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3), dtserver(i)(4), dtserver(i)(5), dtserver(i)(6), dtserver(i)(7), dtserver(i)(8), dtserver(i)(9), dtserver(i)(10).ToString, dtserver(i)(11), dtserver(i)(12))
                         End If
@@ -2143,6 +2166,9 @@ Public Class SettingsForm
                     dtserver = New DataTable
                     daserver.Fill(dtserver)
                     For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                        If WorkerCanceled Then
+                            Exit Sub
+                        End If
                         If FormulaLocal(i)(0).ToString <> dtserver(i)(10) Then
                             DataGridView3.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3), dtserver(i)(4), dtserver(i)(5), dtserver(i)(6), dtserver(i)(7), dtserver(i)(8), dtserver(i)(9), dtserver(i)(10).ToString, dtserver(i)(11), dtserver(i)(12))
                             LabelNewRows.Text += Val(LabelNewRows.Text)
@@ -2202,6 +2228,9 @@ Public Class SettingsForm
                 dtserver = New DataTable
                 daserver.Fill(dtserver)
                 For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                    If WorkerCanceled Then
+                        Exit Sub
+                    End If
                     DataGridView4.Rows.Add(dtserver(i)(0), 0, dtserver(i)(1), dtserver(i)(2), dtserver(i)(3), dtserver(i)(4), dtserver(i)(5), dtserver(i)(6), dtserver(i)(7), dtserver(i)(8).ToString, dtserver(i)(9).ToString, dtserver(i)(10).ToString)
                     LabelNewRows.Text += Val(LabelNewRows.Text)
                 Next
@@ -2222,6 +2251,9 @@ Public Class SettingsForm
                     dtserver = New DataTable
                     daserver.Fill(dtserver)
                     For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                        If WorkerCanceled Then
+                            Exit Sub
+                        End If
                         If InventoryLocal(i)(0).ToString <> dtserver(i)(8).ToString Then
                             DataGridView4.Rows.Add(dtserver(i)(0), 0, dtserver(i)(1), dtserver(i)(2), dtserver(i)(3), dtserver(i)(4), dtserver(i)(5), dtserver(i)(6), dtserver(i)(7), dtserver(i)(8).ToString, dtserver(i)(9).ToString, dtserver(i)(10).ToString)
                         End If
@@ -2234,6 +2266,9 @@ Public Class SettingsForm
                     dtserver = New DataTable
                     daserver.Fill(dtserver)
                     For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                        If WorkerCanceled Then
+                            Exit Sub
+                        End If
                         If InventoryLocal(i)(0).ToString <> dtserver(i)(8) Then
                             DataGridView4.Rows.Add(dtserver(i)(0), 0, dtserver(i)(1), dtserver(i)(2), dtserver(i)(3), dtserver(i)(4), dtserver(i)(5), dtserver(i)(6), dtserver(i)(7), dtserver(i)(8).ToString, dtserver(i)(9).ToString, dtserver(i)(10).ToString)
                             LabelNewRows.Text += Val(LabelNewRows.Text)
@@ -2289,6 +2324,9 @@ Public Class SettingsForm
                 dtserver = New DataTable
                 daserver.Fill(dtserver)
                 For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                    If WorkerCanceled Then
+                        Exit Sub
+                    End If
                     DataGridView6.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4), dtserver(i)(5), dtserver(i)(6), dtserver(i)(7), dtserver(i)(8), dtserver(i)(9), dtserver(i)(10), dtserver(i)(11), dtserver(i)(12))
                     LabelNewRows.Text += Val(LabelNewRows.Text)
                 Next
@@ -2308,6 +2346,9 @@ Public Class SettingsForm
                     dtserver = New DataTable
                     daserver.Fill(dtserver)
                     For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                        If WorkerCanceled Then
+                            Exit Sub
+                        End If
                         If LoadCouponsLocal(i)(0).ToString <> dtserver(i)(12).ToString Then
                             DataGridView6.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4), dtserver(i)(5), dtserver(i)(6), dtserver(i)(7), dtserver(i)(8), dtserver(i)(9), dtserver(i)(10), dtserver(i)(11), dtserver(i)(12))
                         End If
@@ -2320,6 +2361,9 @@ Public Class SettingsForm
                     dtserver = New DataTable
                     daserver.Fill(dtserver)
                     For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                        If WorkerCanceled Then
+                            Exit Sub
+                        End If
                         If LoadCouponsLocal(i)(0) <> dtserver(i)(12) Then
                             DataGridView6.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4), dtserver(i)(5), dtserver(i)(6), dtserver(i)(7), dtserver(i)(8), dtserver(i)(9), dtserver(i)(10), dtserver(i)(11), dtserver(i)(12))
                             LabelNewRows.Text += Val(LabelNewRows.Text)
@@ -2373,6 +2417,9 @@ Public Class SettingsForm
                 dtserver = New DataTable
                 daserver.Fill(dtserver)
                 For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                    If WorkerCanceled Then
+                        Exit Sub
+                    End If
                     DataGridView7.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4))
                     LabelNewRows.Text += Val(LabelNewRows.Text)
                 Next
@@ -2392,6 +2439,9 @@ Public Class SettingsForm
                     dtserver = New DataTable
                     daserver.Fill(dtserver)
                     For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                        If WorkerCanceled Then
+                            Exit Sub
+                        End If
                         If LoadPartnersCategory(i)(0).ToString <> dtserver(i)(3).ToString Then
                             DataGridView7.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4))
                         End If
@@ -2404,6 +2454,9 @@ Public Class SettingsForm
                     dtserver = New DataTable
                     daserver.Fill(dtserver)
                     For i As Integer = 0 To dtserver.Rows.Count - 1 Step +1
+                        If WorkerCanceled Then
+                            Exit Sub
+                        End If
                         If LoadPartnersCategory(i)(0) <> dtserver(i)(3) Then
                             DataGridView7.Rows.Add(dtserver(i)(0), dtserver(i)(1), dtserver(i)(2), dtserver(i)(3).ToString, dtserver(i)(4))
                             LabelNewRows.Text += Val(LabelNewRows.Text)
@@ -2818,6 +2871,7 @@ Public Class SettingsForm
                     TruncateTableAll("loc_daily_transaction_details")
                     TruncateTableAll("loc_senior_details")
                     TruncateTableAll("loc_transaction_mode_details")
+                    TruncateTableAll("loc_coupon_data")
                 End If
                 If .Rows(1).Cells(1).Selected Then
                     TruncateTableAll("loc_deposit")
@@ -2895,26 +2949,25 @@ Public Class SettingsForm
                 Dim ConnectionLocal As MySqlConnection = LocalhostConn()
                 'Dim cmd As MySqlCommand = New MySqlCommand(Query, ConnectionLocal)
                 'Dim res = cmd.ExecuteNonQuery()
-                If CheckBoxAll.Checked Then
-                    Dim ReturnBool As Boolean = False
+                Dim ReturnBool As Boolean = False
 
+
+                Query = "SELECT counter_value FROM `tbcountertable` WHERE counter_id = 1"
+                cmd = New MySqlCommand(Query, ConnectionLocal)
+                Using reader As MySqlDataReader = cmd.ExecuteReader
+                    If reader.HasRows Then
+                        ReturnBool = True
+                        While reader.Read
+                            counterValue = reader("counter_value")
+                        End While
+                    Else
+                        ReturnBool = False
+                    End If
+                End Using
+                If CheckBoxAll.Checked Then
                     For Each value As String In array
                         TruncateTableAll(value)
                     Next
-
-                    Query = "SELECT counter_value FROM `tbcountertable` WHERE counter_id = 1"
-                    cmd = New MySqlCommand(Query, ConnectionLocal)
-                    Using reader As MySqlDataReader = cmd.ExecuteReader
-                        If reader.HasRows Then
-                            ReturnBool = True
-                            While reader.Read
-                                counterValue = reader("counter_value")
-                            End While
-                        Else
-                            ReturnBool = False
-                        End If
-                    End Using
-
                     If ReturnBool Then
                         counterValue += 1
                         Query = "UPDATE `tbcountertable` SET counter_value = '" & counterValue & "' WHERE counter_id = 1"
@@ -2933,6 +2986,30 @@ Public Class SettingsForm
                         Query = "UPDATE `loc_pos_inventory` SET stock_primary = 0, stock_secondary = 0, stock_no_of_servings = 0, date_modified = '" & FullDate24HR() & "'"
                         cmd = New MySqlCommand(Query, ConnectionLocal)
                         cmd.ExecuteNonQuery()
+                    End If
+                Else
+                    If ReturnBool Then
+                        counterValue += 1
+                        Query = "UPDATE `tbcountertable` SET counter_value = '" & counterValue & "' WHERE counter_id = 1"
+                        cmd = New MySqlCommand(Query, ConnectionLocal)
+                        cmd.ExecuteNonQuery()
+                        If DataGridViewReset.Rows(8).Cells(1).Selected Then
+                            Query = "UPDATE `loc_pos_inventory` SET stock_primary = 0, stock_secondary = 0, stock_no_of_servings = 0, date_modified = '" & FullDate24HR() & "'"
+                            cmd = New MySqlCommand(Query, ConnectionLocal)
+                            cmd.ExecuteNonQuery()
+                        End If
+
+                    Else
+                        counterValue = 1
+                        Query = "INSERT INTO `tbcountertable` (counter_value, date_created) VALUES ('" & counterValue & "', '" & FullDate24HR() & "')"
+                        cmd = New MySqlCommand(Query, ConnectionLocal)
+                        cmd.ExecuteNonQuery()
+
+                        If DataGridViewReset.Rows(8).Cells(1).Selected Then
+                            Query = "UPDATE `loc_pos_inventory` SET stock_primary = 0, stock_secondary = 0, stock_no_of_servings = 0, date_modified = '" & FullDate24HR() & "'"
+                            cmd = New MySqlCommand(Query, ConnectionLocal)
+                            cmd.ExecuteNonQuery()
+                        End If
                     End If
                 End If
                 LabelResetStatus.Text = counterValue

@@ -1752,10 +1752,13 @@ Public Class ConfigManager
             Try
                 TextBox1.Text += FullDate24HR() & " :    Getting cloud server's products data." & vbNewLine
                 Dim Connection As MySqlConnection = TestCloudConnection()
-                Dim SqlCount = "SELECT COUNT(product_id) FROM admin_products_org"
+                Dim SqlCount = "SELECT product_id FROM admin_products_org"
                 Dim CmdCount As MySqlCommand = New MySqlCommand(SqlCount, Connection)
-                Dim result As Integer = CmdCount.ExecuteScalar
-                DtCount = New DataTable
+                Dim DaCount As MySqlDataAdapter = New MySqlDataAdapter(CmdCount)
+                Dim DTCountProductID As DataTable = New DataTable
+                DaCount.Fill(DTCountProductID)
+                'Dim result As Integer = CmdCount.ExecuteScalar
+                DTCount = New DataTable
                 DtCount.Columns.Add("product_id")
                 DtCount.Columns.Add("product_sku")
                 DtCount.Columns.Add("product_name")
@@ -1770,16 +1773,17 @@ Public Class ConfigManager
                 DtCount.Columns.Add("date_modified")
                 DtCount.Columns.Add("inventory_id")
                 DtCount.Columns.Add("addontype")
-                Dim DaCount As MySqlDataAdapter
+                DtCount.Columns.Add("half_batch")
+                'Dim DaCount As MySqlDataAdapter
                 Dim FillDt As DataTable = New DataTable
-                For a = 1 To result
-                    Dim Query As String = "SELECT * FROM admin_products_org WHERE product_id = " & a
+                For a = 0 To DTCountProductID.Rows.Count - 1 Step +1
+                    Dim Query As String = "SELECT * FROM admin_products_org WHERE product_id = " & DTCountProductID(a)(0)
                     cmd = New MySqlCommand(Query, Connection)
                     DaCount = New MySqlDataAdapter(cmd)
                     FillDt = New DataTable
                     DaCount.Fill(FillDt)
                     For i As Integer = 0 To FillDt.Rows.Count - 1 Step +1
-                        Dim Prod As DataRow = DtCount.NewRow
+                        Dim Prod As DataRow = DTCount.NewRow
                         Prod("product_id") = FillDt(i)(0)
                         Prod("product_sku") = FillDt(i)(1)
                         Prod("product_name") = FillDt(i)(2)
@@ -1794,7 +1798,8 @@ Public Class ConfigManager
                         Prod("date_modified") = FillDt(i)(11)
                         Prod("inventory_id") = FillDt(i)(12)
                         Prod("addontype") = FillDt(i)(13)
-                        DtCount.Rows.Add(Prod)
+                        Prod("half_batch") = FillDt(i)(14)
+                        DTCount.Rows.Add(Prod)
                     Next
                 Next
                 TextBox1.Text += FullDate24HR() & " :    Complete(Fetching of products data)" & vbNewLine
@@ -1888,8 +1893,8 @@ Public Class ConfigManager
                 Dim ConnectionLocal As MySqlConnection = TestLocalConnection()
                 Dim cmdlocal As MySqlCommand
                 For i As Integer = 0 To .Rows.Count - 1 Step +1
-                    cmdlocal = New MySqlCommand("INSERT INTO loc_admin_products(`server_product_id`,`product_sku`, `product_name`, `formula_id`, `product_barcode`, `product_category`, `product_price`, `product_desc`, `product_image`, `product_status`, `origin`, `date_modified`, `server_inventory_id`, `guid`, `store_id`, `synced`, `addontype`)
-                                             VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11, @12, @13, @14, @15 ,@16)", ConnectionLocal)
+                    cmdlocal = New MySqlCommand("INSERT INTO loc_admin_products(`server_product_id`,`product_sku`, `product_name`, `formula_id`, `product_barcode`, `product_category`, `product_price`, `product_desc`, `product_image`, `product_status`, `origin`, `date_modified`, `server_inventory_id`, `guid`, `store_id`, `synced`, `addontype`, `half_batch`)
+                                             VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11, @12, @13, @14, @15 ,@16, @17)", ConnectionLocal)
                     cmdlocal.Parameters.Add("@0", MySqlDbType.Int32).Value = .Rows(i).Cells(0).Value.ToString()
                     cmdlocal.Parameters.Add("@1", MySqlDbType.VarChar).Value = .Rows(i).Cells(1).Value.ToString()
                     cmdlocal.Parameters.Add("@2", MySqlDbType.VarChar).Value = .Rows(i).Cells(2).Value.ToString()
@@ -1907,7 +1912,7 @@ Public Class ConfigManager
                     cmdlocal.Parameters.Add("@14", MySqlDbType.Int32).Value = DataGridViewOutlets.SelectedRows(0).Cells(0).Value
                     cmdlocal.Parameters.Add("@15", MySqlDbType.VarChar).Value = "Synced"
                     cmdlocal.Parameters.Add("@16", MySqlDbType.Text).Value = .Rows(i).Cells(13).Value
-
+                    cmdlocal.Parameters.Add("@17", MySqlDbType.Text).Value = .Rows(i).Cells(14).Value
                     cmdlocal.ExecuteNonQuery()
                 Next
             End With

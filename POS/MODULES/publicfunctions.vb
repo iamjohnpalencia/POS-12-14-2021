@@ -72,7 +72,31 @@ Module publicfunctions
         End Try
     End Sub
 
+    Public Sub ReturnZero(ByVal root As Control)
 
+        '        If String.IsNullOrEmpty(textBox2.Text)) Then
+
+
+        '    textBox2.Text = "0";                
+        '}
+
+        Try
+            For Each ctrl As Control In root.Controls
+                ReturnZero(ctrl)
+                If TypeOf ctrl Is TextBox Then
+                    If String.IsNullOrEmpty(CType(ctrl, TextBox).Text) Then
+                        CType(ctrl, TextBox).Text = "0"
+                        CType(ctrl, TextBox).SelectAll()
+                    End If
+                End If
+            Next ctrl
+
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+            SendErrorReport(ex.ToString)
+        End Try
+
+    End Sub
     'Public Sub TextboxReadOnly(ByVal root As Control, ENB As Boolean)
     '    Try
     '        For Each ctrl As Control In root.Controls
@@ -346,6 +370,7 @@ Module publicfunctions
             Shift = ""
             BeginningBalance = 0
             EndingBalance = 0
+            BegBalanceBool = False
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
@@ -418,6 +443,14 @@ Module publicfunctions
             SimpleTextDisplay(sender, e, "----------------------------------------------------------------", FontDefault, 0, RowA)
         Else
             SimpleTextDisplay(sender, e, "----------------------------------------------------------------------", FontDefault, 0, RowA)
+        End If
+    End Sub
+    Public Sub PrintSmallLine(sender As Object, e As PrintPageEventArgs, FontDefault As Font, RowA As Integer)
+
+        If My.Settings.PrintSize = "57mm" Then
+            SimpleTextDisplay(sender, e, "-------------------------------------------------------------", FontDefault, 0, RowA)
+        Else
+            SimpleTextDisplay(sender, e, "-------------------------------------------------------------------", FontDefault, 0, RowA)
         End If
     End Sub
 

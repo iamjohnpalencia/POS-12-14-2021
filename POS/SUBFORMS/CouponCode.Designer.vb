@@ -90,7 +90,7 @@ Partial Class CouponCode
         Me.DataGridViewCoupons.Location = New System.Drawing.Point(3, 23)
         Me.DataGridViewCoupons.Name = "DataGridViewCoupons"
         Me.DataGridViewCoupons.RowHeadersVisible = False
-        Me.DataGridViewCoupons.Size = New System.Drawing.Size(640, 206)
+        Me.DataGridViewCoupons.Size = New System.Drawing.Size(783, 272)
         Me.DataGridViewCoupons.TabIndex = 207
         '
         'Column1
@@ -172,7 +172,7 @@ Partial Class CouponCode
         Me.ButtonSubmit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonSubmit.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonSubmit.ForeColor = System.Drawing.Color.White
-        Me.ButtonSubmit.Location = New System.Drawing.Point(509, 23)
+        Me.ButtonSubmit.Location = New System.Drawing.Point(652, 23)
         Me.ButtonSubmit.Name = "ButtonSubmit"
         Me.ButtonSubmit.Size = New System.Drawing.Size(134, 28)
         Me.ButtonSubmit.TabIndex = 180
@@ -191,7 +191,7 @@ Partial Class CouponCode
         Me.TableLayoutPanel1.RowCount = 2
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(652, 298)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(795, 364)
         Me.TableLayoutPanel1.TabIndex = 208
         '
         'GroupBox2
@@ -200,9 +200,9 @@ Partial Class CouponCode
         Me.GroupBox2.Controls.Add(Me.FlowLayoutPanel1)
         Me.GroupBox2.Controls.Add(Me.ButtonSubmit)
         Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox2.Location = New System.Drawing.Point(3, 241)
+        Me.GroupBox2.Location = New System.Drawing.Point(3, 307)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(646, 54)
+        Me.GroupBox2.Size = New System.Drawing.Size(789, 54)
         Me.GroupBox2.TabIndex = 210
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Action"
@@ -233,7 +233,7 @@ Partial Class CouponCode
         Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox1.Location = New System.Drawing.Point(3, 3)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(646, 232)
+        Me.GroupBox1.Size = New System.Drawing.Size(789, 298)
         Me.GroupBox1.TabIndex = 209
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Coupons"
@@ -246,7 +246,7 @@ Partial Class CouponCode
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(652, 298)
+        Me.ClientSize = New System.Drawing.Size(795, 364)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
@@ -273,6 +273,7 @@ Partial Class CouponCode
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents FlowLayoutPanel1 As FlowLayoutPanel
     Friend WithEvents LabelDesc As Label
+    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
     Friend WithEvents Column1 As DataGridViewTextBoxColumn
     Friend WithEvents Column2 As DataGridViewTextBoxColumn
     Friend WithEvents Column3 As DataGridViewTextBoxColumn
@@ -285,5 +286,4 @@ Partial Class CouponCode
     Friend WithEvents Column10 As DataGridViewTextBoxColumn
     Friend WithEvents Column11 As DataGridViewTextBoxColumn
     Friend WithEvents Column12 As DataGridViewTextBoxColumn
-    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
 End Class

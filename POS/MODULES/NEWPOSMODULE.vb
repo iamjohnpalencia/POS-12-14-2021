@@ -68,7 +68,7 @@ Module NEWPOSMODULE
     Private Sub GetFormulaid(ProductName As String, ProductOriginalPrice As Double)
         Try
             Dim ConnectionLocal As MySqlConnection = LocalhostConn()
-            Dim sql = "SELECT product_id, product_sku, formula_id, product_category, origin, server_inventory_id, addontype, product_name FROM `loc_admin_products` WHERE product_sku = '" & ProductName & "'"
+            Dim sql = "SELECT product_id, product_sku, formula_id, product_category, origin, server_inventory_id, addontype, product_name, half_batch FROM `loc_admin_products` WHERE product_sku = '" & ProductName & "'"
             Dim cmd As MySqlCommand = New MySqlCommand(sql, ConnectionLocal)
             Using readerObj As MySqlDataReader = cmd.ExecuteReader
                 While readerObj.Read
@@ -80,6 +80,7 @@ Module NEWPOSMODULE
                     Dim inventoryid = readerObj("server_inventory_id").ToString
                     Dim addontype = readerObj("addontype").ToString
                     Dim prodname = readerObj("product_name").ToString
+                    Dim halfbatch = readerObj("half_batch")
                     With POS
                         .TextBoxNAME.Text = prodname
                         If .WaffleUpgrade = True Then
@@ -103,7 +104,14 @@ Module NEWPOSMODULE
                             formula_id = formulaId.Substring(0, formulaId.Length - 1)
                         End If
                         .TextBoxFormulaID.Text = formula_id
-                        CheckCriticalLimit(prodname, ProductOriginalPrice, formula_id, product_id, product_sku, product_category, origin, inventoryid, addontype)
+                        If product_category = "Others" Then
+                            With POS
+                                .WaffleUpgrade = False
+                                .ButtonWaffleUpgrade.Text = "Brownie Upgrade"
+                                .ButtonWaffleUpgrade.BackColor = Color.FromArgb(221, 114, 46)
+                            End With
+                        End If
+                        CheckCriticalLimit(prodname, ProductOriginalPrice, formula_id, product_id, product_sku, product_category, origin, inventoryid, addontype, halfbatch)
                     End With
                 End While
             End Using
@@ -112,8 +120,11 @@ Module NEWPOSMODULE
         End Try
     End Sub
 
-    Private Sub CheckCriticalLimit(ByVal ProductName, ByVal ProductOriginalPrice, ByVal formula_id, ByVal ID, ByVal SKU, ByVal CAT, ByVal ORIGIN, ByVal INVID, ByVal addontype)
+    Private Sub CheckCriticalLimit(ByVal ProductName, ByVal ProductOriginalPrice, ByVal formula_id, ByVal ID, ByVal SKU, ByVal CAT, ByVal ORIGIN, ByVal INVID, ByVal addontype, ByVal halfbatch)
         Try
+
+
+
             Dim LocalConnection As MySqlConnection = LocalhostConn()
             Dim DataTableCriticalLimit As New DataTable
             Dim DataAdapterCriticalLimit As MySqlDataAdapter
@@ -132,12 +143,12 @@ Module NEWPOSMODULE
                 Dim criticalmessage = ListOfIngredients.Substring(0, ListOfIngredients.Length - 2)
                 Dim outofstock = MessageBox.Show("Item (" & criticalmessage & ") is out of stock, do you wish to continue?", "Out of Stock", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
                 If outofstock = DialogResult.Yes Then
-                    AddProductToDatagridviewOrders(ProductName, ProductOriginalPrice, ID, SKU, CAT, ORIGIN, INVID, addontype)
-                    AddInventoryToDatagridviewInv(formula_id, CAT, ORIGIN, addontype, ProductName)
+                    AddProductToDatagridviewOrders(ProductName, ProductOriginalPrice, ID, SKU, CAT, ORIGIN, INVID, addontype, halfbatch)
+                    AddInventoryToDatagridviewInv(formula_id, CAT, ORIGIN, addontype, ProductName, halfbatch)
                 End If
             Else
-                AddProductToDatagridviewOrders(ProductName, ProductOriginalPrice, ID, SKU, CAT, ORIGIN, INVID, addontype)
-                AddInventoryToDatagridviewInv(formula_id, CAT, ORIGIN, addontype, ProductName)
+                AddProductToDatagridviewOrders(ProductName, ProductOriginalPrice, ID, SKU, CAT, ORIGIN, INVID, addontype, halfbatch)
+                AddInventoryToDatagridviewInv(formula_id, CAT, ORIGIN, addontype, ProductName, halfbatch)
             End If
             POS.TextBoxQTY.Text = "0"
             Compute()
@@ -146,7 +157,7 @@ Module NEWPOSMODULE
         End Try
     End Sub
 
-    Private Sub AddProductToDatagridviewOrders(Name, ProductOriginalPrice, ProductID, Code, Category, Origin, InventoryID, Addontype)
+    Private Sub AddProductToDatagridviewOrders(Name, ProductOriginalPrice, ProductID, Code, Category, Origin, InventoryID, Addontype, halfbatch)
         Try
             With POS
 
@@ -205,14 +216,14 @@ Module NEWPOSMODULE
                                 End If
                             Else
                                 ThisIsMyInventoryID = .TextBoxINC.Text
-                                .DataGridViewOrders.Rows.Add(Name, TotalQuantity, ProductOriginalPrice, TotalAddOnPrice, .TextBoxINC.Text, ProductID, Code, Category, ProductID, "AOPREMIUM", InventoryID, 0, Origin, Addontype)
+                                .DataGridViewOrders.Rows.Add(Name, TotalQuantity, ProductOriginalPrice, TotalAddOnPrice, .TextBoxINC.Text, ProductID, Code, Category, ProductID, "AOPREMIUM", InventoryID, 0, Origin, Addontype, halfbatch)
                             End If
                         Else
                             If Addontype = "Classic" Then
                                 MsgBox("Select product first")
                             Else
                                 ThisIsMyInventoryID = .TextBoxINC.Text
-                                .DataGridViewOrders.Rows.Add(Name, TotalQuantity, ProductOriginalPrice, TotalAddOnPrice, .TextBoxINC.Text, ProductID, Code, Category, ProductID, "AOPREMIUM", InventoryID, 0, Origin, Addontype)
+                                .DataGridViewOrders.Rows.Add(Name, TotalQuantity, ProductOriginalPrice, TotalAddOnPrice, .TextBoxINC.Text, ProductID, Code, Category, ProductID, "AOPREMIUM", InventoryID, 0, Origin, Addontype, halfbatch)
                             End If
                         End If
                     Else
@@ -303,7 +314,21 @@ Module NEWPOSMODULE
 
                         If Category = "Famous Blends" Then
                             DISABLESERVEROTHERSPRODUCT = True
-                            .DataGridViewOrders.Rows.Add(Name, TotalQuantity, ProductOriginalPrice, ProductTotalPrice, .TextBoxINC.Text, ProductID, Code, Category, ProductID, "DRINKS", InventoryID, 0, Origin, Addontype)
+                            MsgBox(.WaffleUpgrade)
+                            If .WaffleUpgrade Then
+                                Dim TotalUpgradePriceDeduction As Double = 0
+                                If Val(.TextBoxQTY.Text) > 0 Then
+                                    TotalUpgradePriceDeduction = Val(S_Upgrade_Price) * Val(.TextBoxQTY.Text)
+                                Else
+                                    TotalUpgradePriceDeduction = Val(S_Upgrade_Price)
+                                End If
+                                'MsgBox(ProductTotalPrice & " - " & TotalQuantity & " - " & TotalUpgradePriceDeduction)
+                                .DataGridViewOrders.Rows.Add(Name, TotalQuantity, ProductOriginalPrice, ProductTotalPrice - TotalUpgradePriceDeduction, .TextBoxINC.Text, ProductID, Code, Category, ProductID, "DRINKS", InventoryID, 0, Origin, Addontype, halfbatch)
+
+                            Else
+                                .DataGridViewOrders.Rows.Add(Name, TotalQuantity, ProductOriginalPrice, ProductTotalPrice, .TextBoxINC.Text, ProductID, Code, Category, ProductID, "DRINKS", InventoryID, 0, Origin, Addontype, halfbatch)
+
+                            End If
                         ElseIf Category = "Others" Then
                             If Origin = "Server" Then
                                 If DISABLESERVEROTHERSPRODUCT = False Then
@@ -315,7 +340,7 @@ Module NEWPOSMODULE
                                     Next
                                     If HASOTHERSLOCALPRODUCT = False Then
                                         'Name, ProductID, Code, Category, Origin, InventoryID, Addontype
-                                        .DataGridViewOrders.Rows.Add(Name, TotalQuantity, ProductOriginalPrice, ProductTotalPrice, .TextBoxINC.Text, ProductID, Code, Category, ProductID, "OTHERS", InventoryID, 0, Origin, Addontype)
+                                        .DataGridViewOrders.Rows.Add(Name, TotalQuantity, ProductOriginalPrice, ProductTotalPrice, .TextBoxINC.Text, ProductID, Code, Category, ProductID, "OTHERS", InventoryID, 0, Origin, Addontype, halfbatch)
                                         .ButtonTransactionMode.Enabled = True
                                         .ButtonPayMent.Enabled = True
                                         .ButtonTransactionMode.Text = "Cancel"
@@ -325,7 +350,8 @@ Module NEWPOSMODULE
                                         .Panel3.Enabled = False
                                         .ButtonWaffleUpgrade.Enabled = False
                                         .WaffleUpgrade = False
-                                        .ButtonWaffleUpgrade.Text = "Waffle Upgrade"
+                                        .ButtonWaffleUpgrade.Text = "Brownie Upgrade"
+                                        .ButtonWaffleUpgrade.BackColor = Color.FromArgb(221, 114, 46)
                                     Else
                                         MsgBox("Remove product first")
                                     End If
@@ -344,14 +370,15 @@ Module NEWPOSMODULE
                                     End If
                                 Next
                                 If HASOTHERSSERVERPRODUCT = False Then
-                                    .DataGridViewOrders.Rows.Add(Name, TotalQuantity, ProductOriginalPrice, ProductTotalPrice, .TextBoxINC.Text, ProductID, Code, Category, ProductID, "OTHERS", InventoryID, 0, Origin, Addontype)
+                                    .DataGridViewOrders.Rows.Add(Name, TotalQuantity, ProductOriginalPrice, ProductTotalPrice, .TextBoxINC.Text, ProductID, Code, Category, ProductID, "OTHERS", InventoryID, 0, Origin, Addontype, halfbatch)
                                     .ButtonTransactionMode.Enabled = True
                                     .ButtonTransactionMode.Enabled = True
                                     .ButtonPayMent.Enabled = True
                                     .Buttonholdoder.Enabled = True
                                     .ButtonPendingOrders.Enabled = False
                                     .WaffleUpgrade = False
-                                    .ButtonWaffleUpgrade.Text = "Waffle Upgrade"
+                                    .ButtonWaffleUpgrade.Text = "Brownie Upgrade"
+                                    .ButtonWaffleUpgrade.BackColor = Color.FromArgb(221, 114, 46)
                                 Else
                                     MsgBox("Remove ingredient first")
                                 End If
@@ -360,7 +387,7 @@ Module NEWPOSMODULE
                             'If Product is waffle 
                             DISABLESERVEROTHERSPRODUCT = True
                             'Name, ProductID, Code, Category, Origin, InventoryID, Addontype
-                            .DataGridViewOrders.Rows.Add(Name, TotalQuantity, ProductOriginalPrice, ProductTotalPrice, .TextBoxINC.Text, ProductID, Code, Category, ProductID, "WAFFLE", InventoryID, TotalUpgrade, Origin, Addontype)
+                            .DataGridViewOrders.Rows.Add(Name, TotalQuantity, ProductOriginalPrice, ProductTotalPrice, .TextBoxINC.Text, ProductID, Code, Category, ProductID, "WAFFLE", InventoryID, TotalUpgrade, Origin, Addontype, halfbatch)
                         End If
                         .ButtonPayMent.Enabled = True
                     Else
@@ -373,14 +400,24 @@ Module NEWPOSMODULE
                                         If .WaffleUpgrade Then
                                             If Category = "Others" Then
                                                 .WaffleUpgrade = False
-                                                .ButtonWaffleUpgrade.Text = "Waffle Upgrade"
+                                                .ButtonWaffleUpgrade.Text = "Brownie Upgrade"
+                                                .ButtonWaffleUpgrade.BackColor = Color.FromArgb(221, 114, 46)
                                             End If
-                                            .DataGridViewOrders.Rows(i).Cells(11).Value = Val(.TextBoxQTY.Text)
-                                            Dim TotalUpgrade As Double = .DataGridViewOrders.Rows(i).Cells(11).Value * Val(S_Upgrade_Price)
-                                            .DataGridViewOrders.Rows(i).Cells(1).Value = Val(.TextBoxQTY.Text)
-                                            Dim PriceXQuantity As Double = .DataGridViewOrders.Rows(i).Cells(1).Value * .DataGridViewOrders.Rows(i).Cells(2).Value
-                                            TotalProductPrice = PriceXQuantity + TotalUpgrade
-                                            .DataGridViewOrders.Rows(i).Cells(3).Value = TwoDecimalPlaces(TotalProductPrice)
+
+                                            If Category = "Famous Blends" Then
+
+                                                .DataGridViewOrders.Rows(i).Cells(1).Value = Val(.TextBoxQTY.Text)
+                                                Dim PriceXQuantity As Double = .DataGridViewOrders.Rows(i).Cells(1).Value * .DataGridViewOrders.Rows(i).Cells(2).Value
+                                                TotalProductPrice = PriceXQuantity
+                                                .DataGridViewOrders.Rows(i).Cells(3).Value = TwoDecimalPlaces(TotalProductPrice)
+                                            Else
+                                                .DataGridViewOrders.Rows(i).Cells(11).Value = Val(.TextBoxQTY.Text)
+                                                Dim TotalUpgrade As Double = .DataGridViewOrders.Rows(i).Cells(11).Value * Val(S_Upgrade_Price)
+                                                .DataGridViewOrders.Rows(i).Cells(1).Value = Val(.TextBoxQTY.Text)
+                                                Dim PriceXQuantity As Double = .DataGridViewOrders.Rows(i).Cells(1).Value * .DataGridViewOrders.Rows(i).Cells(2).Value
+                                                TotalProductPrice = PriceXQuantity + TotalUpgrade
+                                                .DataGridViewOrders.Rows(i).Cells(3).Value = TwoDecimalPlaces(TotalProductPrice)
+                                            End If
                                         Else
                                             .DataGridViewOrders.Rows(i).Cells(1).Value = Val(.TextBoxQTY.Text)
                                             TotalProductPrice = .DataGridViewOrders.Rows(i).Cells(1).Value * .DataGridViewOrders.Rows(i).Cells(2).Value
@@ -390,16 +427,23 @@ Module NEWPOSMODULE
                                         If .WaffleUpgrade Then
                                             If Category = "Others" Then
                                                 .WaffleUpgrade = False
-                                                .ButtonWaffleUpgrade.Text = "Waffle Upgrade"
+                                                .ButtonWaffleUpgrade.Text = "Brownie Upgrade"
+                                                .ButtonWaffleUpgrade.BackColor = Color.FromArgb(221, 114, 46)
+
                                             End If
                                             If .DataGridViewOrders.Rows(i).Cells(9).Value = "WAFFLE" Then
                                                 .DataGridViewOrders.Rows(i).Cells(11).Value += 1
                                             End If
-                                            Dim TotalUpgrade As Double = .DataGridViewOrders.Rows(i).Cells(11).Value * Val(S_Upgrade_Price)
-                                            .DataGridViewOrders.Rows(i).Cells(1).Value += 1
-                                            Dim PriceXQuantity As Double = .DataGridViewOrders.Rows(i).Cells(1).Value * .DataGridViewOrders.Rows(i).Cells(2).Value
-                                            TotalProductPrice = PriceXQuantity + TotalUpgrade
-                                            .DataGridViewOrders.Rows(i).Cells(3).Value = TwoDecimalPlaces(TotalProductPrice)
+
+                                            If Category = "Famous Blends" Then
+                                                .DataGridViewOrders.Rows(i).Cells(3).Value = TwoDecimalPlaces(TotalProductPrice)
+                                            Else
+                                                Dim TotalUpgrade As Double = .DataGridViewOrders.Rows(i).Cells(11).Value * Val(S_Upgrade_Price)
+                                                .DataGridViewOrders.Rows(i).Cells(1).Value += 1
+                                                Dim PriceXQuantity As Double = .DataGridViewOrders.Rows(i).Cells(1).Value * .DataGridViewOrders.Rows(i).Cells(2).Value
+                                                TotalProductPrice = PriceXQuantity + TotalUpgrade
+                                                .DataGridViewOrders.Rows(i).Cells(3).Value = TwoDecimalPlaces(TotalProductPrice)
+                                            End If
                                         Else
                                             Dim TotalUpgrade As Double = .DataGridViewOrders.Rows(i).Cells(11).Value * Val(S_Upgrade_Price)
                                             .DataGridViewOrders.Rows(i).Cells(1).Value += 1
@@ -414,7 +458,8 @@ Module NEWPOSMODULE
                                         If .WaffleUpgrade Then
                                             If Category = "Others" Then
                                                 .WaffleUpgrade = False
-                                                .ButtonWaffleUpgrade.Text = "Waffle Upgrade"
+                                                .ButtonWaffleUpgrade.Text = "Brownie Upgrade"
+                                                .ButtonWaffleUpgrade.BackColor = Color.FromArgb(221, 114, 46)
                                             End If
                                             If .DataGridViewOrders.Rows(i).Cells(9).Value = "WAFFLE" Then
                                                 .DataGridViewOrders.Rows(i).Cells(11).Value = Val(.TextBoxQTY.Text)
@@ -433,7 +478,8 @@ Module NEWPOSMODULE
                                         If .WaffleUpgrade Then
                                             If Category = "Others" Then
                                                 .WaffleUpgrade = False
-                                                .ButtonWaffleUpgrade.Text = "Waffle Upgrade"
+                                                .ButtonWaffleUpgrade.Text = "Brownie Upgrade"
+                                                .ButtonWaffleUpgrade.BackColor = Color.FromArgb(221, 114, 46)
                                             End If
                                             If .DataGridViewOrders.Rows(i).Cells(9).Value = "WAFFLE" Then
                                                 .DataGridViewOrders.Rows(i).Cells(11).Value += 1
@@ -470,7 +516,7 @@ Module NEWPOSMODULE
             SendErrorReport(ex.ToString)
         End Try
     End Sub
-    Public Sub AddInventoryToDatagridviewInv(ByVal formulaID, ByVal Cat, ByVal Origin, ByVal addontype, ByVal ProductName)
+    Public Sub AddInventoryToDatagridviewInv(ByVal formulaID, ByVal Cat, ByVal Origin, ByVal addontype, ByVal ProductName, ByVal halfbatch)
         Try
             Dim DtInventory As DataTable = New DataTable
             If Origin = "Server" Then
@@ -489,7 +535,12 @@ Module NEWPOSMODULE
                     Dim dtfill As DataTable = New DataTable
                     da.Fill(dtfill)
                     Dim FRID As DataRow = DtInventory.NewRow
-                    FRID("serving_value") = dtfill(0)(0)
+                    If halfbatch Then
+                        FRID("serving_value") = dtfill(0)(0) / 2
+                    Else
+                        FRID("serving_value") = dtfill(0)(0)
+                    End If
+
                     FRID("server_formula_id") = dtfill(0)(1)
                     FRID("unit_cost") = dtfill(0)(2)
                     DtInventory.Rows.Add(FRID)
@@ -512,7 +563,11 @@ Module NEWPOSMODULE
                     Dim dtfill As DataTable = New DataTable
                     da.Fill(dtfill)
                     Dim FRID As DataRow = DtInventory.NewRow
-                    FRID("serving_value") = dtfill(0)(0)
+                    If halfbatch Then
+                        FRID("serving_value") = dtfill(0)(0) / 2
+                    Else
+                        FRID("serving_value") = dtfill(0)(0)
+                    End If
                     FRID("formula_id") = dtfill(0)(1)
                     FRID("unit_cost") = dtfill(0)(2)
                     DtInventory.Rows.Add(FRID)
@@ -746,7 +801,7 @@ Module NEWPOSMODULE
                                     End If
                                 End If
                             Next
-                              Dim TotalQty As Integer = 0
+                            Dim TotalQty As Integer = 0
                             If BrownieExist = False Then
                                 Dim query
                                 If Origin = "Server" Then

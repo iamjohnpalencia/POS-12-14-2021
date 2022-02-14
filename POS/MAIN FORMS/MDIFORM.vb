@@ -330,17 +330,10 @@
             MessageBox.Show("Sync is on process please wait.", "Syncing", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
             If MessageBox.Show("Are you sure you really want to Logout ?", "Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = vbYes Then
-                HASUPDATE = False
-                BegBalanceBool = False
-                FormIsOpen()
-                SystemLogDesc = "User Logout: " & returnfullname(where:=ClientCrewID)
-                SystemLogType = "LOG OUT"
-                GLOBAL_SYSTEM_LOGS(SystemLogType, SystemLogDesc)
-                EndBalance()
                 iflogout = True
-                Login.Show()
-                Close()
-                POS.Close()
+                LOGOUTFROMPOS = False
+                CashBreakdown.Show()
+                Enabled = False
             End If
         End If
     End Sub

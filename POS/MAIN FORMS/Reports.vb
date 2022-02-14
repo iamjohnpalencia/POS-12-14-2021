@@ -271,7 +271,7 @@ Public Class Reports
     Public Sub reportssales(ByVal searchdate As Boolean)
         Try
             table = "`loc_daily_transaction_details`"
-            fields = "`product_sku`, `product_name`, sum(`quantity`), `price`, sum(`total`), `created_at`"
+            fields = "`product_sku`, `product_name`, sum(`quantity`), `price`, sum(`total`), `created_at` ,`product_category`"
             If searchdate = False Then
                 where = " zreading = CURRENT_DATE()  AND active = 1 AND store_id = '" & ClientStoreID & "' AND guid = '" & ClientGuid & "' GROUP BY `product_name`"
                 GLOBAL_SELECT_ALL_FUNCTION_WHERE(table:=table, datagrid:=DataGridViewSales, errormessage:="", fields:=fields, successmessage:="", where:=where)
@@ -286,6 +286,7 @@ Public Class Reports
                 .Columns(3).HeaderText = "Price"
                 .Columns(4).HeaderText = "Total Price"
                 .Columns(5).HeaderText = "Date"
+                .Columns(6).Visible = False
                 Label10.Text = "P " & SumOfColumnsToDecimal(DataGridViewSales, 4)
                 Label9.Text = SumOfColumnsToInt(DataGridViewSales, 2)
             End With
@@ -986,30 +987,42 @@ Public Class Reports
             Else
                 ZreadDateFormat = Format(DateTimePickerZXreading.Value, "yyyy-MM-dd")
             End If
+
             Dim font As New Font("tahoma", 6)
             Dim font2 As New Font("tahoma", 6, FontStyle.Bold)
             Dim brandfont As New Font("tahoma", 8, FontStyle.Bold)
-            Dim GrossSale = 0
-            ThreadZXRead = New Thread(Sub() GrossSale = sum("grosssales", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Grab') AND active = 1"))
+            Dim GrossSale As Double = 0
+            ThreadZXRead = New Thread(Sub() GrossSale = sum("grosssales", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim LessVat = 0
+
+            Dim LessVat As Double = 0
             ThreadZXRead = New Thread(Sub() LessVat = sum("lessvat", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Grab') AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim TotalDiscount = 0
-            ThreadZXRead = New Thread(Sub() TotalDiscount = sum("totaldiscount", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Grab') AND active = 1"))
+
+            Dim TotalDiscount As Double = 0
+            ThreadZXRead = New Thread(Sub() TotalDiscount = sum("totaldiscount", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND discount_type NOT IN ('N/A','Fix-1') AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
+
+            Dim TotalGC As Double = 0
+            ThreadZXRead = New Thread(Sub() TotalGC = sum("totaldiscount", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND discount_type = 'Fix-1' AND active = 1"))
+            ThreadZXRead.Start()
+            ThreadlistZXRead.Add(ThreadZXRead)
+            For Each t In ThreadlistZXRead
+                t.Join()
+            Next
+
             Dim begORNm = ""
             ThreadZXRead = New Thread(Sub() begORNm = returnselect("transaction_number", "`loc_daily_transaction` WHERE date(zreading) = zreading AND active = 1 Limit 1"))
             ThreadZXRead.Start()
@@ -1017,6 +1030,7 @@ Public Class Reports
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
+
             Dim EndORNumber = ""
             ThreadZXRead = New Thread(Sub() EndORNumber = returnselect("transaction_number", "loc_daily_transaction WHERE date(zreading) = zreading AND active = 1 ORDER by `transaction_number` desc limit 1"))
             ThreadZXRead.Start()
@@ -1024,28 +1038,30 @@ Public Class Reports
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim ReturnsTotal = 0
+
+            Dim ReturnsTotal As Double = 0
             ThreadZXRead = New Thread(Sub() sum("total", "loc_daily_transaction_details WHERE active = 2 AND zreading = '" & ZreadDateFormat & "' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim ReturnsExchange = 0
+
+            Dim ReturnsExchange As Double = 0
             ThreadZXRead = New Thread(Sub() ReturnsExchange = sum("quantity", "loc_daily_transaction_details WHERE active = 2 AND zreading = '" & ZreadDateFormat & "' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim OLDgrandtotal = 0
+            Dim OLDgrandtotal As Double = 0
             ThreadZXRead = New Thread(Sub() OLDgrandtotal = sum("total", "loc_daily_transaction_details WHERE zreading <> '" & ZreadDateFormat & "' AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim NEWgrandtotal = 0
+            Dim NEWgrandtotal As Double = 0
             ThreadZXRead = New Thread(Sub() NEWgrandtotal = sum("total", "loc_daily_transaction_details WHERE active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
@@ -1066,91 +1082,91 @@ Public Class Reports
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim SrDiscount = 0
-            ThreadZXRead = New Thread(Sub() SrDiscount = sum("totaldiscount", "loc_daily_transaction WHERE discount_type = 'Percentage' AND zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Grab') AND active = 1"))
+            Dim SrDiscount As Double = 0
+            ThreadZXRead = New Thread(Sub() SrDiscount = sum("coupon_total", "loc_coupon_data WHERE coupon_name = 'Senior Discount 20%' AND zreading = '" & ZreadDateFormat & "' AND status = '1' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim totalExpenses = 0
+            Dim totalExpenses As Double = 0
             ThreadZXRead = New Thread(Sub() totalExpenses = sum("total_amount", "loc_expense_list WHERE zreading = '" & ZreadDateFormat & "'"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim VatExempt = 0
+            Dim VatExempt As Double = 0
             ThreadZXRead = New Thread(Sub() VatExempt = sum("vatexemptsales", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Grab') AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim zeroratedsales = 0
+            Dim zeroratedsales As Double = 0
             ThreadZXRead = New Thread(Sub() zeroratedsales = sum("zeroratedsales", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim vatablesales = 0
+            Dim vatablesales As Double = 0
             ThreadZXRead = New Thread(Sub() vatablesales = sum("vatablesales", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Grab') AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim DepositSlip = 0
+            Dim DepositSlip As Double = 0
             ThreadZXRead = New Thread(Sub() DepositSlip = sum("amount", "loc_deposit WHERE date(transaction_date) = '" & ZreadDateFormat & "' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim BegBalance = 0
+            Dim BegBalance As Double = 0
             ThreadZXRead = New Thread(Sub() BegBalance = sum("CAST(log_description AS DECIMAL(10,2))", "loc_system_logs WHERE log_type IN ('BG-1','BG-2','BG-3','BG-4') AND zreading = '" & ZreadDateFormat & "' ORDER by log_date_time DESC LIMIT 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim vat12percent = 0
+            Dim vat12percent As Double = 0
             ThreadZXRead = New Thread(Sub() vat12percent = sum("vatpercentage", "loc_daily_transaction WHERE zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Grab') AND active = 1"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim DailySales = 0
+            Dim DailySales As Double = 0
             ThreadZXRead = New Thread(Sub() DailySales = GrossSale - LessVat - TotalDiscount)
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim NetSales = 0
+            Dim NetSales As Double = 0
             ThreadZXRead = New Thread(Sub() NetSales = sum("amountdue", "loc_daily_transaction WHERE active = 1 AND zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Grab')"))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim CashInDrawer = 0
+            Dim CashInDrawer As Double = 0
             ThreadZXRead = New Thread(Sub() CashInDrawer = DailySales + BeginningBalance - totalExpenses)
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim CashTotal = 0
+            Dim CashTotal As Double = 0
             ThreadZXRead = New Thread(Sub() CashTotal = CashInDrawer)
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            Dim TotalNewGrandTotal = 0
+            Dim TotalNewGrandTotal As Double = 0
             ThreadZXRead = New Thread(Sub() TotalNewGrandTotal = CashInDrawer + OLDgrandtotal)
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
@@ -1207,7 +1223,7 @@ Public Class Reports
             RightToLeftDisplay(sender, e, 305, "CREDIT CARD", "N/A", font, 10, 0)
             RightToLeftDisplay(sender, e, 315, "DEBIT CARD", "N/A", font, 10, 0)
             RightToLeftDisplay(sender, e, 325, "MISC/CHEQUES", "N/A", font, 10, 0)
-            RightToLeftDisplay(sender, e, 335, "GIFT CARD(GC)", "N/A", font, 10, 0)
+            RightToLeftDisplay(sender, e, 335, "GIFT CARD(GC)", NUMBERFORMAT(TotalGC), font, 10, 0)
             RightToLeftDisplay(sender, e, 345, "A/R", "N/A", font, 10, 0)
             RightToLeftDisplay(sender, e, 355, "TOTAL EXPENSES", NUMBERFORMAT(totalExpenses), font, 10, 0)
             RightToLeftDisplay(sender, e, 365, "OTHERS", "N/A", font, 10, 0)
@@ -1215,83 +1231,96 @@ Public Class Reports
             RightToLeftDisplay(sender, e, 385, "DEPOSIT", NUMBERFORMAT(DepositSlip), font, 10, 0)
             RightToLeftDisplay(sender, e, 395, "CASH IN DRAWER", NUMBERFORMAT(CashInDrawer), font, 10, 0)
             '============================================================================================================================
-            Dim CASHLESS = 0
+            Dim CASHLESS As Double = 0
             ThreadZXRead = New Thread(Sub() CASHLESS = sum("amountdue", "loc_daily_transaction WHERE active IN (1,3) AND zreading = '" & ZreadDateFormat & "' AND transaction_type NOT IN ('Walk-in','Grab') "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            RightToLeftDisplay(sender, e, 410, "CASHLESS", CASHLESS, font, 10, 0)
-            Dim GCASH = 0
+            RightToLeftDisplay(sender, e, 410, "CASHLESS", NUMBERFORMAT(CASHLESS), font, 10, 0)
+            Dim GCASH As Double = 0
             ThreadZXRead = New Thread(Sub() GCASH = sum("amountdue", "loc_daily_transaction WHERE active = 1 AND zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Gcash' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            RightToLeftDisplay(sender, e, 420, "GCASH", GCASH, font, 10, 0)
-            Dim PAYMAYA = 0
+            RightToLeftDisplay(sender, e, 420, "GCASH", NUMBERFORMAT(GCASH), font, 10, 0)
+            Dim PAYMAYA As Double = 0
             ThreadZXRead = New Thread(Sub() PAYMAYA = sum("amountdue", "loc_daily_transaction WHERE active = 1 AND zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Paymaya' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            RightToLeftDisplay(sender, e, 430, "PAYMAYA", PAYMAYA, font, 10, 0)
-            Dim lalafood = 0
-            ThreadZXRead = New Thread(Sub() lalafood = sum("amountdue", "loc_daily_transaction WHERE active = 1 AND zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Lalafood' "))
+            RightToLeftDisplay(sender, e, 430, "PAYMAYA", NUMBERFORMAT(PAYMAYA), font, 10, 0)
+
+            Dim SHOPEE As Double = 0
+            ThreadZXRead = New Thread(Sub() SHOPEE = sum("amountdue", "loc_daily_transaction WHERE active = 1 AND zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Shopee' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            RightToLeftDisplay(sender, e, 440, "LALAFOOD", lalafood, font, 10, 0)
-            Dim FOODPANDA = 0
+
+            RightToLeftDisplay(sender, e, 440, "SHOPEE", NUMBERFORMAT(SHOPEE), font, 10, 0)
+
+            Dim FOODPANDA As Double = 0
             ThreadZXRead = New Thread(Sub() FOODPANDA = sum("amountdue", "loc_daily_transaction WHERE active = 1 AND zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Food Panda' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            RightToLeftDisplay(sender, e, 450, "FOOD PANDA", FOODPANDA, font, 10, 0)
-            Dim REPEX = 0
+
+            RightToLeftDisplay(sender, e, 440 + 10, "FOODPANDA", NUMBERFORMAT(FOODPANDA), font, 10, 0)
+            Dim Grab As Double = 0
+            ThreadZXRead = New Thread(Sub() Grab = sum("amountdue", "loc_daily_transaction WHERE active = 1 AND zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Grab' "))
+            ThreadZXRead.Start()
+            ThreadlistZXRead.Add(ThreadZXRead)
+            For Each t In ThreadlistZXRead
+                t.Join()
+            Next
+
+            RightToLeftDisplay(sender, e, 450 + 10, "GRAB", NUMBERFORMAT(Grab), font, 10, 0)
+            Dim REPEX As Double = 0
             ThreadZXRead = New Thread(Sub() REPEX = sum("amountdue", "loc_daily_transaction WHERE active = 3 AND zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Representation Expenses' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            RightToLeftDisplay(sender, e, 460, "REPEXPENSE", REPEX, font, 10, 0)
-            Dim Others = 0
+            RightToLeftDisplay(sender, e, 460 + 10, "REPEXPENSE", NUMBERFORMAT(REPEX), font, 10, 0)
+            Dim Others As Double = 0
             ThreadZXRead = New Thread(Sub() Others = sum("amountdue", "loc_daily_transaction WHERE active = 3 AND zreading = '" & ZreadDateFormat & "' AND transaction_type = 'Others' "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
                 t.Join()
             Next
-            RightToLeftDisplay(sender, e, 470, "OTHERS", Others, font, 10, 0)
+            RightToLeftDisplay(sender, e, 470 + 10, "OTHERS", Others, font, 10, 0)
             '============================================================================================================================
-            RightToLeftDisplay(sender, e, 485, "ITEM VOID E/C", ReturnsExchange, font, 10, 0)
-            RightToLeftDisplay(sender, e, 495, "TRANSACTION VOID", ReturnsExchange, font, 10, 0)
-            RightToLeftDisplay(sender, e, 505, "TRANSACTION CANCEL", ReturnsExchange, font, 10, 0)
-            RightToLeftDisplay(sender, e, 515, "DIMPLOMAT", "N/A", font, 10, 0)
-            RightToLeftDisplay(sender, e, 525, "TOTAL DISCOUNTS", NUMBERFORMAT(TotalDiscount), font, 10, 0)
-            RightToLeftDisplay(sender, e, 535, " - SENIOR CITIZEN", NUMBERFORMAT(SrDiscount), font, 10, 0)
-            RightToLeftDisplay(sender, e, 545, "TAKE OUT CHARGE", "N/A", font, 10, 0)
-            RightToLeftDisplay(sender, e, 555, "DELIVERY CHARGE", "N/A", font, 10, 0)
-            RightToLeftDisplay(sender, e, 565, "RETURNS EXCHANGE", ReturnsExchange, font, 10, 0)
-            RightToLeftDisplay(sender, e, 575, "RETURNS REFUND", NUMBERFORMAT(ReturnsTotal), font, 10, 0)
+            RightToLeftDisplay(sender, e, 485 + 10, "ITEM VOID E/C", ReturnsExchange, font, 10, 0)
+            RightToLeftDisplay(sender, e, 495 + 10, "TRANSACTION VOID", ReturnsExchange, font, 10, 0)
+            RightToLeftDisplay(sender, e, 505 + 10, "TRANSACTION CANCEL", ReturnsExchange, font, 10, 0)
+            RightToLeftDisplay(sender, e, 515 + 10, "DIMPLOMAT", "N/A", font, 10, 0)
+            RightToLeftDisplay(sender, e, 525 + 10, "TOTAL DISCOUNTS", NUMBERFORMAT(TotalDiscount), font, 10, 0)
+            RightToLeftDisplay(sender, e, 535 + 10, " - SENIOR CITIZEN", NUMBERFORMAT(SrDiscount), font, 10, 0)
+            RightToLeftDisplay(sender, e, 545 + 10, "TAKE OUT CHARGE", "N/A", font, 10, 0)
+            RightToLeftDisplay(sender, e, 555 + 10, "DELIVERY CHARGE", "N/A", font, 10, 0)
+            RightToLeftDisplay(sender, e, 565 + 10, "RETURNS EXCHANGE", ReturnsExchange, font, 10, 0)
+            RightToLeftDisplay(sender, e, 575 + 10, "RETURNS REFUND", NUMBERFORMAT(ReturnsTotal), font, 10, 0)
             '============================================================================================================================
-            RightToLeftDisplay(sender, e, 590, "TOTAL QTY SOLD", TotalQuantity, font, 10, 0)
-            RightToLeftDisplay(sender, e, 600, "TOTAL TRANS. COUNT", TotalGuest, font, 10, 0)
-            RightToLeftDisplay(sender, e, 610, "TOTAL GUEST", TotalGuest, font, 10, 0)
-            RightToLeftDisplay(sender, e, 620, "BEGINNING OR NO.", begORNm, font, 10, 0)
-            RightToLeftDisplay(sender, e, 630, "END OR NO.", EndORNumber, font, 10, 0)
+            RightToLeftDisplay(sender, e, 590 + 10, "TOTAL QTY SOLD", TotalQuantity, font, 10, 0)
+            RightToLeftDisplay(sender, e, 600 + 10, "TOTAL TRANS. COUNT", TotalGuest, font, 10, 0)
+            RightToLeftDisplay(sender, e, 610 + 10, "TOTAL GUEST", TotalGuest, font, 10, 0)
+            RightToLeftDisplay(sender, e, 620 + 10, "BEGINNING OR NO.", begORNm, font, 10, 0)
+            RightToLeftDisplay(sender, e, 630 + 10, "END OR NO.", EndORNumber, font, 10, 0)
             '============================================================================================================================
-            RightToLeftDisplay(sender, e, 645, "CURRENT TOTAL SALES", NUMBERFORMAT(CashTotal), font, 10, 0)
-            RightToLeftDisplay(sender, e, 655, "OLD GRAND TOTAL", NUMBERFORMAT(OLDgrandtotal), font, 10, 0)
-            RightToLeftDisplay(sender, e, 665, "NEW GRAND TOTAL", NUMBERFORMAT(TotalNewGrandTotal), font, 10, 0)
+            RightToLeftDisplay(sender, e, 645 + 10, "CURRENT TOTAL SALES", NUMBERFORMAT(CashTotal), font, 10, 0)
+            RightToLeftDisplay(sender, e, 655 + 10, "OLD GRAND TOTAL", NUMBERFORMAT(OLDgrandtotal), font, 10, 0)
+            RightToLeftDisplay(sender, e, 665 + 10, "NEW GRAND TOTAL", NUMBERFORMAT(TotalNewGrandTotal), font, 10, 0)
 
 
 
@@ -1317,12 +1346,12 @@ Public Class Reports
                 'For Each t In ThreadlistZXRead
                 '    t.Join()
                 'Next
-                RightToLeftDisplay(sender, e, 675, "RESET COUNTER", ResetCounter, font, 10, 0)
-                RightToLeftDisplay(sender, e, 685, "Z-COUNTER", My.Settings.zcounter, font, 10, 0)
-                ZreadOrXread += 20
+                RightToLeftDisplay(sender, e, 675 + 10, "RESET COUNTER", ResetCounter, font, 10, 0)
+                RightToLeftDisplay(sender, e, 685 + 10, "Z-COUNTER", My.Settings.zcounter, font, 10, 0)
+                ZreadOrXread += 30
             Else
-                RightToLeftDisplay(sender, e, 675, "CASHIER", returnfullname(ClientCrewID), font, 10, 0)
-                ZreadOrXread += 10
+                RightToLeftDisplay(sender, e, 675 + 10, "CASHIER", returnfullname(ClientCrewID), font, 10, 0)
+                ZreadOrXread += 20
             End If
 
             Dim ADDONS = 0
@@ -1533,7 +1562,7 @@ Public Class Reports
         Try
             loopa = 100
             loopb = 0
-            Dim sql = "SELECT  product_sku , SUM(quantity), SUM(total) FROM loc_daily_transaction_details WHERE zreading >= '" & Format(DateTimePicker3.Value, "yyyy-MM-dd") & "' AND zreading <= '" & Format(DateTimePicker4.Value, "yyyy-MM-dd") & "' AND active = 1  AND store_id = '" & ClientStoreID & "' AND guid = '" & ClientGuid & "' GROUP BY product_name"
+            Dim sql = "SELECT  product_sku , SUM(quantity), SUM(total), product_category FROM loc_daily_transaction_details WHERE zreading >= '" & Format(DateTimePicker3.Value, "yyyy-MM-dd") & "' AND zreading <= '" & Format(DateTimePicker4.Value, "yyyy-MM-dd") & "' AND active = 1  AND store_id = '" & ClientStoreID & "' AND guid = '" & ClientGuid & "' GROUP BY product_name"
             Dim cmd As MySqlCommand = New MySqlCommand(sql, LocalhostConn)
             Dim da As MySqlDataAdapter = New MySqlDataAdapter(cmd)
             PrintSalesDatatable = New DataTable
@@ -1542,7 +1571,7 @@ Public Class Reports
                 loopb += 10
             Next
 
-            printsales.DefaultPageSettings.PaperSize = New PaperSize("Custom", ReturnPrintSize(), 300 + loopb)
+            printsales.DefaultPageSettings.PaperSize = New PaperSize("Custom", ReturnPrintSize(), 800 + loopb)
             previewsales.Document = printsales
             previewsales.ShowDialog()
         Catch ex As Exception
@@ -1555,45 +1584,429 @@ Public Class Reports
             Dim font1 As New Font("Tahoma", 6, FontStyle.Bold)
 
             ReceiptHeader(sender, e, False)
-            If My.Settings.PrintSize = "57mm" Then
-                SimpleTextDisplay(sender, e, "PRODUCT CODE", font1, 0, 130)
-                SimpleTextDisplay(sender, e, "QUANTITY", font1, 70, 130)
-                SimpleTextDisplay(sender, e, "TOTAL SALES", font1, 120, 130)
-            Else
-                SimpleTextDisplay(sender, e, "PRODUCT CODE", font1, 0, 130)
-                SimpleTextDisplay(sender, e, "QUANTITY", font1, 80, 130)
-                SimpleTextDisplay(sender, e, "TOTAL SALES", font1, 140, 130)
-            End If
+
+            SimpleTextDisplay(sender, e, "ITEM SOLD REPORT", font, 0, 130)
+            SimpleTextDisplay(sender, e, "BY DEPARTMENT", font, 0, 140)
+            SimpleTextDisplay(sender, e, "TERMINAL NO.", font, 0, 150)
+
+            PrintSmallLine(sender, e, font, 160)
+
+            SimpleTextDisplay(sender, e, "ITEMS", font, 0, 170)
+            SimpleTextDisplay(sender, e, "QTY", font, 70, 170)
+            SimpleTextDisplay(sender, e, "%", font, 120, 170)
+            SimpleTextDisplay(sender, e, "AMOUNT", font, 170, 170)
+
+            PrintSmallLine(sender, e, font, 180)
+
+            CenterTextDisplay(sender, e, "SIMPLY PERFECT", font1, 220)
+
+            Dim maxLength As Integer = 0
+            Dim title As String = ""
+
+            loopa += 90
 
 
-            loopa += 30
-            Dim TotalSales As Decimal = 0
-            For i As Integer = 0 To PrintSalesDatatable.Rows.Count - 1 Step +1
-                SimpleTextDisplay(sender, e, PrintSalesDatatable(i)(0), font, 0, loopa + 20)
-                If My.Settings.PrintSize = "57mm" Then
-                    RightDisplay1(sender, e, loopa + 40, "", PrintSalesDatatable(i)(1), font, 80, 0)
-                    RightDisplay1(sender, e, loopa + 40, "", PrintSalesDatatable(i)(2), font, 170, 0)
-                Else
-                    RightDisplay1(sender, e, loopa + 40, "", PrintSalesDatatable(i)(1), font, 80, 30)
-                    RightDisplay1(sender, e, loopa + 40, "", PrintSalesDatatable(i)(2), font, 170, 30)
+            Dim TotalSales As Integer = SumOfColumnsToDecimal(DataGridViewSales, 4)
+            Dim TotalPercentage As Double = 0
+            Dim Percentage As Double = 0
+            Dim SimplyPerfectQty As Integer = 0
+            Dim SimplyPerfectPercentage As Double = 0
+            Dim SimplyPerfectTotalSales As Double = 0
+
+            For i As Integer = 0 To DataGridViewSales.Rows.Count - 1 Step +1
+
+                If DataGridViewSales.Rows(i).Cells(6).Value.ToString = "Simply Perfect" Then
+                    maxLength = Math.Min(DataGridViewSales.Rows(i).Cells(1).Value.Length, 15)
+                    title = DataGridViewSales.Rows(i).Cells(1).Value.Substring(0, maxLength)
+
+                    If maxLength = 15 Then
+                        title &= ".."
+                    End If
+
+                    SimpleTextDisplay(sender, e, title, font, 0, loopa + 30)
+
+                    Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales * 100
+                    SimplyPerfectPercentage += Percentage
+                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 60, 77)
+                    loopa += 10
+                    SimplyPerfectQty += 1
+                    SimplyPerfectTotalSales += DataGridViewSales.Rows(i).Cells(4).Value
+                    RightDisplay1(sender, e, loopa + 40, "", Math.Round(DataGridViewSales.Rows(i).Cells(4).Value, 2), font, 60, 145)
                 End If
 
-                loopa += 10
-                TotalSales += PrintSalesDatatable(i)(2)
             Next
-            If My.Settings.PrintSize = "57mm" Then
-                SimpleTextDisplay(sender, e, "GRAND TOTAL:", font1, 70, loopa + 30)
-                RightDisplay1(sender, e, loopa + 50, "", TotalSales, font1, 170, 0)
-            Else
-                SimpleTextDisplay(sender, e, "GRAND TOTAL:", font1, 100, loopa + 30)
-                RightDisplay1(sender, e, loopa + 50, "", TotalSales, font1, 200, 0)
-            End If
+            loopa += 30
+            PrintSmallLine(sender, e, font, loopa)
+            SimpleTextDisplay(sender, e, "SUBTOTAL", font, 0, loopa + 10)
+            SimplyPerfectPercentage = SimplyPerfectTotalSales / TotalSales * 100
+            RightDisplay1(sender, e, loopa + 30, SimplyPerfectQty, Math.Round(SimplyPerfectPercentage, 2), font, 60, 77)
+            RightDisplay1(sender, e, loopa + 30, "", Math.Round(SimplyPerfectTotalSales, 2), font, 60, 145)
+            loopa += 10
+            PrintSmallLine(sender, e, font, loopa + 30)
+            CenterTextDisplay(sender, e, "PERFECT COMBINATION", font1, loopa + 40)
+            loopa += 10
+            TotalPercentage += SimplyPerfectPercentage
+            Dim PerfectCombinationQty As Integer = 0
+            Dim PerfectCombinationPercentage As Double = 0
+            Dim PerfectCombinationTotalSales As Double = 0
 
 
-            'SimpleTextDisplay(sender, e, , font1, 120, loopa + 20)
+            For i As Integer = 0 To DataGridViewSales.Rows.Count - 1 Step +1
 
-            PrintStars(sender, e, font, loopa + 50)
-            CenterTextDisplay(sender, e, Format(Now(), "yyyy-MM-dd HH:mm:ss"), font, loopa + 80)
+                If DataGridViewSales.Rows(i).Cells(6).Value.ToString = "Perfect Combination" Then
+                    maxLength = Math.Min(DataGridViewSales.Rows(i).Cells(1).Value.Length, 15)
+                    title = DataGridViewSales.Rows(i).Cells(1).Value.Substring(0, maxLength)
+
+                    If maxLength = 15 Then
+                        title &= ".."
+                    End If
+
+                    SimpleTextDisplay(sender, e, title, font, 0, loopa + 30)
+
+                    Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales * 100
+                    PerfectCombinationPercentage += Percentage
+                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 60, 77)
+                    loopa += 10
+                    PerfectCombinationQty += 1
+                    PerfectCombinationTotalSales += DataGridViewSales.Rows(i).Cells(4).Value
+                    RightDisplay1(sender, e, loopa + 40, "", Math.Round(DataGridViewSales.Rows(i).Cells(4).Value, 2), font, 60, 145)
+                End If
+
+            Next
+            loopa += 30
+            PrintSmallLine(sender, e, font, loopa)
+            SimpleTextDisplay(sender, e, "SUBTOTAL", font, 0, loopa + 10)
+            PerfectCombinationPercentage = PerfectCombinationTotalSales / TotalSales * 100
+            RightDisplay1(sender, e, loopa + 30, PerfectCombinationQty, Math.Round(PerfectCombinationPercentage, 2), font, 60, 77)
+            RightDisplay1(sender, e, loopa + 30, "", Math.Round(PerfectCombinationTotalSales, 2), font, 60, 145)
+            loopa += 10
+            PrintSmallLine(sender, e, font, loopa + 30)
+            CenterTextDisplay(sender, e, "PREMIUM", font1, loopa + 40)
+            loopa += 10
+            TotalPercentage += PerfectCombinationPercentage
+
+            Dim PremiumQty As Integer = 0
+            Dim PremiumPercentage As Double = 0
+            Dim PremiumTotalSales As Double = 0
+
+            For i As Integer = 0 To DataGridViewSales.Rows.Count - 1 Step +1
+
+                If DataGridViewSales.Rows(i).Cells(6).Value.ToString = "Premium" Then
+                    maxLength = Math.Min(DataGridViewSales.Rows(i).Cells(1).Value.Length, 15)
+                    title = DataGridViewSales.Rows(i).Cells(1).Value.Substring(0, maxLength)
+
+                    If maxLength = 15 Then
+                        title &= ".."
+                    End If
+
+                    SimpleTextDisplay(sender, e, title, font, 0, loopa + 30)
+
+                    Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales * 100
+                    PremiumPercentage += Percentage
+                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 60, 77)
+                    loopa += 10
+                    PremiumQty += 1
+                    PremiumTotalSales += DataGridViewSales.Rows(i).Cells(4).Value
+                    RightDisplay1(sender, e, loopa + 40, "", Math.Round(DataGridViewSales.Rows(i).Cells(4).Value, 2), font, 60, 145)
+                End If
+
+            Next
+            loopa += 30
+            PrintSmallLine(sender, e, font, loopa)
+            SimpleTextDisplay(sender, e, "SUBTOTAL", font, 0, loopa + 10)
+            PremiumPercentage = PremiumTotalSales / TotalSales * 100
+            RightDisplay1(sender, e, loopa + 30, PremiumQty, Math.Round(PremiumPercentage, 2), font, 60, 77)
+            RightDisplay1(sender, e, loopa + 30, "", Math.Round(PremiumTotalSales, 2), font, 60, 145)
+            loopa += 10
+            PrintSmallLine(sender, e, font, loopa + 30)
+            CenterTextDisplay(sender, e, "COMBO", font1, loopa + 40)
+            loopa += 10
+
+            TotalPercentage += PremiumPercentage
+
+            Dim ComboQty As Integer = 0
+            Dim ComboPercentage As Double = 0
+            Dim ComboTotalSales As Double = 0
+
+
+            For i As Integer = 0 To DataGridViewSales.Rows.Count - 1 Step +1
+
+                If DataGridViewSales.Rows(i).Cells(6).Value.ToString = "Combo" Then
+                    maxLength = Math.Min(DataGridViewSales.Rows(i).Cells(1).Value.Length, 15)
+                    title = DataGridViewSales.Rows(i).Cells(1).Value.Substring(0, maxLength)
+
+                    If maxLength = 15 Then
+                        title &= ".."
+                    End If
+
+                    SimpleTextDisplay(sender, e, title, font, 0, loopa + 30)
+
+                    Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales * 100
+                    ComboPercentage += Percentage
+                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 60, 77)
+                    loopa += 10
+                    ComboQty += 1
+                    ComboTotalSales += DataGridViewSales.Rows(i).Cells(4).Value
+                    RightDisplay1(sender, e, loopa + 40, "", Math.Round(DataGridViewSales.Rows(i).Cells(4).Value, 2), font, 60, 145)
+                End If
+
+            Next
+            loopa += 30
+            PrintSmallLine(sender, e, font, loopa)
+            SimpleTextDisplay(sender, e, "SUBTOTAL", font, 0, loopa + 10)
+            ComboPercentage = ComboTotalSales / TotalSales * 100
+            RightDisplay1(sender, e, loopa + 30, ComboQty, Math.Round(ComboPercentage, 2), font, 60, 77)
+            RightDisplay1(sender, e, loopa + 30, "", Math.Round(ComboTotalSales, 2), font, 60, 145)
+            loopa += 10
+            PrintSmallLine(sender, e, font, loopa + 30)
+            CenterTextDisplay(sender, e, "SAVORY", font1, loopa + 40)
+            loopa += 10
+            TotalPercentage += ComboPercentage
+
+
+            Dim SavoryQty As Integer = 0
+            Dim SavoryPercentage As Double = 0
+            Dim SavoryTotalSales As Double = 0
+
+            For i As Integer = 0 To DataGridViewSales.Rows.Count - 1 Step +1
+
+                If DataGridViewSales.Rows(i).Cells(6).Value.ToString = "Savory" Then
+                    maxLength = Math.Min(DataGridViewSales.Rows(i).Cells(1).Value.Length, 15)
+                    title = DataGridViewSales.Rows(i).Cells(1).Value.Substring(0, maxLength)
+
+                    If maxLength = 15 Then
+                        title &= ".."
+                    End If
+
+                    SimpleTextDisplay(sender, e, title, font, 0, loopa + 30)
+
+                    Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales * 100
+                    SavoryPercentage += Percentage
+                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 60, 77)
+                    loopa += 10
+                    SavoryQty += 1
+                    SavoryTotalSales += DataGridViewSales.Rows(i).Cells(4).Value
+                    RightDisplay1(sender, e, loopa + 40, "", Math.Round(DataGridViewSales.Rows(i).Cells(4).Value, 2), font, 60, 145)
+                End If
+
+            Next
+            loopa += 30
+            PrintSmallLine(sender, e, font, loopa)
+            SimpleTextDisplay(sender, e, "SUBTOTAL", font, 0, loopa + 10)
+            SavoryPercentage = SavoryTotalSales / TotalSales * 100
+            RightDisplay1(sender, e, loopa + 30, SavoryQty, Math.Round(SavoryPercentage, 2), font, 60, 77)
+            RightDisplay1(sender, e, loopa + 30, "", Math.Round(SavoryTotalSales, 2), font, 60, 145)
+            loopa += 10
+            PrintSmallLine(sender, e, font, loopa + 30)
+            CenterTextDisplay(sender, e, "FAMOUS BLENDS", font1, loopa + 40)
+            loopa += 10
+            TotalPercentage += SavoryPercentage
+
+
+            Dim FamousBlendsQty As Integer = 0
+            Dim FamousBlendsPercentage As Double = 0
+            Dim FamousBlendsTotalSales As Double = 0
+
+            For i As Integer = 0 To DataGridViewSales.Rows.Count - 1 Step +1
+
+                If DataGridViewSales.Rows(i).Cells(6).Value.ToString = "Famous Blends" Then
+                    maxLength = Math.Min(DataGridViewSales.Rows(i).Cells(1).Value.Length, 15)
+                    title = DataGridViewSales.Rows(i).Cells(1).Value.Substring(0, maxLength)
+
+                    If maxLength = 15 Then
+                        title &= ".."
+                    End If
+
+                    SimpleTextDisplay(sender, e, title, font, 0, loopa + 30)
+
+                    Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales * 100
+                    FamousBlendsPercentage += Percentage
+                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 60, 77)
+                    loopa += 10
+                    FamousBlendsQty += 1
+                    FamousBlendsTotalSales += DataGridViewSales.Rows(i).Cells(4).Value
+                    RightDisplay1(sender, e, loopa + 40, "", Math.Round(DataGridViewSales.Rows(i).Cells(4).Value, 2), font, 60, 145)
+                End If
+
+            Next
+            loopa += 30
+            PrintSmallLine(sender, e, font, loopa)
+            SimpleTextDisplay(sender, e, "SUBTOTAL", font, 0, loopa + 10)
+            FamousBlendsPercentage = FamousBlendsTotalSales / TotalSales * 100
+            RightDisplay1(sender, e, loopa + 30, FamousBlendsQty, Math.Round(FamousBlendsPercentage, 2), font, 60, 77)
+            RightDisplay1(sender, e, loopa + 30, "", Math.Round(FamousBlendsTotalSales, 2), font, 60, 145)
+            loopa += 10
+            PrintSmallLine(sender, e, font, loopa + 30)
+            CenterTextDisplay(sender, e, "ADD-ONS", font1, loopa + 40)
+            loopa += 10
+            TotalPercentage += FamousBlendsPercentage
+
+            Dim AddOnsQty As Integer = 0
+            Dim AddOnsPercentage As Double = 0
+            Dim AddOnsTotalSales As Double = 0
+
+            For i As Integer = 0 To DataGridViewSales.Rows.Count - 1 Step +1
+
+                If DataGridViewSales.Rows(i).Cells(6).Value.ToString = "Add-Ons" Then
+                    maxLength = Math.Min(DataGridViewSales.Rows(i).Cells(1).Value.Length, 15)
+                    title = DataGridViewSales.Rows(i).Cells(1).Value.Substring(0, maxLength)
+
+                    If maxLength = 15 Then
+                        title &= ".."
+                    End If
+
+                    SimpleTextDisplay(sender, e, title, font, 0, loopa + 30)
+
+                    Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales * 100
+                    AddOnsPercentage += Percentage
+                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 60, 77)
+                    loopa += 10
+                    AddOnsQty += 1
+                    AddOnsTotalSales += DataGridViewSales.Rows(i).Cells(4).Value
+                    RightDisplay1(sender, e, loopa + 40, "", Math.Round(DataGridViewSales.Rows(i).Cells(4).Value, 2), font, 60, 145)
+                End If
+
+            Next
+            loopa += 30
+            PrintSmallLine(sender, e, font, loopa)
+            SimpleTextDisplay(sender, e, "SUBTOTAL", font, 0, loopa + 10)
+            AddOnsPercentage = AddOnsTotalSales / TotalSales * 100
+            RightDisplay1(sender, e, loopa + 30, AddOnsQty, Math.Round(AddOnsPercentage, 2), font, 60, 77)
+            RightDisplay1(sender, e, loopa + 30, "", Math.Round(AddOnsTotalSales, 2), font, 60, 145)
+
+            loopa += 10
+            PrintSmallLine(sender, e, font, loopa + 30)
+            CenterTextDisplay(sender, e, "OTHERS", font1, loopa + 40)
+            loopa += 10
+
+            TotalPercentage += AddOnsPercentage
+
+            Dim OthersQty As Integer = 0
+            Dim OthersPercentage As Double = 0
+            Dim OthersTotalSales As Double = 0
+
+
+            For i As Integer = 0 To DataGridViewSales.Rows.Count - 1 Step +1
+
+                If DataGridViewSales.Rows(i).Cells(6).Value.ToString = "Others" Then
+                    maxLength = Math.Min(DataGridViewSales.Rows(i).Cells(1).Value.Length, 15)
+                    title = DataGridViewSales.Rows(i).Cells(1).Value.Substring(0, maxLength)
+
+                    If maxLength = 15 Then
+                        title &= ".."
+                    End If
+
+                    SimpleTextDisplay(sender, e, title, font, 0, loopa + 30)
+
+                    Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales * 100
+                    OthersPercentage += Percentage
+                    RightDisplay1(sender, e, loopa + 50, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 60, 77)
+                    loopa += 10
+                    OthersQty += 1
+                    OthersTotalSales += DataGridViewSales.Rows(i).Cells(4).Value
+                    RightDisplay1(sender, e, loopa + 40, "", Math.Round(DataGridViewSales.Rows(i).Cells(4).Value, 2), font, 60, 145)
+                End If
+
+            Next
+            loopa += 30
+            PrintSmallLine(sender, e, font, loopa)
+            SimpleTextDisplay(sender, e, "SUBTOTAL", font, 0, loopa + 10)
+            OthersPercentage = OthersTotalSales / TotalSales * 100
+            RightDisplay1(sender, e, loopa + 30, OthersQty, Math.Round(OthersPercentage, 2), font, 60, 77)
+            RightDisplay1(sender, e, loopa + 30, "", Math.Round(OthersTotalSales, 2), font, 60, 145)
+
+            TotalPercentage += OthersPercentage
+
+            PrintSmallLine(sender, e, font, loopa + 20)
+            SimpleTextDisplay(sender, e, "TOTAL", font, 0, loopa + 30)
+
+            SimpleTextDisplay(sender, e, SumOfColumnsToInt(DataGridViewSales, 2), font, 70, loopa + 30)
+            SimpleTextDisplay(sender, e, NUMBERFORMAT(TotalPercentage) & "%", font, 120, loopa + 30)
+
+            RightDisplay1(sender, e, loopa + 50, "", NUMBERFORMAT(TotalSales), font, 60, 145)
+
+            PrintSmallLine(sender, e, font, loopa + 40)
+
+            Dim TotalDiscount As Double = 0
+            ThreadZXRead = New Thread(Sub() TotalDiscount = sum("totaldiscount", "loc_daily_transaction WHERE zreading >= '" & Format(DateTimePicker3.Value, "yyyy-MM-dd") & "' AND zreading <= '" & Format(DateTimePicker4.Value, "yyyy-MM-dd") & "'  AND active = 1"))
+            ThreadZXRead.Start()
+            ThreadlistZXRead.Add(ThreadZXRead)
+            For Each t In ThreadlistZXRead
+                t.Join()
+            Next
+
+            Dim LessVat As Double = 0
+            ThreadZXRead = New Thread(Sub() LessVat = sum("lessvat", "loc_daily_transaction WHERE zreading >= '" & Format(DateTimePicker3.Value, "yyyy-MM-dd") & "' AND zreading <= '" & Format(DateTimePicker4.Value, "yyyy-MM-dd") & "' AND  active = 1"))
+            ThreadZXRead.Start()
+            ThreadlistZXRead.Add(ThreadZXRead)
+            For Each t In ThreadlistZXRead
+                t.Join()
+            Next
+
+            Dim DailySales As Double = 0
+            ThreadZXRead = New Thread(Sub() DailySales = TotalSales - LessVat - TotalDiscount)
+            ThreadZXRead.Start()
+            ThreadlistZXRead.Add(ThreadZXRead)
+            For Each t In ThreadlistZXRead
+                t.Join()
+            Next
+
+            RightDisplay1(sender, e, loopa + 70, "DISCOUNT", NUMBERFORMAT(TotalDiscount), font, 205, 0)
+            RightDisplay1(sender, e, loopa + 80, "LESS VAT", NUMBERFORMAT(LessVat), font, 205, 0)
+            RightDisplay1(sender, e, loopa + 90, "SUPERCHARGE", NUMBERFORMAT(0), font, 205, 0)
+            RightDisplay1(sender, e, loopa + 100, "CORKAGE", NUMBERFORMAT(0), font, 205, 0)
+            RightDisplay1(sender, e, loopa + 110, "SERVICE CHARGE", NUMBERFORMAT(0), font, 205, 0)
+            RightDisplay1(sender, e, loopa + 120, "DELIVERY CHARGE", NUMBERFORMAT(0), font, 205, 0)
+            RightDisplay1(sender, e, loopa + 130, "TAKEOUT CHARGE", NUMBERFORMAT(0), font, 205, 0)
+            RightDisplay1(sender, e, loopa + 140, "ADD VAT", NUMBERFORMAT(0), font, 205, 0)
+            RightDisplay1(sender, e, loopa + 150, "EXCESS GC", NUMBERFORMAT(0), font, 205, 0)
+            RightDisplay1(sender, e, loopa + 160, "EXCESS CHK", NUMBERFORMAT(0), font, 205, 0)
+            PrintSmallLine(sender, e, font, loopa + 150)
+
+            SimpleTextDisplay(sender, e, "G. TOTAL", font, 0, loopa + 160)
+
+            SimpleTextDisplay(sender, e, SumOfColumnsToInt(DataGridViewSales, 2), font, 70, loopa + 160)
+            SimpleTextDisplay(sender, e, NUMBERFORMAT(TotalPercentage) & "%", font, 120, loopa + 160)
+
+            RightDisplay1(sender, e, loopa + 180, "", NUMBERFORMAT(DailySales), font, 60, 145)
+            PrintSmallLine(sender, e, font, loopa + 170)
+            CenterTextDisplay(sender, e, S_Zreading & Format(Now(), " hh:mm:ss tt"), font, loopa + 200)
+            'For i As Integer = 0 To DataGridViewSales.Rows.Count - 1 Step +1
+
+            '    If DataGridViewSales.Rows(i).Cells(6).Value.ToString = "Simply Perfect" Then
+            '        maxLength = Math.Min(DataGridViewSales.Rows(i).Cells(1).Value.Length, 15)
+            '        title = DataGridViewSales.Rows(i).Cells(1).Value.Substring(0, maxLength)
+
+            '        If maxLength = 15 Then
+            '            title &= ".."
+            '        End If
+
+            '        SimpleTextDisplay(sender, e, title, font, 0, loopa + 20)
+
+            '        Percentage = DataGridViewSales.Rows(i).Cells(3).Value / TotalSales
+            '        Percentage = Percentage * 100
+            '        RightDisplay1(sender, e, loopa + 40, DataGridViewSales.Rows(i).Cells(2).Value, Math.Round(Percentage, 2), font, 50, 77)
+            '        loopa += 10
+            '    End If
+
+            'Next
+
+
+
+
+            'If My.Settings.PrintSize = "57mm" Then
+            '    SimpleTextDisplay(sender, e, "GRAND TOTAL:", font1, 70, loopa + 30)
+            '    RightDisplay1(sender, e, loopa + 50, "", TotalSales, font1, 170, 0)
+            'Else
+            '    SimpleTextDisplay(sender, e, "GRAND TOTAL:", font1, 100, loopa + 30)
+            '    RightDisplay1(sender, e, loopa + 50, "", TotalSales, font1, 200, 0)
+            'End If
+
+
+            ''SimpleTextDisplay(sender, e, , font1, 120, loopa + 20)
+
+            'PrintStars(sender, e, font, loopa + 50)
+
 
         Catch ex As Exception
             SendErrorReport(ex.ToString)
@@ -1605,33 +2018,8 @@ Public Class Reports
             Dim font As New Font("tahoma", 6)
             Dim font2 As New Font("tahoma", 6, FontStyle.Bold)
             Dim brandfont As New Font("tahoma", 8, FontStyle.Bold)
-            'CenterTextDisplay(sender, e, ClientBrand.ToUpper, brandfont, 10)
-            'ReadingOR = "R" & Format(Now, "yyddMMHHmmssyy")
-            ''============================================================================================================================
-            'CenterTextDisplay(sender, e, "Opt by : Innovention Food Asia Co.", font, 21)
-            ''============================================================================================================================
-            'CenterTextDisplay(sender, e, ClientAddress & ", Brgy. " & ClientBrgy, font, 31)
-            ''============================================================================================================================
-            'CenterTextDisplay(sender, e, getmunicipality & ", " & getprovince, font, 41)
-            ''============================================================================================================================
-            'CenterTextDisplay(sender, e, "VAT REG TIN : " & ClientTin, font, 51)
-            ''============================================================================================================================
-            'CenterTextDisplay(sender, e, "MSN : " & ClientMSN, font, 61)
-            ''============================================================================================================================
-            'CenterTextDisplay(sender, e, "MIN : " & ClientMIN, font, 71)
-            ''============================================================================================================================
-            'CenterTextDisplay(sender, e, "PTUN : " & ClientPTUN, font, 81)
-            ''============================================================================================================================
-            'RightToLeftDisplay(sender, e, 100, "TERMINAL REPORT", "RETURNS", font2, 20, 0)
-            ''============================================================================================================================
-            'SimpleTextDisplay(sender, e, ReadingOR, font, 0, 90)
-
             ReceiptHeader(sender, e, False)
-
-            'SimpleTextDisplay(sender, e, "----------------------------------------------------------------", font, 0, 100)
             PrintLine(sender, e, font, 140)
-
-            '============================================================================================================================
             With DataGridViewReturns
                 Dim FooterSpacing As Integer = 0
                 If CheckBoxPRINTALL.Checked = False Then

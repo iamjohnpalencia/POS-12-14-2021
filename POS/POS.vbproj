@@ -212,6 +212,12 @@
     <Compile Include="SUBFORMS\BegBalance.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SUBFORMS\CashBreakdown.Designer.vb">
+      <DependentUpon>CashBreakdown.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SUBFORMS\CashBreakdown.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SUBFORMS\ChangePrice.Designer.vb">
       <DependentUpon>ChangePrice.vb</DependentUpon>
     </Compile>
@@ -453,6 +459,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SUBFORMS\BegBalance.resx">
       <DependentUpon>BegBalance.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SUBFORMS\CashBreakdown.resx">
+      <DependentUpon>CashBreakdown.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SUBFORMS\ChangePrice.resx">
       <DependentUpon>ChangePrice.vb</DependentUpon>

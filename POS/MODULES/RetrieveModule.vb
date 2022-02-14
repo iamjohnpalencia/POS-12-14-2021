@@ -246,10 +246,13 @@ Module RetrieveModule
             Dim cmd As MySqlCommand
             Dim da As MySqlDataAdapter
             Dim dt As DataTable
+            Dim Sql As String = ""
             If where = "Others" Then
-                cmd = New MySqlCommand("SELECT product_id, product_name, product_image, product_price, formula_id, product_sku FROM loc_admin_products WHERE product_category ='" & where & "' AND product_status = 1 AND store_id = " & ClientStoreID, LocalhostConn())
+                Sql = "SELECT product_id, product_name, product_image, product_price, formula_id, product_sku FROM loc_admin_products WHERE product_category ='" & where & "' AND product_status = 1 AND store_id = " & ClientStoreID
+                cmd = New MySqlCommand(Sql, LocalhostConn())
             Else
-                cmd = New MySqlCommand("SELECT product_id, product_name, product_image, product_price, formula_id, product_sku FROM loc_admin_products WHERE product_category ='" & where & "' AND product_status = 1 ", LocalhostConn())
+                Sql = "SELECT product_id, product_name, product_image, product_price, formula_id, product_sku FROM loc_admin_products WHERE product_category ='" & where & "' AND product_status = 1 "
+                cmd = New MySqlCommand(Sql, LocalhostConn())
             End If
             With POS
                 .PanelProducts.Controls.Clear()
@@ -399,6 +402,36 @@ Module RetrieveModule
                 .AllowUserToResizeColumns = False
                 .AllowUserToResizeRows = False
                 .Font = New Font("tahoma", 10)
+                .CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal
+                .ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None
+                .SelectionMode = DataGridViewSelectionMode.FullRowSelect
+            End With
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        Finally
+            ConnectionLocal.Close()
+            cmd.Dispose()
+            da.Dispose()
+        End Try
+        Return dttable
+    End Function
+    Public Function AsDatatableFontIncrease(table, fields, datagridd) As DataTable
+        datagridd.rows.clear
+        Dim dttable As DataTable = New DataTable
+        Dim ConnectionLocal As MySqlConnection = LocalhostConn()
+        Try
+            Dim sql = "SELECT " & fields & " FROM " & table
+            Dim cmd As MySqlCommand = New MySqlCommand(sql, ConnectionLocal)
+            Dim da As MySqlDataAdapter = New MySqlDataAdapter(cmd)
+            da.Fill(dttable)
+            With datagridd
+                .RowHeadersVisible = False
+                .AllowUserToAddRows = False
+                .AllowUserToDeleteRows = False
+                .AllowUserToOrderColumns = False
+                .AllowUserToResizeColumns = False
+                .AllowUserToResizeRows = False
+                .Font = New Font("tahoma", 12)
                 .CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal
                 .ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None
                 .SelectionMode = DataGridViewSelectionMode.FullRowSelect
@@ -562,6 +595,7 @@ Module RetrieveModule
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
+
         Return returnsum
     End Function
     Dim RetunSel

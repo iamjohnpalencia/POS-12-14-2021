@@ -35,6 +35,7 @@ Module Addmodule
                 ConnectionLocal = LocalhostConn()
             End If
             Dim Query As String = "INSERT INTO " + table + fields + " VALUES " + values
+            Console.Write(Query)
             Dim cmd As MySqlCommand = New MySqlCommand(Query, LocalhostConn)
             cmd.ExecuteNonQuery()
             LocalhostConn.Close()

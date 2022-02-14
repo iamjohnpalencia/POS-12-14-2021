@@ -162,4 +162,6 @@ Module publicVariables
 
     Public HASUPDATE As Boolean = False
 
+    Public LOGOUTFROMPOS As Boolean = True
+
 End Module

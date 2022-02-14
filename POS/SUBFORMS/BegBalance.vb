@@ -41,6 +41,7 @@ Public Class BegBalance
     End Sub
     Private Sub InsertBeginningBalance()
         Try
+            BegBalanceBool = True
             If ComboBox1.Text = "First Shift" Then
                 SystemLogType = "BG-1"
             ElseIf ComboBox1.Text = "Second Shift" Then
@@ -74,6 +75,9 @@ Public Class BegBalance
                 POS.Enabled = False
             Else
                 POS.Enabled = True
+                If ValidCloudConnection Then
+                    POS.Button3.Enabled = True
+                End If
                 If HASUPDATE Then
                     For Each btn As Button In POS.Panel3.Controls.OfType(Of Button)()
                         If btn.Text = "Simply Perfect" Then

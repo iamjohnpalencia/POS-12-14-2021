@@ -104,7 +104,7 @@ Partial Class TransactionType
         Me.Buttonlalafood.Name = "Buttonlalafood"
         Me.Buttonlalafood.Size = New System.Drawing.Size(180, 40)
         Me.Buttonlalafood.TabIndex = 105
-        Me.Buttonlalafood.Text = "Lalafood"
+        Me.Buttonlalafood.Text = "Shopee"
         Me.Buttonlalafood.UseVisualStyleBackColor = False
         '
         'ButtonGcash

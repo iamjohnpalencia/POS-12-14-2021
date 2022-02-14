@@ -34,7 +34,7 @@ Public Class CouponCode
     Private Sub LoadCoupons(sender As Object)
         Try
 
-            Dim LoadCouponTable = AsDatatable("tbcoupon WHERE active = 1", "*", DataGridViewCoupons)
+            Dim LoadCouponTable = AsDatatableFontIncrease("tbcoupon WHERE active = 1", "*", DataGridViewCoupons)
             For Each row As DataRow In LoadCouponTable.Rows
                 DataGridViewCoupons.Rows.Add(row("ID"), row("Couponname_"), row("Desc_"), row("Discountvalue_"), row("Referencevalue_"), row("Type"), row("Bundlebase_"), row("BBValue_"), row("Bundlepromo_"), row("BPValue_"), row("Effectivedate"), row("Expirydate"))
             Next
@@ -86,6 +86,8 @@ Public Class CouponCode
     End Sub
     Private Sub ButtonSubmit_Click(sender As Object, e As EventArgs) Handles ButtonSubmit.Click
         Try
+
+
             Dim CountItem As Integer = 0
             With POS
                 For i As Integer = 0 To .DataGridViewOrders.Rows.Count - 1 Step +1
@@ -500,22 +502,21 @@ Public Class CouponCode
             With POS
                 Dim ReferenceExist As Boolean = False
                 Dim referenceID As String = Me.DataGridViewCoupons.Item(6, Me.DataGridViewCoupons.CurrentRow.Index).Value.ToString
+
+
                 Dim refIds As String() = referenceID.Split(New Char() {","c})
                 'Total Discount
                 Dim DISCOUNTEDAMOUNT As Double = 0
                 Dim GROSSSALES As Double = 0
                 Dim VATABLESALES As Double = 0
                 Dim TAX As Double = 1 + Val(S_Tax)
+
                 Try
                     For Each getRefids In refIds
                         For i As Integer = 0 To .DataGridViewOrders.Rows.Count - 1 Step +1
                             If .DataGridViewOrders.Rows(i).Cells(5).Value.ToString.Contains(getRefids) = True Then
                                 If .DataGridViewOrders.Rows(i).Cells(1).Value >= Me.DataGridViewCoupons.Item(7, Me.DataGridViewCoupons.CurrentRow.Index).Value Then
-                                    If S_ZeroRated = "0" Then
-                                        DISCOUNTEDAMOUNT = .DataGridViewOrders.Rows(i).Cells(2).Value
-                                    Else
-                                        DISCOUNTEDAMOUNT = .DataGridViewOrders.Rows(i).Cells(2).Value / TAX
-                                    End If
+
                                     ReferenceExist = True
                                     Exit Try
                                 Else
@@ -530,6 +531,19 @@ Public Class CouponCode
                 Catch ex As Exception
                     MsgBox(ex.ToString)
                 End Try
+                'If ReferenceExist Then
+                '    With POS
+                '        'If S_ZeroRated = "0" Then
+                '        '    DISCOUNTEDAMOUNT = .DataGridViewOrders.Rows(i).Cells(2).Value
+                '        '    MsgBox(.DataGridViewOrders.Rows(i).Cells(5).Value)
+                '        'Else
+                '        '    DISCOUNTEDAMOUNT = .DataGridViewOrders.Rows(i).Cells(2).Value / TAX
+                '        'End If
+                '    End With
+                'End If
+
+
+
                 'Gross Sales/ Subtotal
                 Dim TOTALAMOUNTDUE As Double = 0
                 For i As Integer = 0 To .DataGridViewOrders.Rows.Count - 1 Step +1
@@ -541,7 +555,10 @@ Public Class CouponCode
                 Else
                     SUBTOTAL = Val(POS.Label76.Text)
                 End If
-                TOTALAMOUNTDUE = SUBTOTAL - DISCOUNTEDAMOUNT
+
+                '
+
+
                 Dim QtyCondMeet As Boolean = True
                 Dim TotalPrice As Double = 0
                 Dim BundlepromoID As String = Me.DataGridViewCoupons.Item(8, Me.DataGridViewCoupons.CurrentRow.Index).Value.ToString
@@ -551,7 +568,9 @@ Public Class CouponCode
                     For Each getBundleids In bundIds
                         For i As Integer = 0 To .DataGridViewOrders.Rows.Count - 1 Step +1
                             If POS.DataGridViewOrders.Rows(i).Cells(5).Value.ToString.Contains(getBundleids) = True Then
+                                DISCOUNTEDAMOUNT = .DataGridViewOrders.Rows(i).Cells(2).Value
                                 TotalPrice += .DataGridViewOrders.Rows(i).Cells(3).Value
+                                TOTALAMOUNTDUE = SUBTOTAL - DISCOUNTEDAMOUNT
                                 If POS.DataGridViewOrders.Rows(i).Cells(1).Value >= Me.DataGridViewCoupons.SelectedRows(0).Cells(9).Value Then
                                     Dim GetDiscount As Double = 0
                                     Dim OrgPrice = POS.DataGridViewOrders.Rows(i).Cells(2).Value
