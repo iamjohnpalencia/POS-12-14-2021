@@ -119,6 +119,10 @@ Partial Class SettingsForm
         Me.TabPage9 = New System.Windows.Forms.TabPage()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.DataGridViewProducts = New System.Windows.Forms.DataGridView()
+        Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column20 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
@@ -325,7 +329,6 @@ Partial Class SettingsForm
         Me.GroupBox6 = New System.Windows.Forms.GroupBox()
         Me.Panel8 = New System.Windows.Forms.Panel()
         Me.ButtonOptimizeDB = New System.Windows.Forms.Button()
-        Me.ButtonDatabaseReset = New System.Windows.Forms.Button()
         Me.ButtonMaintenance = New System.Windows.Forms.Button()
         Me.Label64 = New System.Windows.Forms.Label()
         Me.Label65 = New System.Windows.Forms.Label()
@@ -456,10 +459,6 @@ Partial Class SettingsForm
         Me.TabPage17 = New System.Windows.Forms.TabPage()
         Me.BackgroundWorkerLocalConnection = New System.ComponentModel.BackgroundWorker()
         Me.BackgroundWorkerCloudConnection = New System.ComponentModel.BackgroundWorker()
-        Me.Column20 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
-        Me.DataGridViewTextBoxColumn5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TabPage6.SuspendLayout()
         CType(Me.DataGridViewReset, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel35.SuspendLayout()
@@ -1278,6 +1277,27 @@ Partial Class SettingsForm
         Me.DataGridViewProducts.Name = "DataGridViewProducts"
         Me.DataGridViewProducts.Size = New System.Drawing.Size(1005, 193)
         Me.DataGridViewProducts.TabIndex = 236
+        '
+        'DataGridViewTextBoxColumn3
+        '
+        Me.DataGridViewTextBoxColumn3.HeaderText = "Product ID"
+        Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
+        Me.DataGridViewTextBoxColumn3.Visible = False
+        '
+        'DataGridViewTextBoxColumn4
+        '
+        Me.DataGridViewTextBoxColumn4.HeaderText = "Product Name"
+        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
+        '
+        'DataGridViewTextBoxColumn5
+        '
+        Me.DataGridViewTextBoxColumn5.HeaderText = "Product Category"
+        Me.DataGridViewTextBoxColumn5.Name = "DataGridViewTextBoxColumn5"
+        '
+        'Column20
+        '
+        Me.Column20.HeaderText = "Select Product"
+        Me.Column20.Name = "Column20"
         '
         'CheckBox1
         '
@@ -3240,6 +3260,7 @@ Partial Class SettingsForm
         '
         'ButtonTestLocCon
         '
+        Me.ButtonTestLocCon.Enabled = False
         Me.ButtonTestLocCon.FlatAppearance.BorderSize = 0
         Me.ButtonTestLocCon.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonTestLocCon.Location = New System.Drawing.Point(866, 125)
@@ -3512,6 +3533,7 @@ Partial Class SettingsForm
         '
         'ButtonTestCloudCon
         '
+        Me.ButtonTestCloudCon.Enabled = False
         Me.ButtonTestCloudCon.FlatAppearance.BorderSize = 0
         Me.ButtonTestCloudCon.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonTestCloudCon.Location = New System.Drawing.Point(866, 128)
@@ -3574,10 +3596,10 @@ Partial Class SettingsForm
         'TabPage12
         '
         Me.TabPage12.Controls.Add(Me.Panel10)
-        Me.TabPage12.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage12.Location = New System.Drawing.Point(4, 28)
         Me.TabPage12.Name = "TabPage12"
         Me.TabPage12.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage12.Size = New System.Drawing.Size(1017, 449)
+        Me.TabPage12.Size = New System.Drawing.Size(1017, 443)
         Me.TabPage12.TabIndex = 1
         Me.TabPage12.Text = "TabPage12"
         Me.TabPage12.UseVisualStyleBackColor = True
@@ -3588,7 +3610,7 @@ Partial Class SettingsForm
         Me.Panel10.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel10.Location = New System.Drawing.Point(3, 3)
         Me.Panel10.Name = "Panel10"
-        Me.Panel10.Size = New System.Drawing.Size(1011, 443)
+        Me.Panel10.Size = New System.Drawing.Size(1011, 437)
         Me.Panel10.TabIndex = 0
         '
         'TableLayoutPanel2
@@ -3605,7 +3627,7 @@ Partial Class SettingsForm
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(1011, 443)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(1011, 437)
         Me.TableLayoutPanel2.TabIndex = 10
         '
         'GroupBox6
@@ -3615,7 +3637,7 @@ Partial Class SettingsForm
         Me.GroupBox6.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox6.Location = New System.Drawing.Point(3, 3)
         Me.GroupBox6.Name = "GroupBox6"
-        Me.GroupBox6.Size = New System.Drawing.Size(1005, 141)
+        Me.GroupBox6.Size = New System.Drawing.Size(1005, 139)
         Me.GroupBox6.TabIndex = 4
         Me.GroupBox6.TabStop = False
         Me.GroupBox6.Text = "System Database Option"
@@ -3624,7 +3646,6 @@ Partial Class SettingsForm
         '
         Me.Panel8.AutoScroll = True
         Me.Panel8.Controls.Add(Me.ButtonOptimizeDB)
-        Me.Panel8.Controls.Add(Me.ButtonDatabaseReset)
         Me.Panel8.Controls.Add(Me.ButtonMaintenance)
         Me.Panel8.Controls.Add(Me.Label64)
         Me.Panel8.Controls.Add(Me.Label65)
@@ -3632,7 +3653,7 @@ Partial Class SettingsForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(3, 22)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(999, 116)
+        Me.Panel8.Size = New System.Drawing.Size(999, 114)
         Me.Panel8.TabIndex = 0
         '
         'ButtonOptimizeDB
@@ -3642,26 +3663,12 @@ Partial Class SettingsForm
         Me.ButtonOptimizeDB.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonOptimizeDB.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonOptimizeDB.ForeColor = System.Drawing.Color.White
-        Me.ButtonOptimizeDB.Location = New System.Drawing.Point(279, 83)
+        Me.ButtonOptimizeDB.Location = New System.Drawing.Point(279, 61)
         Me.ButtonOptimizeDB.Name = "ButtonOptimizeDB"
-        Me.ButtonOptimizeDB.Size = New System.Drawing.Size(441, 23)
+        Me.ButtonOptimizeDB.Size = New System.Drawing.Size(219, 23)
         Me.ButtonOptimizeDB.TabIndex = 30
         Me.ButtonOptimizeDB.Text = "Optimize"
         Me.ButtonOptimizeDB.UseVisualStyleBackColor = False
-        '
-        'ButtonDatabaseReset
-        '
-        Me.ButtonDatabaseReset.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(160, Byte), Integer), CType(CType(34, Byte), Integer))
-        Me.ButtonDatabaseReset.FlatAppearance.BorderSize = 0
-        Me.ButtonDatabaseReset.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonDatabaseReset.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ButtonDatabaseReset.ForeColor = System.Drawing.Color.White
-        Me.ButtonDatabaseReset.Location = New System.Drawing.Point(279, 57)
-        Me.ButtonDatabaseReset.Name = "ButtonDatabaseReset"
-        Me.ButtonDatabaseReset.Size = New System.Drawing.Size(219, 23)
-        Me.ButtonDatabaseReset.TabIndex = 29
-        Me.ButtonDatabaseReset.Text = "Database Reset"
-        Me.ButtonDatabaseReset.UseVisualStyleBackColor = False
         '
         'ButtonMaintenance
         '
@@ -3670,7 +3677,7 @@ Partial Class SettingsForm
         Me.ButtonMaintenance.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonMaintenance.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonMaintenance.ForeColor = System.Drawing.Color.White
-        Me.ButtonMaintenance.Location = New System.Drawing.Point(501, 57)
+        Me.ButtonMaintenance.Location = New System.Drawing.Point(501, 61)
         Me.ButtonMaintenance.Name = "ButtonMaintenance"
         Me.ButtonMaintenance.Size = New System.Drawing.Size(219, 23)
         Me.ButtonMaintenance.TabIndex = 28
@@ -3715,9 +3722,9 @@ Partial Class SettingsForm
         Me.GroupBox2.Controls.Add(Me.Panel7)
         Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox2.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox2.Location = New System.Drawing.Point(3, 150)
+        Me.GroupBox2.Location = New System.Drawing.Point(3, 148)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(1005, 141)
+        Me.GroupBox2.Size = New System.Drawing.Size(1005, 139)
         Me.GroupBox2.TabIndex = 3
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Manual System Backup"
@@ -3732,7 +3739,7 @@ Partial Class SettingsForm
         Me.Panel7.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel7.Location = New System.Drawing.Point(3, 22)
         Me.Panel7.Name = "Panel7"
-        Me.Panel7.Size = New System.Drawing.Size(999, 116)
+        Me.Panel7.Size = New System.Drawing.Size(999, 114)
         Me.Panel7.TabIndex = 0
         '
         'TextBoxLocalRestorePath
@@ -3758,6 +3765,7 @@ Partial Class SettingsForm
         'ButtonImport
         '
         Me.ButtonImport.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(160, Byte), Integer), CType(CType(34, Byte), Integer))
+        Me.ButtonImport.Enabled = False
         Me.ButtonImport.FlatAppearance.BorderSize = 0
         Me.ButtonImport.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonImport.Font = New System.Drawing.Font("Tahoma", 9.75!)
@@ -3772,6 +3780,7 @@ Partial Class SettingsForm
         'ButtonExport
         '
         Me.ButtonExport.BackColor = System.Drawing.Color.FromArgb(CType(CType(74, Byte), Integer), CType(CType(74, Byte), Integer), CType(CType(74, Byte), Integer))
+        Me.ButtonExport.Enabled = False
         Me.ButtonExport.FlatAppearance.BorderSize = 0
         Me.ButtonExport.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonExport.Font = New System.Drawing.Font("Tahoma", 9.75!)
@@ -3799,9 +3808,9 @@ Partial Class SettingsForm
         Me.GroupBox1.Controls.Add(Me.Panel6)
         Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox1.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(3, 297)
+        Me.GroupBox1.Location = New System.Drawing.Point(3, 293)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(1005, 143)
+        Me.GroupBox1.Size = New System.Drawing.Size(1005, 141)
         Me.GroupBox1.TabIndex = 2
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Schedule Automatic System Backup"
@@ -3813,7 +3822,7 @@ Partial Class SettingsForm
         Me.Panel6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel6.Location = New System.Drawing.Point(3, 22)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(999, 118)
+        Me.Panel6.Size = New System.Drawing.Size(999, 116)
         Me.Panel6.TabIndex = 0
         '
         'Label60
@@ -5054,27 +5063,6 @@ Partial Class SettingsForm
         'BackgroundWorkerCloudConnection
         '
         '
-        'Column20
-        '
-        Me.Column20.HeaderText = "Select Product"
-        Me.Column20.Name = "Column20"
-        '
-        'DataGridViewTextBoxColumn5
-        '
-        Me.DataGridViewTextBoxColumn5.HeaderText = "Product Category"
-        Me.DataGridViewTextBoxColumn5.Name = "DataGridViewTextBoxColumn5"
-        '
-        'DataGridViewTextBoxColumn4
-        '
-        Me.DataGridViewTextBoxColumn4.HeaderText = "Product Name"
-        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
-        '
-        'DataGridViewTextBoxColumn3
-        '
-        Me.DataGridViewTextBoxColumn3.HeaderText = "Product ID"
-        Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
-        Me.DataGridViewTextBoxColumn3.Visible = False
-        '
         'SettingsForm
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -5421,7 +5409,6 @@ Partial Class SettingsForm
     Friend WithEvents GroupBox6 As GroupBox
     Friend WithEvents Panel8 As Panel
     Friend WithEvents ButtonOptimizeDB As Button
-    Friend WithEvents ButtonDatabaseReset As Button
     Friend WithEvents ButtonMaintenance As Button
     Friend WithEvents Label64 As Label
     Friend WithEvents Label65 As Label

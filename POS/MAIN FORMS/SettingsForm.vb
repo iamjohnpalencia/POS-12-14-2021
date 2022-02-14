@@ -44,6 +44,12 @@ Public Class SettingsForm
                 LabelResetStatus.Text = "0"
             End If
 
+            If ClientRole = "Admin" Then
+                ButtonTestLocCon.Enabled = True
+                ButtonTestCloudCon.Enabled = True
+                ButtonImport.Enabled = True
+                ButtonExport.Enabled = True
+            End If
             If ClientRole <> "Admin" And ClientRole <> "Manager" Then
                 TabControl1.TabPages.Remove(TabControl1.TabPages(5))
                 AutoBackupBoolean = False
@@ -53,6 +59,7 @@ Public Class SettingsForm
                 RadioButtonNO.Enabled = False
                 NumericUpDownPrintCount.Enabled = False
                 ComboBoxPrintSize.Enabled = False
+
             Else
                 GroupBox19.Enabled = True
                 AutoBackupBoolean = True
@@ -67,11 +74,11 @@ Public Class SettingsForm
                 ButtonEditBank.Visible = False
                 ButtonPTActivate.Visible = False
                 ButtonChangeFormula.Visible = False
-                ButtonDatabaseReset.Visible = False
+
                 ButtonMaintenance.Visible = False
                 ButtonOptimizeDB.Visible = False
-                ButtonImport.Visible = False
-                ButtonExport.Visible = False
+                ButtonImport.Enabled = False
+                ButtonExport.Enabled = False
                 ToolStripButtonSelectP.Visible = False
                 ToolStripButtonClear.Visible = False
                 ButtonCHelp.Visible = False
@@ -1392,7 +1399,7 @@ Public Class SettingsForm
         End Try
     End Sub
 
-    Private Sub ButtonDatabaseReset_Click(sender As Object, e As EventArgs) Handles ButtonDatabaseReset.Click
+    Private Sub ButtonDatabaseReset_Click(sender As Object, e As EventArgs)
         If ClientRole = "Crew" Then
             MsgBox("You dont have administrator rights.")
         Else

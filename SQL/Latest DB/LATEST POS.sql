@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 27, 2022 at 03:10 PM
+-- Generation Time: Feb 13, 2022 at 05:47 PM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.7
 
@@ -120,8 +120,37 @@ CREATE TABLE IF NOT EXISTS `loc_admin_products` (
   `server_inventory_id` int(11) NOT NULL,
   `price_change` int(11) NOT NULL,
   `addontype` text NOT NULL,
+  `half_batch` int(11) NOT NULL,
   PRIMARY KEY (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `loc_cash_breakdown`
+--
+
+DROP TABLE IF EXISTS `loc_cash_breakdown`;
+CREATE TABLE IF NOT EXISTS `loc_cash_breakdown` (
+  `cb_id` int(11) NOT NULL AUTO_INCREMENT,
+  `1000` int(11) NOT NULL,
+  `500` int(11) NOT NULL,
+  `200` int(11) NOT NULL,
+  `100` int(11) NOT NULL,
+  `50` int(11) NOT NULL,
+  `20` int(11) NOT NULL,
+  `10` int(11) NOT NULL,
+  `5` int(11) NOT NULL,
+  `1` int(11) NOT NULL,
+  `.25` int(11) NOT NULL,
+  `.05` int(11) NOT NULL,
+  `created_at` text NOT NULL,
+  `crew_id` text NOT NULL,
+  `status` text NOT NULL,
+  `zreading` text NOT NULL,
+  `synced` text NOT NULL,
+  PRIMARY KEY (`cb_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -138,6 +167,9 @@ CREATE TABLE IF NOT EXISTS `loc_coupon_data` (
   `coupon_type` text NOT NULL,
   `coupon_line` text NOT NULL,
   `coupon_total` text NOT NULL,
+  `zreading` text NOT NULL,
+  `status` text NOT NULL,
+  `synced` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
