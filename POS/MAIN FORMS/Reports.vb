@@ -1153,7 +1153,7 @@ Public Class Reports
                 t.Join()
             Next
             Dim CashInDrawer As Double = 0
-            ThreadZXRead = New Thread(Sub() CashInDrawer = DailySales + BeginningBalance - totalExpenses)
+            ThreadZXRead = New Thread(Sub() CashInDrawer = sum("amountdue", "loc_daily_transaction WHERE active = 1 AND zreading = '" & ZreadDateFormat & "' AND transaction_type IN ('Walk-in','Registered')") + BeginningBalance - totalExpenses)
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead
@@ -1232,7 +1232,7 @@ Public Class Reports
             RightToLeftDisplay(sender, e, 395, "CASH IN DRAWER", NUMBERFORMAT(CashInDrawer), font, 10, 0)
             '============================================================================================================================
             Dim CASHLESS As Double = 0
-            ThreadZXRead = New Thread(Sub() CASHLESS = sum("amountdue", "loc_daily_transaction WHERE active IN (1,3) AND zreading = '" & ZreadDateFormat & "' AND transaction_type NOT IN ('Walk-in','Grab') "))
+            ThreadZXRead = New Thread(Sub() CASHLESS = sum("amountdue", "loc_daily_transaction WHERE active IN (1,3) AND zreading = '" & ZreadDateFormat & "' AND transaction_type NOT IN ('Walk-in') "))
             ThreadZXRead.Start()
             ThreadlistZXRead.Add(ThreadZXRead)
             For Each t In ThreadlistZXRead

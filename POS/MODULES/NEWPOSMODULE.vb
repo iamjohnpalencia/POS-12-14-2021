@@ -314,7 +314,7 @@ Module NEWPOSMODULE
 
                         If Category = "Famous Blends" Then
                             DISABLESERVEROTHERSPRODUCT = True
-                            MsgBox(.WaffleUpgrade)
+
                             If .WaffleUpgrade Then
                                 Dim TotalUpgradePriceDeduction As Double = 0
                                 If Val(.TextBoxQTY.Text) > 0 Then

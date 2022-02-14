@@ -537,7 +537,7 @@ Public Class POS
                 HASOTHERSSERVERPRODUCT = False
                 DISABLESERVEROTHERSPRODUCT = False
                 Panel3.Enabled = True
-                ButtonWaffleUpgrade.Enabled = True
+
                 ButtonPayMent.Text = "Checkout"
                 ButtonTransactionMode.Text = "Transaction Type"
                 ButtonClickCount = 0
