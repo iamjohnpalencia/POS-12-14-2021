@@ -25,9 +25,15 @@ Partial Class CouponCode
         Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CouponCode))
         Me.DataGridViewCoupons = New System.Windows.Forms.DataGridView()
+        Me.ButtonSubmit = New System.Windows.Forms.Button()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -40,18 +46,8 @@ Partial Class CouponCode
         Me.Column10 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ButtonSubmit = New System.Windows.Forms.Button()
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.LabelDesc = New System.Windows.Forms.Label()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         CType(Me.DataGridViewCoupons, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.GroupBox2.SuspendLayout()
-        Me.FlowLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -76,22 +72,68 @@ Partial Class CouponCode
         Me.DataGridViewCoupons.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.DataGridViewCoupons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridViewCoupons.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column4, Me.Column5, Me.Column6, Me.Column7, Me.Column8, Me.Column9, Me.Column10, Me.Column11, Me.Column12})
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(252, Byte), Integer), CType(CType(248, Byte), Integer), CType(CType(209, Byte), Integer))
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewCoupons.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(252, Byte), Integer), CType(CType(248, Byte), Integer), CType(CType(209, Byte), Integer))
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewCoupons.DefaultCellStyle = DataGridViewCellStyle4
         Me.DataGridViewCoupons.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridViewCoupons.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.DataGridViewCoupons.EnableHeadersVisualStyles = False
         Me.DataGridViewCoupons.Location = New System.Drawing.Point(3, 23)
         Me.DataGridViewCoupons.Name = "DataGridViewCoupons"
         Me.DataGridViewCoupons.RowHeadersVisible = False
-        Me.DataGridViewCoupons.Size = New System.Drawing.Size(783, 272)
+        Me.DataGridViewCoupons.Size = New System.Drawing.Size(783, 292)
         Me.DataGridViewCoupons.TabIndex = 207
+        '
+        'ButtonSubmit
+        '
+        Me.ButtonSubmit.BackColor = System.Drawing.Color.FromArgb(CType(CType(74, Byte), Integer), CType(CType(74, Byte), Integer), CType(CType(74, Byte), Integer))
+        Me.ButtonSubmit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.ButtonSubmit.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtonSubmit.FlatAppearance.BorderSize = 0
+        Me.ButtonSubmit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonSubmit.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonSubmit.ForeColor = System.Drawing.Color.White
+        Me.ButtonSubmit.Location = New System.Drawing.Point(3, 327)
+        Me.ButtonSubmit.Name = "ButtonSubmit"
+        Me.ButtonSubmit.Size = New System.Drawing.Size(789, 34)
+        Me.ButtonSubmit.TabIndex = 180
+        Me.ButtonSubmit.Text = "Apply"
+        Me.ButtonSubmit.UseVisualStyleBackColor = False
+        '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.ColumnCount = 1
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.Controls.Add(Me.ButtonSubmit, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.GroupBox1, 0, 0)
+        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 2
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(795, 364)
+        Me.TableLayoutPanel1.TabIndex = 208
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.BackColor = System.Drawing.Color.White
+        Me.GroupBox1.Controls.Add(Me.DataGridViewCoupons)
+        Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GroupBox1.Location = New System.Drawing.Point(3, 3)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(789, 318)
+        Me.GroupBox1.TabIndex = 209
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Coupons"
+        '
+        'BackgroundWorker1
+        '
         '
         'Column1
         '
@@ -106,9 +148,10 @@ Partial Class CouponCode
         '
         'Column3
         '
-        Me.Column3.HeaderText = "Column3"
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Column3.DefaultCellStyle = DataGridViewCellStyle3
+        Me.Column3.HeaderText = "Description"
         Me.Column3.Name = "Column3"
-        Me.Column3.Visible = False
         '
         'Column4
         '
@@ -126,6 +169,7 @@ Partial Class CouponCode
         '
         Me.Column6.HeaderText = "Coupon Type"
         Me.Column6.Name = "Column6"
+        Me.Column6.Visible = False
         '
         'Column7
         '
@@ -163,84 +207,6 @@ Partial Class CouponCode
         Me.Column12.Name = "Column12"
         Me.Column12.Visible = False
         '
-        'ButtonSubmit
-        '
-        Me.ButtonSubmit.BackColor = System.Drawing.Color.FromArgb(CType(CType(74, Byte), Integer), CType(CType(74, Byte), Integer), CType(CType(74, Byte), Integer))
-        Me.ButtonSubmit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.ButtonSubmit.Dock = System.Windows.Forms.DockStyle.Right
-        Me.ButtonSubmit.FlatAppearance.BorderSize = 0
-        Me.ButtonSubmit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonSubmit.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ButtonSubmit.ForeColor = System.Drawing.Color.White
-        Me.ButtonSubmit.Location = New System.Drawing.Point(652, 23)
-        Me.ButtonSubmit.Name = "ButtonSubmit"
-        Me.ButtonSubmit.Size = New System.Drawing.Size(134, 28)
-        Me.ButtonSubmit.TabIndex = 180
-        Me.ButtonSubmit.Text = "Apply"
-        Me.ButtonSubmit.UseVisualStyleBackColor = False
-        '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.ColumnCount = 1
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.GroupBox2, 0, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.GroupBox1, 0, 0)
-        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 2
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(795, 364)
-        Me.TableLayoutPanel1.TabIndex = 208
-        '
-        'GroupBox2
-        '
-        Me.GroupBox2.BackColor = System.Drawing.Color.White
-        Me.GroupBox2.Controls.Add(Me.FlowLayoutPanel1)
-        Me.GroupBox2.Controls.Add(Me.ButtonSubmit)
-        Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox2.Location = New System.Drawing.Point(3, 307)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(789, 54)
-        Me.GroupBox2.TabIndex = 210
-        Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Action"
-        '
-        'FlowLayoutPanel1
-        '
-        Me.FlowLayoutPanel1.AutoScroll = True
-        Me.FlowLayoutPanel1.Controls.Add(Me.LabelDesc)
-        Me.FlowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Left
-        Me.FlowLayoutPanel1.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(3, 23)
-        Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(500, 28)
-        Me.FlowLayoutPanel1.TabIndex = 182
-        '
-        'LabelDesc
-        '
-        Me.LabelDesc.AutoSize = True
-        Me.LabelDesc.Location = New System.Drawing.Point(3, 0)
-        Me.LabelDesc.Name = "LabelDesc"
-        Me.LabelDesc.Size = New System.Drawing.Size(0, 18)
-        Me.LabelDesc.TabIndex = 181
-        '
-        'GroupBox1
-        '
-        Me.GroupBox1.BackColor = System.Drawing.Color.White
-        Me.GroupBox1.Controls.Add(Me.DataGridViewCoupons)
-        Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox1.Location = New System.Drawing.Point(3, 3)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(789, 298)
-        Me.GroupBox1.TabIndex = 209
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Coupons"
-        '
-        'BackgroundWorker1
-        '
-        '
         'CouponCode
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -258,9 +224,6 @@ Partial Class CouponCode
         Me.Text = "POS | COUPON"
         CType(Me.DataGridViewCoupons, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.GroupBox2.ResumeLayout(False)
-        Me.FlowLayoutPanel1.ResumeLayout(False)
-        Me.FlowLayoutPanel1.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -269,10 +232,7 @@ Partial Class CouponCode
     Friend WithEvents DataGridViewCoupons As DataGridView
     Friend WithEvents Timer1 As Timer
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
-    Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents GroupBox1 As GroupBox
-    Friend WithEvents FlowLayoutPanel1 As FlowLayoutPanel
-    Friend WithEvents LabelDesc As Label
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
     Friend WithEvents Column1 As DataGridViewTextBoxColumn
     Friend WithEvents Column2 As DataGridViewTextBoxColumn

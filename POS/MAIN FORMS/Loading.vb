@@ -487,7 +487,7 @@ Public Class Loading
                 Dim dt As DataTable = New DataTable
                 da.Fill(dt)
                 For Each row As DataRow In dt.Rows
-                    MsgBox(row("script_command"))
+                    'MsgBox(row("script_command"))
                     Dim query = "" & row("script_command") & ""
                     cmd = New MySqlCommand(query, ConnectionLocal)
                     cmd.ExecuteNonQuery()

@@ -435,6 +435,7 @@ Module RetrieveModule
                 .CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal
                 .ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None
                 .SelectionMode = DataGridViewSelectionMode.FullRowSelect
+                .rowtemplate.height = 30
             End With
         Catch ex As Exception
             SendErrorReport(ex.ToString)

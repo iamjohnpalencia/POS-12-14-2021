@@ -14,7 +14,8 @@ Public Class SeniorDetails
             If TextboxIsEmpty(Me) Then
                 Dim LimitToOne As Boolean = False
                 Dim ConnectionLocal As MySqlConnection = LocalhostConn()
-                Dim SQL = "SELECT senior_id FROM `loc_senior_details` WHERE senior_id = " & Trim(TextBoxSENIORID.Text)
+                Dim SQL = "SELECT senior_id FROM `loc_senior_details` WHERE senior_id = '" & Trim(TextBoxSENIORID.Text) & "'"
+                Console.WriteLine(SQL)
                 Dim Cmd As MySqlCommand = New MySqlCommand(SQL, ConnectionLocal)
                 Using reader As MySqlDataReader = Cmd.ExecuteReader
                     If reader.HasRows Then
@@ -37,6 +38,14 @@ Public Class SeniorDetails
             End If
         Catch ex As Exception
             SendErrorReport(ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub TextBoxSENIORID_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBoxSENIORID.KeyPress
+        Try
+            'Numeric(sender, e)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
         End Try
     End Sub
 End Class

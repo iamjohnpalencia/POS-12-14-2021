@@ -1517,6 +1517,7 @@ Public Class POS
             Exit Sub
         End Try
     End Sub
+
     Private Function LoadCouponsLocal() As DataTable
         Dim cmdlocal As MySqlCommand
         Dim dalocal As MySqlDataAdapter
@@ -2097,6 +2098,7 @@ Public Class POS
             FillDatagridProduct.Columns.Add("date_modified")
             FillDatagridProduct.Columns.Add("inventory_id")
             FillDatagridProduct.Columns.Add("addontype")
+            FillDatagridProduct.Columns.Add("half_batch")
 
             Dim Query = "SELECT * FROM loc_admin_products"
             Dim CmdCheck As MySqlCommand = New MySqlCommand(Query, ConnectionLocal)
@@ -2106,62 +2108,6 @@ Public Class POS
 
             If DtCheck.Rows.Count < 1 Then
                 GetAllProducts()
-
-                'Dim SqlGet = "SELECT product_id FROM admin_products_org"
-                'Dim CmdGet As MySqlCommand = New MySqlCommand(SqlGet, ConnectionServer)
-                'Dim DaGet As MySqlDataAdapter = New MySqlDataAdapter(CmdGet)
-                'Dim DTGet As DataTable = New DataTable
-                'DaGet.Fill(DTGet)
-
-
-                'If WorkerCancel = False Then
-                '    CheckingForUpdates.Instance.Invoke(Sub()
-                '                                           CheckingForUpdates.ProgressBar1.Maximum += DTGet.Rows.Count
-                '                                           Console.WriteLine("PRODUCTS : " & CheckingForUpdates.ProgressBar1.Maximum)
-                '                                       End Sub)
-                'End If
-
-
-                '
-                'Dim SqlCount = "SELECT * FROM admin_products_org"
-                'Dim CmdCount As MySqlCommand = New MySqlCommand(SqlCount, ConnectionServer)
-                'Dim DataAdapter As MySqlDataAdapter = New MySqlDataAdapter(CmdCount)
-                '
-                'Dim DtCountProductIds As DataTable
-                'Dim DataAdapter As MySqlDataAdapter
-                'For i As Integer = 0 To DTGet.Rows.Count - 1 Step +1
-                '    Dim SqlCount = "SELECT * FROM admin_products_org WHERE product_id = " & DTGet(i)(0)
-                '    Dim CmdCount As MySqlCommand = New MySqlCommand(SqlCount, ConnectionServer)
-                '    DataAdapter = New MySqlDataAdapter(CmdCount)
-                '    DtCountProductIds = New DataTable
-                '    DataAdapter.Fill(DtCountProductIds)
-
-                '    Dim Prod As DataRow = FillDatagridProduct.NewRow
-                '    Prod("product_id") = DtCountProductIds(i)(0)
-                '    Prod("product_sku") = DtCountProductIds(i)(1)
-                '    Prod("product_name") = DtCountProductIds(i)(2)
-                '    Prod("formula_id") = DtCountProductIds(i)(3)
-                '    Prod("product_barcode") = DtCountProductIds(i)(4)
-                '    Prod("product_category") = DtCountProductIds(i)(5)
-                '    Prod("product_price") = DtCountProductIds(i)(6)
-                '    Prod("product_desc") = DtCountProductIds(i)(7)
-                '    Prod("product_image") = DtCountProductIds(i)(8)
-                '    Prod("product_status") = DtCountProductIds(i)(9)
-                '    Prod("origin") = DtCountProductIds(i)(10)
-                '    Prod("date_modified") = DtCountProductIds(i)(11)
-                '    Prod("inventory_id") = DtCountProductIds(i)(12)
-                '    Prod("addontype") = DtCountProductIds(i)(13)
-                '    FillDatagridProduct.Rows.Add(Prod)
-
-                '    If WorkerCancel = False Then
-                '        CheckingForUpdates.Instance.Invoke(Sub()
-                '                                               If DataGridViewUpdate.Rows.Count > 0 Then
-                '                                                   CheckingForUpdates.ProgressBar1.Value += 1
-                '                                                   CheckingForUpdates.Label1.Text = CheckingForUpdates.ProgressBar1.Value
-                '                                               End If
-                '                                           End Sub)
-                '    End If
-                'Next
             Else
                 Dim DtCount As DataTable
                 Dim DtCountProductIds As DataTable = New DataTable
@@ -2223,6 +2169,7 @@ Public Class POS
                             Prod("date_modified") = DtCount(0)(11)
                             Prod("inventory_id") = DtCount(0)(12)
                             Prod("addontype") = DtCount(0)(13)
+                            Prod("half_batch") = DtCount(0)(14)
                             FillDatagridProduct.Rows.Add(Prod)
                         End If
                     Else
@@ -2248,6 +2195,7 @@ Public Class POS
                         Prod("date_modified") = DtCount(0)(11)
                         Prod("inventory_id") = DtCount(0)(12)
                         Prod("addontype") = DtCount(0)(13)
+                        Prod("half_batch") = DtCount(0)(14)
                         FillDatagridProduct.Rows.Add(Prod)
 
                     End If
@@ -2289,6 +2237,8 @@ Public Class POS
             FillDatagridProduct.Columns.Add("date_modified")
             FillDatagridProduct.Columns.Add("inventory_id")
             FillDatagridProduct.Columns.Add("addontype")
+            FillDatagridProduct.Columns.Add("half_batch")
+
             Dim DaCount As MySqlDataAdapter
             Dim FillDt As DataTable = New DataTable
 
@@ -2330,6 +2280,7 @@ Public Class POS
                     Prod("date_modified") = FillDt(i)(11)
                     Prod("inventory_id") = FillDt(i)(12)
                     Prod("addontype") = FillDt(i)(13)
+                    Prod("half_batch") = FillDt(i)(14)
                     FillDatagridProduct.Rows.Add(Prod)
                 Next
             Next
@@ -3022,7 +2973,7 @@ Public Class POS
                     Dim result As Integer = cmdlocal.ExecuteScalar
                     If result = 0 Then
                         Dim sqlinsert = "INSERT INTO loc_admin_products (`server_product_id`, `product_sku`, `product_name`, `formula_id`, `product_barcode`, `product_category`, `product_price`, `product_desc`, `product_image`, `product_status`, `origin`, `date_modified`, `server_inventory_id`, `guid`, `store_id`, `crew_id`, `synced`, `addontype`, `half_batch`) VALUES
-                                        (@0 ,@1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11, @12, @13, @14, @15, @16, @17)"
+                                        (@0 ,@1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11, @12, @13, @14, @15, @16, @17, @18)"
                         cmdlocal = New MySqlCommand(sqlinsert, Connection)
                         cmdlocal.Parameters.Add("@0", MySqlDbType.Int64).Value = .Rows(i).Cells(0).Value.ToString()
                         cmdlocal.Parameters.Add("@1", MySqlDbType.VarChar).Value = .Rows(i).Cells(1).Value.ToString()
@@ -3042,7 +2993,7 @@ Public Class POS
                         cmdlocal.Parameters.Add("@15", MySqlDbType.VarChar).Value = "0"
                         cmdlocal.Parameters.Add("@16", MySqlDbType.VarChar).Value = "Synced"
                         cmdlocal.Parameters.Add("@17", MySqlDbType.Text).Value = .Rows(i).Cells(13).Value.ToString()
-                        cmdlocal.Parameters.Add("@18", MySqlDbType.Text).Value = .Rows(i).Cells(14).Value.ToString()
+                        cmdlocal.Parameters.Add("@18", MySqlDbType.Int64).Value = .Rows(i).Cells(14).Value.ToString()
                         cmdlocal.ExecuteNonQuery()
                         If WorkerUpdateCancel = False Then
                             CheckingForUpdates.Instance.Invoke(Sub()
@@ -3070,7 +3021,7 @@ Public Class POS
                         cmdlocal.Parameters.Add("@15", MySqlDbType.VarChar).Value = "0"
                         cmdlocal.Parameters.Add("@16", MySqlDbType.VarChar).Value = "Synced"
                         cmdlocal.Parameters.Add("@17", MySqlDbType.Text).Value = .Rows(i).Cells(13).Value.ToString()
-                        cmdlocal.Parameters.Add("@18", MySqlDbType.Text).Value = .Rows(i).Cells(14).Value.ToString()
+                        cmdlocal.Parameters.Add("@18", MySqlDbType.Int64).Value = .Rows(i).Cells(14).Value.ToString()
                         cmdlocal.ExecuteNonQuery()
                         If WorkerUpdateCancel = False Then
                             CheckingForUpdates.Instance.Invoke(Sub()

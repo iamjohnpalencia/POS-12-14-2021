@@ -36,12 +36,10 @@ Public Class CouponCode
 
             Dim LoadCouponTable = AsDatatableFontIncrease("tbcoupon WHERE active = 1", "*", DataGridViewCoupons)
             For Each row As DataRow In LoadCouponTable.Rows
+                DataGridViewCoupons.DefaultCellStyle.Font = New Font("Tahoma", 15)
+                DataGridViewCoupons.Height = 40
                 DataGridViewCoupons.Rows.Add(row("ID"), row("Couponname_"), row("Desc_"), row("Discountvalue_"), row("Referencevalue_"), row("Type"), row("Bundlebase_"), row("BBValue_"), row("Bundlepromo_"), row("BPValue_"), row("Effectivedate"), row("Expirydate"))
             Next
-            If LoadCouponTable.Rows.Count > 0 Then
-                Dim arg = New DataGridViewCellEventArgs(0, 0)
-                DataGridViewCoupons_CellClick(sender, arg)
-            End If
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
@@ -849,11 +847,11 @@ Public Class CouponCode
             SendErrorReport(ex.ToString)
         End Try
     End Sub
-    Private Sub DataGridViewCoupons_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewCoupons.CellClick
-        Try
-            LabelDesc.Text = DataGridViewCoupons.SelectedRows(0).Cells(2).Value.ToString
-        Catch ex As Exception
-            SendErrorReport(ex.ToString)
-        End Try
-    End Sub
+    'Private Sub DataGridViewCoupons_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewCoupons.CellClick
+    '    Try
+    '        LabelDesc.Text = DataGridViewCoupons.SelectedRows(0).Cells(2).Value.ToString
+    '    Catch ex As Exception
+    '        SendErrorReport(ex.ToString)
+    '    End Try
+    'End Sub
 End Class

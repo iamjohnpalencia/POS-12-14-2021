@@ -520,7 +520,7 @@ Partial Class SynctoCloud
         Me.Panel7.Controls.Add(Me.Label4)
         Me.Panel7.Controls.Add(Me.ProgressBar1)
         Me.Panel7.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel7.Location = New System.Drawing.Point(0, 308)
+        Me.Panel7.Location = New System.Drawing.Point(0, 326)
         Me.Panel7.Name = "Panel7"
         Me.Panel7.Size = New System.Drawing.Size(491, 31)
         Me.Panel7.TabIndex = 24
@@ -2352,9 +2352,9 @@ Partial Class SynctoCloud
         Me.Panel1.Controls.Add(Me.RadioButton2)
         Me.Panel1.Controls.Add(Me.RadioButton1)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel1.Location = New System.Drawing.Point(0, 227)
+        Me.Panel1.Location = New System.Drawing.Point(0, 229)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(491, 71)
+        Me.Panel1.Size = New System.Drawing.Size(491, 87)
         Me.Panel1.TabIndex = 59
         '
         'Button2
@@ -2362,11 +2362,11 @@ Partial Class SynctoCloud
         Me.Button2.BackColor = System.Drawing.Color.FromArgb(CType(CType(74, Byte), Integer), CType(CType(74, Byte), Integer), CType(CType(74, Byte), Integer))
         Me.Button2.FlatAppearance.BorderSize = 0
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button2.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button2.Font = New System.Drawing.Font("Tahoma", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button2.ForeColor = System.Drawing.Color.White
-        Me.Button2.Location = New System.Drawing.Point(5, 44)
+        Me.Button2.Location = New System.Drawing.Point(3, 49)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(181, 22)
+        Me.Button2.Size = New System.Drawing.Size(485, 35)
         Me.Button2.TabIndex = 43
         Me.Button2.Text = "Start"
         Me.Button2.UseVisualStyleBackColor = False
@@ -2374,30 +2374,32 @@ Partial Class SynctoCloud
         'RadioButton2
         '
         Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(5, 21)
+        Me.RadioButton2.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RadioButton2.Location = New System.Drawing.Point(246, 18)
         Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(96, 17)
+        Me.RadioButton2.Size = New System.Drawing.Size(183, 23)
         Me.RadioButton2.TabIndex = 1
-        Me.RadioButton2.Text = "Sync Inventory"
+        Me.RadioButton2.Text = "UPLOAD INVENTORY"
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
         'RadioButton1
         '
         Me.RadioButton1.AutoSize = True
         Me.RadioButton1.Checked = True
-        Me.RadioButton1.Location = New System.Drawing.Point(5, 4)
+        Me.RadioButton1.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RadioButton1.Location = New System.Drawing.Point(52, 18)
         Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(184, 17)
+        Me.RadioButton1.Size = New System.Drawing.Size(188, 23)
         Me.RadioButton1.TabIndex = 0
         Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Sync data(Inventory not included)"
+        Me.RadioButton1.Text = "UPLOAD SALES DATA"
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'Panel3
         '
         Me.Panel3.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(160, Byte), Integer), CType(CType(34, Byte), Integer))
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel3.Location = New System.Drawing.Point(0, 298)
+        Me.Panel3.Location = New System.Drawing.Point(0, 316)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(491, 10)
         Me.Panel3.TabIndex = 61
@@ -2513,7 +2515,7 @@ Partial Class SynctoCloud
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(491, 339)
+        Me.ClientSize = New System.Drawing.Size(491, 357)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.Panel3)
