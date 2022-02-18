@@ -253,6 +253,7 @@ Module RetrieveModule
             Else
                 Sql = "SELECT product_id, product_name, product_image, product_price, formula_id, product_sku FROM loc_admin_products WHERE product_category ='" & where & "' AND product_status = 1 "
                 cmd = New MySqlCommand(Sql, LocalhostConn())
+                Console.WriteLine(Sql)
             End If
             With POS
                 .PanelProducts.Controls.Clear()

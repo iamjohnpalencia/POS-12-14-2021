@@ -58,6 +58,7 @@ Public Class Reports
             reportstransactionlogs(False)
             expensereports(False)
             LoadUsers()
+            LoadCouponTypes()
 
             reportsreturnsandrefunds(False)
             viewdeposit(False)
@@ -151,6 +152,26 @@ Public Class Reports
                     ComboBoxUserIDS.Items.Add(reader("uniq_id"))
                 End While
             End Using
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub LoadCouponTypes()
+        Try
+            Dim ConnectionLocal As MySqlConnection = LocalhostConn()
+            Dim sql = "Select Type FROM tbcoupon GROUP BY type ORDER BY type ASC"
+            Dim cmd As MySqlCommand = New MySqlCommand(sql, ConnectionLocal)
+            Dim da As MySqlDataAdapter = New MySqlDataAdapter(cmd)
+            Dim dt As DataTable = New DataTable
+            da.Fill(dt)
+            ToolStripComboBoxDiscType.Items.Clear()
+            ToolStripComboBoxDiscType.Items.Add("All")
+            ToolStripComboBoxDiscType.Items.Add("N/A")
+            For i As Integer = 0 To dt.Rows.Count - 1 Step +1
+                ToolStripComboBoxDiscType.Items.Add(dt(i)(0))
+            Next
+            ToolStripComboBoxDiscType.SelectedIndex = 0
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
@@ -409,7 +430,7 @@ Public Class Reports
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
         Try
             DataGridViewCustomReport.Rows.Clear()
-            CustomReport(ToolStripComboBoxProducts.Text, ToolStripComboBoxTaxType.Text, ToolStripComboBoxTransactionType.Text)
+            CustomReport(ToolStripComboBoxProducts.Text, ToolStripComboBoxTaxType.Text, ToolStripComboBoxTransactionType.Text, ToolStripComboBoxDiscType.Text)
             ToolStripStatusLabel2.Text = DataGridViewCustomReport.Rows.Count
         Catch ex As Exception
             SendErrorReport(ex.ToString)
@@ -418,7 +439,7 @@ Public Class Reports
     Dim CustomReportLessVat As Double = 0
     Dim CustomReportVat As Double = 0
     Dim CustomReportdt As DataTable
-    Private Sub CustomReport(ProductName, TaxType, TransactionType)
+    Private Sub CustomReport(ProductName, TaxType, TransactionType, DiscountType)
         Try
             Dim ConnectionLocal As MySqlConnection = LocalhostConn()
             Dim cmd As MySqlCommand
@@ -429,93 +450,165 @@ Public Class Reports
             If ProductName = "All" Then
                 If TaxType = "All" Then
                     If TransactionType = "All(Cash)" Then
-                        sql = "SELECT product_name, transaction_number, quantity, price, total, created_at, product_sku FROM loc_daily_transaction_details WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND active = 1 AND transaction_type IN('Walk-In','Registered')"
+                        If DiscountType = "All" Then
+                            sql = "SELECT product_name, transaction_number, quantity, price, total, created_at, product_sku FROM loc_daily_transaction_details WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND active = 1 AND transaction_type IN('Walk-In','Registered')"
+                        Else
+                            sql = "SELECT LDT.product_name, LDT.transaction_number, LDT.quantity, LDT.price, LDT.total, LDT.created_at, LDT.product_sku FROM loc_daily_transaction_details LDT LEFT JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LDT.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LDT.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.active = 1 AND LDT.transaction_type IN('Walk-In','Registered') AND LD.discount_type = '" & DiscountType & "'"
+                        End If
                     ElseIf TransactionType = "All(Others)" Then
-                        sql = "SELECT product_name, transaction_number, quantity, price, total, created_at, product_sku FROM loc_daily_transaction_details WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND active = 1 AND transaction_type NOT IN('Walk-In','Registered')"
+                        If DiscountType = "All" Then
+                            sql = "SELECT product_name, transaction_number, quantity, price, total, created_at, product_sku FROM loc_daily_transaction_details WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND active = 1 AND transaction_type NOT IN('Walk-In','Registered')"
+                        Else
+                            sql = "SELECT LDT.product_name, LDT.transaction_number, LDT.quantity, LDT.price, LDT.total, LDT.created_at, LDT.product_sku FROM loc_daily_transaction_details LDT LEFT JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LDT.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LDT.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.active = 1 AND LDT.transaction_type NOT IN('Walk-In','Registered') AND LD.discount_type = '" & DiscountType & "'"
+                        End If
                     Else
-                        sql = "SELECT product_name, transaction_number, quantity, price, total, created_at, product_sku FROM loc_daily_transaction_details WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND active = 1 AND transaction_type = '" & TransactionType & "' "
+                        If DiscountType = "All" Then
+                            sql = "SELECT product_name, transaction_number, quantity, price, total, created_at, product_sku FROM loc_daily_transaction_details WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND active = 1 AND transaction_type = '" & TransactionType & "' "
+                        Else
+                            sql = "SELECT LDT.product_name, LDT.transaction_number, LDT.quantity, LDT.price, LDT.total, LDT.created_at, LDT.product_sku FROM loc_daily_transaction_details LDT LEFT JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LDT.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LDT.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.active = 1 AND LDT.transaction_type = '" & TransactionType & "' AND LD.discount_type = '" & DiscountType & "'"
+                        End If
                     End If
                 Else
                     If TaxType = "VAT" Then
                         If TransactionType = "All(Cash)" Then
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'N/A' AND LD.zeroratedsales = 0 AND LD.active = 1 AND LD.transaction_type IN('Walk-In','Registered')"
+                            If DiscountType = "All" Or DiscountType = "N/A" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'N/A' AND LD.zeroratedsales = 0 AND LD.active = 1 AND LD.transaction_type IN('Walk-In','Registered')"
+                            End If
                         ElseIf TransactionType = "All(Others)" Then
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'N/A' AND LD.zeroratedsales = 0 AND LD.active = 1 AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                            If DiscountType = "All" Or DiscountType = "N/A" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'N/A' AND LD.zeroratedsales = 0 AND LD.active = 1 AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                            End If
                         Else
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'N/A' AND LD.zeroratedsales = 0 AND LD.active = 1 AND LD.transaction_type = '" & TransactionType & "' "
+                            If DiscountType = "All" Or DiscountType = "N/A" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'N/A' AND LD.zeroratedsales = 0 AND LD.active = 1 AND LD.transaction_type = '" & TransactionType & "' "
+                            End If
                         End If
                     ElseIf TaxType = "NONVAT" Then
                         If TransactionType = "All(Cash)" Then
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.active = 1 AND LD.transaction_type IN('Walk-In','Registered')"
+                            If DiscountType = "All" Or DiscountType = "Percentage(w/o vat)" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.active = 1 AND LD.transaction_type IN('Walk-In','Registered')"
+                            End If
                         ElseIf TransactionType = "All(Others)" Then
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.active = 1 AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                            If DiscountType = "All" Or DiscountType = "Percentage(w/o vat)" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.active = 1 AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                            End If
                         Else
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.transaction_type = '" & TransactionType & "' AND LD.active = 1"
+                            If DiscountType = "All" Or DiscountType = "Percentage(w/o vat)" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.transaction_type = '" & TransactionType & "' AND LD.active = 1"
+                            End If
                         End If
                     ElseIf TaxType = "ZERO RATED" Then
                         If TransactionType = "All(Cash)" Then
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_type IN('Walk-In','Registered')"
+                            If DiscountType = "All" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_type IN('Walk-In','Registered')"
+                            Else
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_type IN('Walk-In','Registered') AND LD.discount_type = '" & DiscountType & "'"
+                            End If
                         ElseIf TransactionType = "All(Others)" Then
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                            If DiscountType = "All" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                            Else
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_type NOT IN('Walk-In','Registered') AND LD.discount_type = '" & DiscountType & "'"
+                            End If
                         Else
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_type = '" & TransactionType & "' AND LD.active = 1"
+                            If DiscountType = "All" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_type = '" & TransactionType & "' AND LD.active = 1"
+                            Else
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_type = '" & TransactionType & "' AND LD.active = 1 AND LD.discount_type = '" & DiscountType & "'"
+                            End If
                         End If
                     End If
                 End If
             Else
                 If TaxType = "All" Then
                     If TransactionType = "All(Cash)" Then
-                        sql = "SELECT product_name, transaction_number, quantity, price, total, created_at, product_sku FROM loc_daily_transaction_details WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND product_name = '" & ProductName & "' AND active = 1 AND transaction_type IN('Walk-In','Registered')"
+                        If DiscountType = "All" Then
+                            sql = "SELECT product_name, transaction_number, quantity, price, total, created_at, product_sku FROM loc_daily_transaction_details WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND product_name = '" & ProductName & "' AND active = 1 AND transaction_type IN('Walk-In','Registered')"
+                        Else
+                            sql = "SELECT LDT.product_name, LDT.transaction_number, LDT.quantity, LDT.price, LDT.total, LDT.created_at, LDT.product_sku FROM loc_daily_transaction_details LDT LEFT JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LDT.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LDT.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LDT.active = 1 AND LDT.transaction_type IN('Walk-In','Registered') AND LD.discount_type = '" & DiscountType & "'"
+                        End If
                     ElseIf TransactionType = "All(Others)" Then
-                        sql = "SELECT product_name, transaction_number, quantity, price, total, created_at, product_sku FROM loc_daily_transaction_details WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND product_name = '" & ProductName & "' AND active = 1 AND transaction_type NOT IN('Walk-In','Registered')"
+                        If DiscountType = "All" Then
+                            sql = "SELECT product_name, transaction_number, quantity, price, total, created_at, product_sku FROM loc_daily_transaction_details WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND product_name = '" & ProductName & "' AND active = 1 AND transaction_type NOT IN('Walk-In','Registered')"
+                        Else
+                            sql = "SELECT LDT.product_name, LDT.transaction_number, LDT.quantity, LDT.price, LDT.total, LDT.created_at, LDT.product_sku FROM loc_daily_transaction_details LDT LEFT JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LDT.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LDT.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LDT.active = 1 AND LDT.transaction_type NOT IN('Walk-In','Registered') AND LD.discount_type = '" & DiscountType & "'"
+                        End If
                     Else
-                        sql = "SELECT product_name, transaction_number, quantity, price, total, created_at, product_sku FROM loc_daily_transaction_details WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND product_name = '" & ProductName & "' AND transaction_type = '" & TransactionType & "' AND active = 1"
+                        If DiscountType = "All" Then
+                            sql = "SELECT product_name, transaction_number, quantity, price, total, created_at, product_sku FROM loc_daily_transaction_details WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND product_name = '" & ProductName & "' AND transaction_type = '" & TransactionType & "' AND active = 1"
+                        Else
+                            sql = "SELECT LDT.product_name, LDT.transaction_number, LDT.quantity, LDT.price, LDT.total, LDT.created_at, LDT.product_sku FROM loc_daily_transaction_details LDT LEFT JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LDT.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LDT.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LDT.transaction_type = '" & TransactionType & "' AND active = 1 AND LD.discount_type = '" & DiscountType & "'"
+                        End If
                     End If
                 Else
                     If TaxType = "VAT" Then
                         If TransactionType = "All(Cash)" Then
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.discount_type = 'N/A' AND LD.zeroratedsales = 0 AND LD.active = 1 AND LD.transaction_type IN('Walk-In','Registered')"
+                            If DiscountType = "All" Or DiscountType = "N/A" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.discount_type = 'N/A' AND LD.zeroratedsales = 0 AND LD.active = 1 AND LD.transaction_type IN('Walk-In','Registered')"
+                            End If
                         ElseIf TransactionType = "All(Others)" Then
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.discount_type = 'N/A' AND LD.zeroratedsales = 0 AND LD.active = 1 AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                            If DiscountType = "All" Or DiscountType = "N/A" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.discount_type = 'N/A' AND LD.zeroratedsales = 0 AND LD.active = 1 AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                            End If
                         Else
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.discount_type = 'N/A' AND LD.zeroratedsales = 0 AND LD.transaction_type = '" & TransactionType & "' AND LD.active = 1"
+                            If DiscountType = "All" Or DiscountType = "N/A" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.discount_type = 'N/A' AND LD.zeroratedsales = 0 AND LD.transaction_type = '" & TransactionType & "' AND LD.active = 1"
+                            End If
                         End If
                     ElseIf TaxType = "NONVAT" Then
                         If TransactionType = "All(Cash)" Then
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.active = 1 AND LD.transaction_type IN('Walk-In','Registered')"
+                            If DiscountType = "All" Or DiscountType = "Percentage(w/o vat)" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.active = 1 AND LD.transaction_type IN('Walk-In','Registered')"
+                            End If
                         ElseIf TransactionType = "All(Others)" Then
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.active = 1 AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                            If DiscountType = "All" Or DiscountType = "Percentage(w/o vat)" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.active = 1 AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                            End If
                         Else
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.transaction_type = '" & TransactionType & "' AND LD.active = 1"
+                            If DiscountType = "All" Or DiscountType = "Percentage(w/o vat)" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.transaction_type = '" & TransactionType & "' AND LD.active = 1"
+                            End If
                         End If
                     ElseIf TaxType = "ZERO RATED" Then
                         If TransactionType = "All(Cash)" Then
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.zeroratedsales > 0 AND LD.active = 1 AND LD.transaction_type IN('Walk-In','Registered')"
+                            If DiscountType = "All" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.zeroratedsales > 0 AND LD.active = 1 AND LD.transaction_type IN('Walk-In','Registered')"
+                            Else
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.zeroratedsales > 0 AND LD.active = 1 AND LD.transaction_type IN('Walk-In','Registered') AND LD.discount_type = '" & DiscountType & "'"
+                            End If
                         ElseIf TransactionType = "All(Others)" Then
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.zeroratedsales > 0 AND LD.active = 1 AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                            If DiscountType = "All" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.zeroratedsales > 0 AND LD.active = 1 AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                            Else
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.zeroratedsales > 0 AND LD.active = 1 AND LD.transaction_type NOT IN('Walk-In','Registered') AND LD.discount_type = '" & DiscountType & "'"
+                            End If
                         Else
-                            sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.zeroratedsales > 0 AND LD.transaction_type = '" & TransactionType & "' AND LD.active = 1"
-
+                            If DiscountType = "All" Then
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.zeroratedsales > 0 AND LD.transaction_type = '" & TransactionType & "' AND LD.active = 1"
+                            Else
+                                sql = "SELECT LDT.product_name as PName, LDT.transaction_number as TN, LDT.quantity as QTY, LDT.price as P, LDT.total as T, LDT.created_at as CA, LDT.product_sku as SKU FROM loc_daily_transaction_details LDT INNER JOIN loc_daily_transaction LD ON LDT.transaction_number = LD.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LDT.product_name = '" & ProductName & "' AND LD.zeroratedsales > 0 AND LD.transaction_type = '" & TransactionType & "' AND LD.active = 1 AND LD.discount_type = '" & DiscountType & "'"
+                            End If
                         End If
                     End If
                 End If
             End If
 
-            cmd = New MySqlCommand(sql, ConnectionLocal)
-            da = New MySqlDataAdapter(cmd)
-            da.Fill(CustomReportdt)
+            If sql <> "" Then
+                cmd = New MySqlCommand(sql, ConnectionLocal)
+                da = New MySqlDataAdapter(cmd)
+                da.Fill(CustomReportdt)
 
-            For Each row As DataRow In CustomReportdt.Rows
-                If TaxType = "All" Then
-                    DataGridViewCustomReport.Rows.Add(row("product_name"), row("transaction_number"), row("quantity"), row("price"), row("total"), row("created_at"), row("product_sku"))
-                Else
-                    DataGridViewCustomReport.Rows.Add(row("PName"), row("TN"), row("QTY"), row("P"), row("T"), row("CA"), row("SKU"))
-                End If
-            Next
+                For Each row As DataRow In CustomReportdt.Rows
+                    If TaxType = "All" Then
+                        DataGridViewCustomReport.Rows.Add(row("product_name"), row("transaction_number"), row("quantity"), row("price"), row("total"), row("created_at"), row("product_sku"))
+                    Else
+                        DataGridViewCustomReport.Rows.Add(row("PName"), row("TN"), row("QTY"), row("P"), row("T"), row("CA"), row("SKU"))
+                    End If
+                Next
+            End If
 
             Dim sql1 As String = ""
             Dim cmd1 As MySqlCommand
-
 
             Dim list As List(Of String) = New List(Of String)
 
@@ -532,72 +625,144 @@ Public Class Reports
                 If ProductName = "All" Then
                     If TaxType = "All" Then
                         If TransactionType = "All(Cash)" Then
-                            sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND transaction_number = '" & element & "' AND transaction_type IN('Walk-In','Registered')"
+                            If DiscountType = "All" Then
+                                sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND transaction_number = '" & element & "' AND transaction_type IN('Walk-In','Registered')"
+                            Else
+                                sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND transaction_number = '" & element & "' AND transaction_type IN('Walk-In','Registered') AND discount_type = '" & DiscountType & "'"
+                            End If
                         ElseIf TransactionType = "All(Others)" Then
-                            sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND transaction_number = '" & element & "' AND transaction_type NOT IN('Walk-In','Registered')"
+                            If DiscountType = "All" Then
+                                sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND transaction_number = '" & element & "' AND transaction_type NOT IN('Walk-In','Registered')"
+                            Else
+                                sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND transaction_number = '" & element & "' AND transaction_type NOT IN('Walk-In','Registered') AND discount_type = '" & DiscountType & "'"
+                            End If
                         Else
-                            sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND transaction_type = '" & TransactionType & "' AND transaction_number = '" & element & "'"
+                            If DiscountType = "All" Then
+                                sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND transaction_type = '" & TransactionType & "' AND transaction_number = '" & element & "'"
+                            Else
+                                sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND transaction_type = '" & TransactionType & "' AND transaction_number = '" & element & "' AND discount_type = '" & DiscountType & "'"
+                            End If
                         End If
                     Else
                         If TaxType = "VAT" Then
                             If TransactionType = "All(Cash)" Then
-                                sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND discount_type = 'N/A' AND zeroratedsales = 0 AND transaction_number = '" & element & "' AND transaction_type IN('Walk-In','Registered')"
+                                If DiscountType = "All" Or DiscountType = "N/A" Then
+                                    sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND discount_type = 'N/A' AND zeroratedsales = 0 AND transaction_number = '" & element & "' AND transaction_type IN('Walk-In','Registered')"
+                                End If
                             ElseIf TransactionType = "All(Others)" Then
-                                sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND discount_type = 'N/A' AND zeroratedsales = 0 AND transaction_number = '" & element & "' AND transaction_type NOT IN('Walk-In','Registered')"
+                                If DiscountType = "All" Or DiscountType = "N/A" Then
+                                    sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND discount_type = 'N/A' AND zeroratedsales = 0 AND transaction_number = '" & element & "' AND transaction_type NOT IN('Walk-In','Registered')"
+                                End If
                             Else
-                                sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND discount_type = 'N/A' AND zeroratedsales = 0 AND transaction_type = '" & TransactionType & "' AND transaction_number = '" & element & "'"
+                                If DiscountType = "All" Or DiscountType = "N/A" Then
+                                    sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND discount_type = 'N/A' AND zeroratedsales = 0 AND transaction_type = '" & TransactionType & "' AND transaction_number = '" & element & "'"
+                                End If
                             End If
                         ElseIf TaxType = "NONVAT" Then
                             If TransactionType = "All(Cash)" Then
-                                sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND discount_type = 'Percentage(w/o vat)' AND transaction_number = '" & element & "' AND transaction_type IN('Walk-In','Registered')"
+                                If DiscountType = "All" Or DiscountType = "Percentage(w/o vat)" Then
+                                    sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND discount_type = 'Percentage(w/o vat)' AND transaction_number = '" & element & "' AND transaction_type IN('Walk-In','Registered')"
+                                End If
                             ElseIf TransactionType = "All(Others)" Then
-                                sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND discount_type = 'Percentage(w/o vat)' AND transaction_number = '" & element & "' AND transaction_type NOT IN('Walk-In','Registered')"
+                                If DiscountType = "All" Or DiscountType = "Percentage(w/o vat)" Then
+                                    sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND discount_type = 'Percentage(w/o vat)' AND transaction_number = '" & element & "' AND transaction_type NOT IN('Walk-In','Registered')"
+                                End If
                             Else
-                                sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND discount_type = 'Percentage(w/o vat)' AND transaction_type = '" & TransactionType & "' AND transaction_number = '" & element & "'"
+                                If DiscountType = "All" Or DiscountType = "Percentage(w/o vat)" Then
+                                    sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND discount_type = 'Percentage(w/o vat)' AND transaction_type = '" & TransactionType & "' AND transaction_number = '" & element & "'"
+                                End If
                             End If
                         ElseIf TaxType = "ZERO RATED" Then
                             If TransactionType = "All(Cash)" Then
-                                sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND zeroratedsales > 0 AND transaction_number = '" & element & "' AND transaction_type IN('Walk-In','Registered')"
+                                If DiscountType = "All" Then
+                                    sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND zeroratedsales > 0 AND transaction_number = '" & element & "' AND transaction_type IN('Walk-In','Registered')"
+                                Else
+                                    sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND zeroratedsales > 0 AND transaction_number = '" & element & "' AND transaction_type IN('Walk-In','Registered') AND discount_type = '" & DiscountType & "'"
+                                End If
                             ElseIf TransactionType = "All(Others)" Then
-                                sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND zeroratedsales > 0 AND transaction_number = '" & element & "' AND transaction_type NOT IN('Walk-In','Registered')"
+                                If DiscountType = "All" Then
+                                    sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND zeroratedsales > 0 AND transaction_number = '" & element & "' AND transaction_type NOT IN('Walk-In','Registered')"
+                                Else
+                                    sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND zeroratedsales > 0 AND transaction_number = '" & element & "' AND transaction_type NOT IN('Walk-In','Registered') AND discount_type = '" & DiscountType & "'"
+                                End If
                             Else
-                                sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND zeroratedsales > 0 AND transaction_type = '" & TransactionType & "' AND transaction_number = '" & element & "'"
+                                If DiscountType = "All" Then
+                                    sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND zeroratedsales > 0 AND transaction_type = '" & TransactionType & "' AND transaction_number = '" & element & "'"
+                                Else
+                                    sql1 = "SELECT vatablesales, lessvat FROM loc_daily_transaction WHERE date(created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND zeroratedsales > 0 AND transaction_type = '" & TransactionType & "' AND transaction_number = '" & element & "' AND discount_type = '" & DiscountType & "'"
+                                End If
                             End If
                         End If
                     End If
                 Else
                     If TaxType = "All" Then
                         If TransactionType = "All" Then
-                            sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type IN('Walk-In','Registered')"
+                            If DiscountType = "All" Then
+                                sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type IN('Walk-In','Registered')"
+                            Else
+                                sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type IN('Walk-In','Registered') AND discount_type = '" & DiscountType & "'"
+                            End If
                         ElseIf TransactionType = "All(Others)" Then
-                            sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                            If DiscountType = "All" Then
+                                sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                            Else
+                                sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type NOT IN('Walk-In','Registered') AND discount_type = '" & DiscountType & "'"
+                            End If
                         Else
-                            sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.transaction_type = '" & TransactionType & "' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "'"
+                            If DiscountType = "All" Then
+                                sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.transaction_type = '" & TransactionType & "' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "'"
+                            Else
+                                sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.transaction_type = '" & TransactionType & "' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND discount_type = '" & DiscountType & "'"
+                            End If
                         End If
                     Else
                         If TaxType = "VAT" Then
                             If TransactionType = "All" Then
-                                sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'N/A' AND zeroratedsales = 0 AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type IN('Walk-In','Registered')"
+                                If DiscountType = "All" Or DiscountType = "N/A" Then
+                                    sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'N/A' AND zeroratedsales = 0 AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type IN('Walk-In','Registered')"
+                                End If
                             ElseIf TransactionType = "All(Others)" Then
-                                sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'N/A' AND zeroratedsales = 0 AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                                If DiscountType = "All" Or DiscountType = "N/A" Then
+                                    sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'N/A' AND zeroratedsales = 0 AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                                End If
                             Else
-                                sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'N/A' AND zeroratedsales = 0 AND LD.transaction_type = '" & TransactionType & "' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "'"
+                                If DiscountType = "All" Or DiscountType = "N/A" Then
+                                    sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'N/A' AND zeroratedsales = 0 AND LD.transaction_type = '" & TransactionType & "' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "'"
+                                End If
                             End If
                         ElseIf TaxType = "NONVAT" Then
                             If TransactionType = "All" Then
-                                sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type IN('Walk-In','Registered')"
+                                If DiscountType = "All" Or DiscountType = "Percentage(w/o vat)" Then
+                                    sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type IN('Walk-In','Registered')"
+                                End If
                             ElseIf TransactionType = "All(Others)" Then
-                                sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                                If DiscountType = "All" Or DiscountType = "Percentage(w/o vat)" Then
+                                    sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                                End If
                             Else
-                                sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.transaction_type = '" & TransactionType & "' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "'"
+                                If DiscountType = "All" Or DiscountType = "Percentage(w/o vat)" Then
+                                    sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.discount_type = 'Percentage(w/o vat)' AND LD.transaction_type = '" & TransactionType & "' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "'"
+                                End If
                             End If
                         ElseIf TaxType = "ZERO RATED" Then
                             If TransactionType = "All" Then
-                                sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type IN('Walk-In','Registered')"
+                                If DiscountType = "All" Then
+                                    sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type IN('Walk-In','Registered')"
+                                Else
+                                    sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type IN('Walk-In','Registered') AND LD.discount_type = '" & DiscountType & "'"
+                                End If
                             ElseIf TransactionType = "All(Others)" Then
-                                sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                                If DiscountType = "All" Then
+                                    sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type NOT IN('Walk-In','Registered')"
+                                Else
+                                    sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.transaction_type NOT IN('Walk-In','Registered') AND LD.discount_type = '" & DiscountType & "'"
+                                End If
                             Else
-                                sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_type = '" & TransactionType & "' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "'"
+                                If DiscountType = "All" Then
+                                    sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_type = '" & TransactionType & "' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "'"
+                                Else
+                                    sql1 = "SELECT LD.vatablesales, LD.lessvat FROM loc_daily_transaction LD INNER JOIN loc_daily_transaction_details LDT ON LD.transaction_number = LDT.transaction_number WHERE date(LD.created_at) >= '" & Format(DateTimePicker17.Value, "yyyy-MM-dd") & "' AND date(LD.created_at) <= '" & Format(DateTimePicker18.Value, "yyyy-MM-dd") & "' AND LD.zeroratedsales > 0 AND LD.transaction_type = '" & TransactionType & "' AND LD.transaction_number = '" & element & "' AND LDT.product_name = '" & ProductName & "' AND LD.discount_type = '" & DiscountType & "'"
+                                End If
                             End If
                         End If
                     End If
@@ -2136,14 +2301,15 @@ Public Class Reports
                         gfx.DrawString("Product Name: " & ToolStripComboBoxProducts.Text, font, XBrushes.Black, 50, 61)
                         gfx.DrawString("Tax Type: " & ToolStripComboBoxTaxType.Text, font, XBrushes.Black, 50, 72)
                         gfx.DrawString("Transaction Type: " & ToolStripComboBoxTransactionType.Text, font, XBrushes.Black, 50, 83)
-                        gfx.DrawString("Product Name", font1, XBrushes.Black, 50, 103)
-                        gfx.DrawString("Transaction Number", font1, XBrushes.Black, 130, 103)
-                        gfx.DrawString("Quantity", font1, XBrushes.Black, 240, 103)
-                        gfx.DrawString("Price", font1, XBrushes.Black, 290, 103)
-                        gfx.DrawString("Total", font1, XBrushes.Black, 330, 103)
-                        gfx.DrawString("Date Created", font1, XBrushes.Black, 370, 103)
+                        gfx.DrawString("Discount Type: " & ToolStripComboBoxDiscType.Text, font, XBrushes.Black, 50, 94)
+                        gfx.DrawString("Product Name", font1, XBrushes.Black, 50, 103 + 10)
+                        gfx.DrawString("Transaction Number", font1, XBrushes.Black, 130, 103 + 10)
+                        gfx.DrawString("Quantity", font1, XBrushes.Black, 240, 103 + 10)
+                        gfx.DrawString("Price", font1, XBrushes.Black, 290, 103 + 10)
+                        gfx.DrawString("Total", font1, XBrushes.Black, 330, 103 + 10)
+                        gfx.DrawString("Date Created", font1, XBrushes.Black, 370, 103 + 10)
 
-                        Dim RowCount As Integer = 0
+                        Dim RowCount As Integer = 10
                         Dim CountPage As Integer = 0
                         With DataGridViewCustomReport
 
@@ -2177,14 +2343,15 @@ Public Class Reports
                         gfx.DrawString("Product Name: " & ToolStripComboBoxProducts.Text, font, XBrushes.Black, 50, 61)
                         gfx.DrawString("Tax Type: " & ToolStripComboBoxTaxType.Text, font, XBrushes.Black, 50, 72)
                         gfx.DrawString("Transaction Type: " & ToolStripComboBoxTransactionType.Text, font, XBrushes.Black, 50, 83)
-                        gfx.DrawString("Product Name", font1, XBrushes.Black, 50, 103)
-                        gfx.DrawString("Transaction Number", font1, XBrushes.Black, 130, 103)
-                        gfx.DrawString("Quantity", font1, XBrushes.Black, 240, 103)
-                        gfx.DrawString("Price", font1, XBrushes.Black, 290, 103)
-                        gfx.DrawString("Total", font1, XBrushes.Black, 330, 103)
-                        gfx.DrawString("Date Created", font1, XBrushes.Black, 370, 103)
+                        gfx.DrawString("Discount Type: " & ToolStripComboBoxDiscType.Text, font, XBrushes.Black, 50, 94)
+                        gfx.DrawString("Product Name", font1, XBrushes.Black, 50, 103 + 10)
+                        gfx.DrawString("Transaction Number", font1, XBrushes.Black, 130, 103 + 10)
+                        gfx.DrawString("Quantity", font1, XBrushes.Black, 240, 103 + 10)
+                        gfx.DrawString("Price", font1, XBrushes.Black, 290, 103 + 10)
+                        gfx.DrawString("Total", font1, XBrushes.Black, 330, 103 + 10)
+                        gfx.DrawString("Date Created", font1, XBrushes.Black, 370, 103 + 10)
 
-                        Dim RowCount As Integer = 0
+                        Dim RowCount As Integer = 10
                         Dim CountPage As Integer = 0
                         With DataGridViewCustomReport
 
@@ -2237,7 +2404,7 @@ Public Class Reports
         End Try
     End Sub
 
-    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs)
         Try
 
 
