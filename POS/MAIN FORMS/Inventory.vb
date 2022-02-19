@@ -312,4 +312,16 @@ Public Class Inventory
             loadstockentry(True)
         End If
     End Sub
+
+    Private Sub TabControl1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
+        Try
+
+            If TabControl1.SelectedIndex = 0 Then
+                loadinventory()
+            End If
+
+        Catch ex As Exception
+            SendErrorReport(ex.ToString)
+        End Try
+    End Sub
 End Class

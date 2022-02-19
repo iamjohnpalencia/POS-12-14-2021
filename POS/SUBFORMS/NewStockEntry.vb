@@ -6,12 +6,12 @@ Public Class NewStockEntry
     End Sub
     Private Sub ButtonENTRYADDSTOCK_Click(sender As Object, e As EventArgs) Handles ButtonENTRYADDSTOCK.Click
         Try
-            Dim ConnectionLocal As MySqlConnection = LocalhostConn()
+
             If Val(TextBoxEQuantity.Text) > 0 Then
                 Dim Primary As Double = Double.Parse(TextBoxEQuantity.Text) * Double.Parse(TextBoxEFPrimaryVal.Text)
                 Dim Secondary As Double = Double.Parse(TextBoxEQuantity.Text) * Double.Parse(TextBoxEFSecondVal.Text)
                 Dim NoOfServings As Double = Double.Parse(TextBoxEQuantity.Text) * Double.Parse(TextBoxENoServings.Text)
-
+                Dim ConnectionLocal As MySqlConnection = LocalhostConn()
                 Dim SQL = "SELECT `stock_primary`, `stock_secondary`, `stock_no_of_servings`, `formula_id` FROM  `loc_pos_inventory` WHERE `inventory_id` = " & TextBox1.Text
                 Dim SQLCmd As MySqlCommand = New MySqlCommand(SQL, ConnectionLocal)
                 Dim SQlDa As MySqlDataAdapter = New MySqlDataAdapter(SQLCmd)
@@ -57,7 +57,7 @@ Public Class NewStockEntry
             End If
             MDIFORM.LabelTotalAvailStock.Text = roundsum("stock_primary", "loc_pos_inventory WHERE store_id = " & ClientStoreID & " AND guid = '" & ClientGuid & "'", "P")
             MDIFORM.LabelTotalCrititems.Text = count(table:="loc_pos_inventory WHERE stock_status = 1 AND critical_limit >= stock_primary AND store_id ='" & ClientStoreID & "' AND guid = '" & ClientGuid & "'", tocount:="inventory_id")
-            ConnectionLocal.Close()
+
         Catch ex As Exception
             SendErrorReport(ex.ToString)
         End Try
@@ -108,7 +108,7 @@ Public Class NewStockEntry
     End Sub
     Sub loadcomboboxingredients()
         Try
-            Dim sql = "SELECT product_ingredients FROM loc_pos_inventory WHERE main_inventory_id = 0 AND stock_status = 1 ORDER BY product_ingredients ASC"
+            Dim sql = "SELECT product_ingredients FROM loc_pos_inventory WHERE main_inventory_id = 0 AND stock_status = 1  AND main_inventory_id = 0 ORDER BY product_ingredients ASC"
             Dim cmd As MySqlCommand = New MySqlCommand(sql, LocalhostConn)
             Dim da As MySqlDataAdapter = New MySqlDataAdapter(cmd)
             Dim dt As DataTable = New DataTable

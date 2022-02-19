@@ -537,12 +537,12 @@ Module NEWPOSMODULE
                     Dim FRID As DataRow = DtInventory.NewRow
                     If halfbatch Then
                         FRID("serving_value") = dtfill(0)(0) / 2
+                        FRID("unit_cost") = dtfill(0)(2) / 2
                     Else
                         FRID("serving_value") = dtfill(0)(0)
+                        FRID("unit_cost") = dtfill(0)(2)
                     End If
-
                     FRID("server_formula_id") = dtfill(0)(1)
-                    FRID("unit_cost") = dtfill(0)(2)
                     DtInventory.Rows.Add(FRID)
                     LocalhostConn.Close()
                 Next
@@ -565,11 +565,13 @@ Module NEWPOSMODULE
                     Dim FRID As DataRow = DtInventory.NewRow
                     If halfbatch Then
                         FRID("serving_value") = dtfill(0)(0) / 2
+                        FRID("unit_cost") = dtfill(0)(2) / 2
                     Else
                         FRID("serving_value") = dtfill(0)(0)
+                        FRID("unit_cost") = dtfill(0)(2)
                     End If
                     FRID("formula_id") = dtfill(0)(1)
-                    FRID("unit_cost") = dtfill(0)(2)
+
                     DtInventory.Rows.Add(FRID)
                     LocalhostConn.Close()
                 Next
@@ -608,15 +610,15 @@ Module NEWPOSMODULE
                                             If Val(.TextBoxQTY.Text) <> 0 Then
                                                 servingtotal = Val(row("serving_value")) * Val(.TextBoxQTY.Text)
                                                 If Origin = "Server" Then
-                                                    .DataGridViewInv.Rows.Add(servingtotal, row("server_formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), ID, Origin)
+                                                    .DataGridViewInv.Rows.Add(servingtotal, row("server_formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), ID, Origin, halfbatch)
                                                 Else
-                                                    .DataGridViewInv.Rows.Add(servingtotal, row("formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), ID, Origin)
+                                                    .DataGridViewInv.Rows.Add(servingtotal, row("formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), ID, Origin, halfbatch)
                                                 End If
                                             Else
                                                 If Origin = "Server" Then
-                                                    .DataGridViewInv.Rows.Add(row("serving_value"), row("server_formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost"), row("unit_cost"), ID, Origin)
+                                                    .DataGridViewInv.Rows.Add(row("serving_value"), row("server_formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost"), row("unit_cost"), ID, Origin, halfbatch)
                                                 Else
-                                                    .DataGridViewInv.Rows.Add(row("serving_value"), row("formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost"), row("unit_cost"), ID, Origin)
+                                                    .DataGridViewInv.Rows.Add(row("serving_value"), row("formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost"), row("unit_cost"), ID, Origin, halfbatch)
                                                 End If
                                             End If
                                         End If
@@ -630,16 +632,16 @@ Module NEWPOSMODULE
                                     If .TextBoxQTY.Text > 0 Then
                                         servingtotal = Val(row("serving_value")) * Val(.TextBoxQTY.Text)
                                         If Origin = "Server" Then
-                                            .DataGridViewInv.Rows.Add(servingtotal, row("server_formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin)
+                                            .DataGridViewInv.Rows.Add(servingtotal, row("server_formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin, halfbatch)
                                         Else
-                                            .DataGridViewInv.Rows.Add(servingtotal, row("formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin)
+                                            .DataGridViewInv.Rows.Add(servingtotal, row("formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin, halfbatch)
                                         End If
                                     Else
                                         If .DataGridViewOrders.Rows.Count > 0 Then
                                             If Origin = "Server" Then
-                                                .DataGridViewInv.Rows.Add(row("serving_value"), row("server_formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost"), row("unit_cost"), 0, Origin)
+                                                .DataGridViewInv.Rows.Add(row("serving_value"), row("server_formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost"), row("unit_cost"), 0, Origin, halfbatch)
                                             Else
-                                                .DataGridViewInv.Rows.Add(row("serving_value"), row("formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost"), row("unit_cost"), 0, Origin)
+                                                .DataGridViewInv.Rows.Add(row("serving_value"), row("formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost"), row("unit_cost"), 0, Origin, halfbatch)
                                             End If
                                         End If
                                     End If
@@ -680,16 +682,16 @@ Module NEWPOSMODULE
                                         If Val(.TextBoxQTY.Text) > 0 Then
                                             servingtotal = Val(row("serving_value")) * Val(.TextBoxQTY.Text)
                                             If Origin = "Server" Then
-                                                .DataGridViewInv.Rows.Add(servingtotal, row("server_formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin)
+                                                .DataGridViewInv.Rows.Add(servingtotal, row("server_formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin, halfbatch)
                                             Else
-                                                .DataGridViewInv.Rows.Add(servingtotal, row("formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin)
+                                                .DataGridViewInv.Rows.Add(servingtotal, row("formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin, halfbatch)
                                             End If
                                         Else
                                             servingtotal = Val(row("serving_value"))
                                             If Origin = "Server" Then
-                                                .DataGridViewInv.Rows.Add(servingtotal, row("server_formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxPressQTY.Text), row("unit_cost"), 0, Origin)
+                                                .DataGridViewInv.Rows.Add(servingtotal, row("server_formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxPressQTY.Text), row("unit_cost"), 0, Origin, halfbatch)
                                             Else
-                                                .DataGridViewInv.Rows.Add(servingtotal, row("formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxPressQTY.Text), row("unit_cost"), 0, Origin)
+                                                .DataGridViewInv.Rows.Add(servingtotal, row("formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxPressQTY.Text), row("unit_cost"), 0, Origin, halfbatch)
                                             End If
                                         End If
                                     Next row
@@ -729,16 +731,16 @@ Module NEWPOSMODULE
                                     If .TextBoxQTY.Text > 0 Then
                                         servingtotal = Val(row("serving_value")) * Val(.TextBoxQTY.Text)
                                         If Origin = "Server" Then
-                                            .DataGridViewInv.Rows.Add(servingtotal, row("server_formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin)
+                                            .DataGridViewInv.Rows.Add(servingtotal, row("server_formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin, halfbatch)
                                         Else
-                                            .DataGridViewInv.Rows.Add(servingtotal, row("formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin)
+                                            .DataGridViewInv.Rows.Add(servingtotal, row("formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin, halfbatch)
                                         End If
                                     Else
                                         servingtotal = Val(row("serving_value"))
                                         If Origin = "Server" Then
-                                            .DataGridViewInv.Rows.Add(servingtotal, row("server_formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost"), row("unit_cost"), 0, Origin)
+                                            .DataGridViewInv.Rows.Add(servingtotal, row("server_formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost"), row("unit_cost"), 0, Origin, halfbatch)
                                         Else
-                                            .DataGridViewInv.Rows.Add(servingtotal, row("formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost"), row("unit_cost"), 0, Origin)
+                                            .DataGridViewInv.Rows.Add(servingtotal, row("formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost"), row("unit_cost"), 0, Origin, halfbatch)
                                         End If
                                     End If
                                 Next row
@@ -776,16 +778,16 @@ Module NEWPOSMODULE
                             If Val(.TextBoxQTY.Text) > 0 Then
                                 servingtotal = Val(row("serving_value")) * Val(.TextBoxQTY.Text)
                                 If Origin = "Server" Then
-                                    .DataGridViewInv.Rows.Add(servingtotal, row("server_formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin)
+                                    .DataGridViewInv.Rows.Add(servingtotal, row("server_formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin, halfbatch)
                                 Else
-                                    .DataGridViewInv.Rows.Add(servingtotal, row("formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin)
+                                    .DataGridViewInv.Rows.Add(servingtotal, row("formula_id"), .TextBoxQTY.Text, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin, halfbatch)
                                 End If
                             Else
                                 servingtotal = Val(row("serving_value"))
                                 If Origin = "Server" Then
-                                    .DataGridViewInv.Rows.Add(servingtotal, row("server_formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin)
+                                    .DataGridViewInv.Rows.Add(servingtotal, row("server_formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin, halfbatch)
                                 Else
-                                    .DataGridViewInv.Rows.Add(servingtotal, row("formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin)
+                                    .DataGridViewInv.Rows.Add(servingtotal, row("formula_id"), 1, .TextBoxINC.Text, .TextBoxNAME.Text, row("serving_value"), row("unit_cost") * Val(.TextBoxQTY.Text), row("unit_cost"), 0, Origin, halfbatch)
                                 End If
                             End If
                         Next row

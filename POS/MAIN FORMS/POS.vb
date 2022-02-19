@@ -187,47 +187,76 @@ Public Class POS
     Private Sub Button38_Click(sender As Object, e As EventArgs) Handles ButtonEnter.Click
         Try
             If payment = False Then
-                Dim Tax = 1 + Val(S_Tax)
-                Dim TotalProductPrice As Double = 0
-                Dim productprice = DataGridViewOrders.SelectedRows(0).Cells(2).Value
-                'Procedure: 1 Product Qty
-                If DataGridViewOrders.Rows.Count > 0 Then
-                    If S_ZeroRated = "0" Then
-                        'Price not / by 1.12
-                        If WaffleUpgrade Then
-                            'Price plus waffle upgrade price
-                            Dim TotalPrice As Integer = 0
-                            TotalPrice = Val(TextBoxQTY.Text) * Val(productprice)
-                            Dim TotalUpgrade As Integer = 0
-                            TotalUpgrade = Val(TextBoxQTY.Text) * Val(S_Upgrade_Price)
-                            TotalProductPrice = TwoDecimalPlaces(TotalPrice + TotalUpgrade)
-                            DataGridViewOrders.SelectedRows(0).Cells(11).Value = TextBoxQTY.Text
+                If Val(TextBoxQTY.Text) > 0 Then
+                    Dim Tax = 1 + Val(S_Tax)
+                    Dim TotalProductPrice As Double = 0
+                    Dim productprice = DataGridViewOrders.SelectedRows(0).Cells(2).Value
+                    'Procedure: 1 Product Qty
+                    If DataGridViewOrders.Rows.Count > 0 Then
+                        If S_ZeroRated = "0" Then
+                            'Price not / by 1.12
+                            If WaffleUpgrade Then
+                                'Price plus waffle upgrade price
+                                Dim TotalPrice As Integer = 0
+                                TotalPrice = Val(TextBoxQTY.Text) * Val(productprice)
+                                Dim TotalUpgrade As Integer = 0
+                                TotalUpgrade = Val(TextBoxQTY.Text) * Val(S_Upgrade_Price)
+                                TotalProductPrice = TwoDecimalPlaces(TotalPrice + TotalUpgrade)
+                                DataGridViewOrders.SelectedRows(0).Cells(11).Value = TextBoxQTY.Text
+                            Else
+                                Dim TotalPrice As Integer = 0
+                                TotalPrice = Val(TextBoxQTY.Text) * Val(productprice)
+                                TotalProductPrice = TwoDecimalPlaces(TotalPrice)
+                            End If
+                            DataGridViewOrders.SelectedRows(0).Cells(1).Value = TextBoxQTY.Text
+                            DataGridViewOrders.SelectedRows(0).Cells(3).Value = TotalProductPrice
+                            Label76.Text = SumOfColumnsToDecimal(datagrid:=DataGridViewOrders, celltocompute:=3)
+                            TextBoxSUBTOTAL.Text = Format(Val(Label76.Text), "###,###,##0.00")
+                            TextBoxGRANDTOTAL.Text = Format(Val(Label76.Text), "###,###,##0.00")
+                            TextBoxDISCOUNT.Text = Format(0, "###,###,##0.00")
+
+
+                            For i As Integer = 0 To DataGridViewInv.Rows.Count - 1 Step +1
+                                If DataGridViewOrders.Rows(0).Cells(0).Value = DataGridViewInv.Rows(i).Cells(4).Value Then
+                                    DataGridViewInv.Rows(i).Cells(2).Value = Val(TextBoxQTY.Text)
+                                    DataGridViewInv.Rows(i).Cells(0).Value = DataGridViewInv.Rows(i).Cells(2).Value * DataGridViewInv.Rows(i).Cells(5).Value
+                                    DataGridViewInv.Rows(i).Cells(6).Value = DataGridViewInv.Rows(i).Cells(2).Value * DataGridViewInv.Rows(i).Cells(7).Value
+                                End If
+                            Next
+
                         Else
-                            Dim TotalPrice As Integer = 0
-                            TotalPrice = Val(TextBoxQTY.Text) * Val(productprice)
-                            TotalProductPrice = TwoDecimalPlaces(TotalPrice)
+                            If WaffleUpgrade Then
+                                Dim TotalPrice As Integer = 0
+                                TotalPrice = Val(TextBoxQTY.Text) * Val(productprice)
+                                Dim TotalUgrade As Integer = 0
+                                TotalUgrade = Val(TextBoxQTY.Text) * Val(S_Upgrade_Price)
+                                Dim WaffleAddPriceTotal = TotalPrice + TotalUgrade
+                                TotalProductPrice = TwoDecimalPlaces(WaffleAddPriceTotal / Tax)
+                                DataGridViewOrders.SelectedRows(0).Cells(11).Value = TextBoxQTY.Text
+                            Else
+                                Dim TotalPrice As Integer = 0
+                                TotalPrice = Val(TextBoxQTY.Text) * Val(productprice)
+                                TotalProductPrice = TwoDecimalPlaces(TotalPrice / Tax)
+                            End If
+                            DataGridViewOrders.SelectedRows(0).Cells(1).Value = TextBoxQTY.Text
+                            DataGridViewOrders.SelectedRows(0).Cells(3).Value = TotalProductPrice
+                            Label76.Text = SumOfColumnsToDecimal(datagrid:=DataGridViewOrders, celltocompute:=3)
+                            TextBoxSUBTOTAL.Text = Format(Val(Label76.Text), "###,###,##0.00")
+                            TextBoxGRANDTOTAL.Text = Format(Val(Label76.Text), "###,###,##0.00")
+                            TextBoxDISCOUNT.Text = Format(0, "###,###,##0.00")
+
+                            For i As Integer = 0 To DataGridViewInv.Rows.Count - 1 Step +1
+                                If DataGridViewOrders.Rows(0).Cells(0).Value = DataGridViewInv.Rows(i).Cells(4).Value Then
+                                    DataGridViewInv.Rows(i).Cells(2).Value = Val(TextBoxQTY.Text)
+                                    DataGridViewInv.Rows(i).Cells(0).Value = DataGridViewInv.Rows(i).Cells(2).Value * DataGridViewInv.Rows(i).Cells(5).Value
+                                    DataGridViewInv.Rows(i).Cells(6).Value = DataGridViewInv.Rows(i).Cells(2).Value * DataGridViewInv.Rows(i).Cells(7).Value
+                                End If
+                            Next
                         End If
-                        DataGridViewOrders.SelectedRows(0).Cells(1).Value = TextBoxQTY.Text
-                        DataGridViewOrders.SelectedRows(0).Cells(3).Value = TotalProductPrice
-                    Else
-                        If WaffleUpgrade Then
-                            Dim TotalPrice As Integer = 0
-                            TotalPrice = Val(TextBoxQTY.Text) * Val(productprice)
-                            Dim TotalUgrade As Integer = 0
-                            TotalUgrade = Val(TextBoxQTY.Text) * Val(S_Upgrade_Price)
-                            Dim WaffleAddPriceTotal = TotalPrice + TotalUgrade
-                            TotalProductPrice = TwoDecimalPlaces(WaffleAddPriceTotal / Tax)
-                            DataGridViewOrders.SelectedRows(0).Cells(11).Value = TextBoxQTY.Text
-                        Else
-                            Dim TotalPrice As Integer = 0
-                            TotalPrice = Val(TextBoxQTY.Text) * Val(productprice)
-                            TotalProductPrice = TwoDecimalPlaces(TotalPrice / Tax)
-                        End If
-                        DataGridViewOrders.SelectedRows(0).Cells(1).Value = TextBoxQTY.Text
-                        DataGridViewOrders.SelectedRows(0).Cells(3).Value = TotalProductPrice
+
                     End If
-                    TextBoxQTY.Text = 0
                 End If
+                TextBoxQTY.Text = 0
             End If
         Catch ex As Exception
             SendErrorReport(ex.ToString)
@@ -336,10 +365,10 @@ Public Class POS
                     inventory_id = .Rows(i).Cells(10).Value
                     totalQuantity = .Rows(i).Cells(1).Value
                     Ingredient = .Rows(i).Cells(0).Value
-                    Console.WriteLine("INV ID - " & inventory_id)
+                    'Console.WriteLine("INV ID - " & inventory_id)
                     If .Rows(i).Cells(14).Value > 0 Then
-                        Query = "SELECT `primary_value`, `secondary_value`, `serving_value`, `no_servings` FROM loc_product_formula WHERE server_formula_id = " & .Rows(i).Cells(14).Value
-                        'Console.WriteLine("HALF BATCH" & Query)
+                        Query = "SELECT `primary_value`, `secondary_value`, `serving_value`, `no_servings` FROM loc_product_formula WHERE server_formula_id = " & inventory_id
+                        ' Console.WriteLine("HALF BATCH" & Query)
                         SqlCommand = New MySqlCommand(Query, LocalhostConn)
                         SqlAdapter = New MySqlDataAdapter(SqlCommand)
                         SqlDt = New DataTable
@@ -350,7 +379,7 @@ Public Class POS
                             FORMServingval = row("serving_value") / 2
                             FORMNoofservings = row("no_servings") / 2
 
-                            ' Console.WriteLine("INVENTORY PV - " & FORMPrimaryval & ", SV - " & FORMSecondaryval & ", SERVAL - " & FORMServingval & ", NO. SERV - " & FORMNoofservings)
+                            '  Console.WriteLine("INVENTORY PV - " & FORMPrimaryval & ", SV - " & FORMSecondaryval & ", SERVAL - " & FORMServingval & ", NO. SERV - " & FORMNoofservings)
                         Next
                     Else
                         Query = "SELECT `primary_value`, `secondary_value`, `serving_value`, `no_servings` FROM loc_product_formula WHERE server_formula_id = " & inventory_id
@@ -364,7 +393,7 @@ Public Class POS
                             FORMServingval = row("serving_value")
                             FORMNoofservings = row("no_servings")
 
-                            'Console.WriteLine("INVENTORY PV - " & FORMPrimaryval & ", SV - " & FORMSecondaryval & ", SERVAL - " & FORMServingval & ", NO. SERV - " & FORMNoofservings)
+                            '  Console.WriteLine("INVENTORY PV - " & FORMPrimaryval & ", SV - " & FORMSecondaryval & ", SERVAL - " & FORMServingval & ", NO. SERV - " & FORMNoofservings)
                         Next
                     End If
 
@@ -374,10 +403,10 @@ Public Class POS
                     TotalSecondaryVal = FORMSecondaryval * totalQuantity
                     TotalNoOfServings = FORMNoofservings * totalQuantity
 
-                    ' Console.WriteLine("TOTAL PV - " & TotalPrimaryVal & ", TOTAL SEC - " & TotalSecondaryVal & ", TOTAL NO. SERV - " & TotalNoOfServings)
+                    '  Console.WriteLine("TOTAL PV - " & TotalPrimaryVal & ", TOTAL SEC - " & TotalSecondaryVal & ", TOTAL NO. SERV - " & TotalNoOfServings)
 
                     If .Rows(i).Cells(14).Value > 0 Then
-                        Query = "SELECT `stock_primary`,`stock_secondary`,`stock_no_of_servings` FROM `loc_pos_inventory` WHERE server_inventory_id = " & .Rows(i).Cells(14).Value
+                        Query = "SELECT `stock_primary`,`stock_secondary`,`stock_no_of_servings` FROM `loc_pos_inventory` WHERE server_inventory_id = " & inventory_id
                     Else
                         Query = "SELECT `stock_primary`,`stock_secondary`,`stock_no_of_servings` FROM `loc_pos_inventory` WHERE server_inventory_id = " & inventory_id
                     End If
@@ -391,7 +420,7 @@ Public Class POS
                         RetStockSec = row("stock_secondary")
                         RetNoServ = row("stock_no_of_servings")
 
-                        'Console.WriteLine("RetStockPrim - " & RetStockPrim & ", RetStockSec - " & RetStockSec & ", RetNoServ - " & RetNoServ)
+                        ' Console.WriteLine("RetStockPrim - " & RetStockPrim & ", RetStockSec - " & RetStockSec & ", RetNoServ - " & RetNoServ)
                     Next
 
                     Dim TotalPrimary As Double = RetStockPrim + TotalPrimaryVal
@@ -402,11 +431,11 @@ Public Class POS
                     ' Console.WriteLine("TOTAL Primary - " & TotalPrimary & ", TOTAL Secondary - " & Secondary & ", TOTAL ServingValue - " & ServingValue)
 
                     If .Rows(i).Cells(14).Value > 0 Then
-                        Query = "UPDATE loc_pos_inventory SET `stock_secondary` = " & Secondary & " , `stock_no_of_servings` = " & ServingValue & " , `stock_primary` = " & TotalPrimary & ", `date_modified` = '" & FullDate24HR() & "' WHERE `server_inventory_id` = " & .Rows(i).Cells(14).Value
+                        Query = "UPDATE loc_pos_inventory SET `stock_secondary` = " & Secondary & " , `stock_no_of_servings` = " & ServingValue & " , `stock_primary` = " & TotalPrimary & ", `date_modified` = '" & FullDate24HR() & "' WHERE `server_inventory_id` = " & inventory_id
                     Else
                         Query = "UPDATE loc_pos_inventory SET `stock_secondary` = " & Secondary & " , `stock_no_of_servings` = " & ServingValue & " , `stock_primary` = " & TotalPrimary & ", `date_modified` = '" & FullDate24HR() & "' WHERE `server_inventory_id` = " & inventory_id
                     End If
-                    'Console.WriteLine(Query)
+                    ' Console.WriteLine(Query)
                     SqlCommand = New MySqlCommand(Query, LocalhostConn())
                     SqlCommand.ExecuteNonQuery()
                     GLOBAL_SYSTEM_LOGS("MIX", "MIXED : " & Ingredient & ", Crew : " & ClientCrewID)
@@ -420,8 +449,7 @@ Public Class POS
     End Sub
     Dim secondary_value As Double = 0
     Dim stock_secondary As Double = 0
-
-    Private Sub UpdateInventory(Half As Boolean)
+    Private Sub UpdateInventory()
         Dim SqlCommand As MySqlCommand
         Dim SqlAdapter As MySqlDataAdapter
         Dim SqlDt As DataTable
@@ -462,9 +490,16 @@ Public Class POS
                     For Each row As DataRow In SqlDt.Rows
                         stock_secondary = row("stock_secondary")
                     Next
+
+                    'Console.WriteLine(Double.Parse(.Rows(i).Cells(5).Value.ToString) - secondary_value)
                     Secondary = stock_secondary - TotalServingValue
                     ServingValue = Secondary / Double.Parse(.Rows(i).Cells(5).Value.ToString)
                     TotalPrimary = Secondary / secondary_value
+
+                    'Console.WriteLine("TOTAL SECONDARY " & Secondary)
+                    'Console.WriteLine("TOTAL SERVING " & ServingValue)
+                    ' Console.WriteLine("TOTAL PRIMARY  " & TotalPrimary)
+
                     If .Rows(i).Cells(9).Value.ToString = "Server" Then
                         Query = "UPDATE loc_pos_inventory SET stock_secondary = " & Secondary & " , stock_no_of_servings = " & ServingValue & " , stock_primary = " & TotalPrimary & ", date_modified = '" & FullDate24HR() & "' WHERE server_inventory_id = " & .Rows(i).Cells(1).Value
                     Else
@@ -480,6 +515,106 @@ Public Class POS
             SendErrorReport(ex.ToString)
         End Try
     End Sub
+    'Private Sub UpdateInventory()
+    '    Dim SqlCommand As MySqlCommand
+    '    Dim SqlAdapter As MySqlDataAdapter
+    '    Dim SqlDt As DataTable
+    '    Dim UpdateInventoryCon As MySqlConnection = LocalhostConn()
+    '    Try
+    '        Dim Query As String = ""
+    '        With DataGridViewInv
+    '            For i As Integer = 0 To .Rows.Count - 1 Step +1
+
+    '                Dim GetStock_Primary As Double = 0
+    '                Dim GetStock_Secondary As Double = 0
+    '                Dim GetStock_NoOfServings As Double = 0
+
+    '                Dim GetFormPrimaryValue As Double = 0
+    '                Dim GetFormSecondaryValue As Double = 0
+    '                Dim GetFormServingValue As Double = 0
+
+    '                Dim TotalStockPrimary As Double = 0
+    '                Dim TotalStockSecondary As Double = 0
+    '                Dim TotaStockNoOfServings As Double = 0
+
+    '                Dim FormulaID = .Rows(i).Cells(1).Value
+
+    '                'Dim TotalServingValue As Double = Double.Parse(.Rows(i).Cells(0).Value.ToString)
+    '                'Dim ServingValue As Double = 0
+    '                'TotalQuantity = .Rows(i).Cells(2).Value
+
+    '                If .Rows(i).Cells(9).Value.ToString = "Server" Then
+    '                    Query = "SELECT `primary_value`,`secondary_value`,`serving_value` FROM `loc_product_formula` WHERE server_formula_id = " & .Rows(i).Cells(1).Value
+    '                Else
+    '                    Query = "SELECT `primary_value`,`secondary_value`,`serving_value` FROM `loc_product_formula` WHERE formula_id = " & .Rows(i).Cells(1).Value
+    '                End If
+
+    '                SqlCommand = New MySqlCommand(Query, UpdateInventoryCon)
+    '                SqlAdapter = New MySqlDataAdapter(SqlCommand)
+    '                SqlDt = New DataTable
+    '                SqlAdapter.Fill(SqlDt)
+
+    '                For Each row As DataRow In SqlDt.Rows
+    '                    GetFormPrimaryValue = row("primary_value")
+    '                    GetFormSecondaryValue = row("secondary_value")
+    '                    GetFormServingValue = row("serving_value")
+    '                Next
+    '                Console.WriteLine("FORMULA PRIMARY " & GetFormPrimaryValue)
+
+    '                If .Rows(i).Cells(9).Value.ToString = "Server" Then
+    '                    Query = "SELECT `stock_primary`,`stock_secondary`,`stock_no_of_servings` FROM `loc_pos_inventory` WHERE server_inventory_id = " & FormulaID
+    '                Else
+    '                    Query = "SELECT `stock_primary`,`stock_secondary`,`stock_no_of_servings` FROM `loc_pos_inventory` WHERE inventory_id = " & FormulaID
+    '                End If
+    '                SqlCommand = New MySqlCommand(Query, UpdateInventoryCon)
+    '                SqlAdapter = New MySqlDataAdapter(SqlCommand)
+    '                SqlDt = New DataTable
+    '                SqlAdapter.Fill(SqlDt)
+    '                For Each row As DataRow In SqlDt.Rows
+    '                    GetStock_Primary = row("stock_primary")
+    '                    GetStock_Secondary = row("stock_secondary")
+    '                    GetStock_NoOfServings = row("stock_no_of_servings")
+    '                Next
+    '                Console.WriteLine("GET STOCK SEC: " & GetStock_Secondary)
+    '                'TotalStockPrimary = GetStock_Primary -
+    '                TotalStockSecondary = GetStock_Secondary - Double.Parse(.Rows(i).Cells(0).Value)
+    '                'TotaStockNoOfServings =  
+    '                TotalStockPrimary = TotalStockSecondary / Double.Parse(.Rows(i).Cells(5).Value.ToString)
+    '                'TotaStockNoOfServings
+    '                ''
+    '                ''    secondary_value = secondary_value / 2
+    '                ''    secondary_value = secondary_value / 2
+    '                ''End If
+    '                'If .Rows(i).Cells(10).Value = 1 Then
+    '                '    secondary_value = secondary_value / 2
+    '                '    stock_secondary = stock_secondary / 2
+    '                'End If
+
+    '                'Secondary = stock_secondary - TotalServingValue
+    '                'ServingValue = Secondary / Double.Parse(.Rows(i).Cells(5).Value.ToString)
+    '                'TotalPrimary = Secondary / secondary_value
+
+
+
+    '                Console.WriteLine("TOTAL SECONDARY " & TotalStockSecondary)
+    '                Console.WriteLine("TOTAL SERVING " & TotaStockNoOfServings)
+    '                Console.WriteLine("TOTAL PRIMARY  " & TotalStockPrimary)
+    '                'If .Rows(i).Cells(9).Value.ToString = "Server" Then
+    '                '    Query = "UPDATE loc_pos_inventory SET stock_secondary = " & Secondary & " , stock_no_of_servings = " & ServingValue & " , stock_primary = " & TotalPrimary & ", date_modified = '" & FullDate24HR() & "' WHERE server_inventory_id = " & .Rows(i).Cells(1).Value
+    '                'Else
+    '                '    Query = "UPDATE loc_pos_inventory SET stock_secondary = " & Secondary & " , stock_no_of_servings = " & ServingValue & " , stock_primary = " & TotalPrimary & ", date_modified = '" & FullDate24HR() & "' WHERE inventory_id = " & .Rows(i).Cells(1).Value
+    '                'End If
+    '                '' Console.WriteLine(Query)
+    '                'SqlCommand = New MySqlCommand(Query, UpdateInventoryCon)
+    '                'SqlCommand.ExecuteNonQuery()
+    '            Next
+    '            UpdateInventoryCon.Close()
+    '        End With
+    '    Catch ex As Exception
+    '        MsgBox(ex.ToString)
+    '        SendErrorReport(ex.ToString)
+    '    End Try
+    'End Sub
     Dim ThreadlistMIX As List(Of Thread) = New List(Of Thread)
     Dim ThreadMix As Thread
     Private Sub BackgroundWorker3_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker3.DoWork
@@ -1110,7 +1245,7 @@ Public Class POS
                             For Each t In THREADLIST
                                 t.Join()
                             Next
-                            ThreadOrder = New Thread(Sub() UpdateInventory(False))
+                            ThreadOrder = New Thread(Sub() UpdateInventory())
                             ThreadOrder.Start()
                             THREADLIST.Add(ThreadOrder)
                             For Each t In THREADLIST
